@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %} Add Department {% endblock %}
+
+{% block content %}
+
+<h2 class="title"><b> Add New Department </b></h2>
+<section class="container">
+    <div class="row">
+        <div class="col-6 justify-content-center">
+            <form action="{% url 'service:add_department' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label><b> Department title:</b></label>
+                <input class="form-control" type="text" name="title" placeholder="Department name..." required />
+
+                <label><b> Description:</b></label>
+                <textarea class="form-control" name="description" placeholder="Descripe the department..."
+                    required></textarea>
+
+                <label><b> Department Image: </b></label>
+                <input type="file" name="Image" class="form-control" accept="image/*" required />
+
+                <br>
+                <input class="btn btn-secondary" type="submit" value="Create Department" />
+                
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

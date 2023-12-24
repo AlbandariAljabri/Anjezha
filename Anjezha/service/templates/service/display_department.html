@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+{% block title %} All Department {% endblock %}
+{% block content %}
+
+<h3 class="title"><b> All Department </b></h3>
+<section class="container">
+    <div class="row gap-1 row-cols-3 row-cols-md-4">
+        {% for department in departments %}
+        <div>
+            <div class="col">
+                <div class="d-flex flex-column gap-1 p-3 border border-1 rounder-6 shadow h-100">
+                    <img src="{{department.Image.url}}" /><br>
+                    <a href="{% url 'service:department_details' department.id %}"> {{ department.title }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

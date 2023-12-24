@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .card {
+        /* .card {
             --main-color: #000;
             --submain-color: #78858F;
             --bg-color: #fff;
@@ -89,7 +89,7 @@
     
     
         /* card-2 */
-        .card-2 {
+        /* .card-2 {
     
     
             width: 1400px;
@@ -149,24 +149,42 @@
     
         .coolinput input[type=text].input:focus {
             outline: none;
-        }
+        }  */
 
 
-        .c{
-            width: 100%;
-            height: 100%;
-            background: rgba(11.10, 105.37, 2.90, 0.70); 
-            border-radius: 9999px
+        .c {
+    background: rgba(11.10, 105.37, 2.90, 0.70);
 
-        }
+      float: right;
+      width: 700px;
+      height: 700px;
+      shape-outside: circle(50% at 50%);
+      clip-path: circle(50% at -10%);
+      transform: rotate(180deg);
+      margin-right: -10px;
+      margin-top: 100px;
+    
+}
+.c2 {
+    background: rgb(121, 121, 121);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: 600px
+}
         
     
     </style>
     
 </head>
 <body>
-    <div  class="c"></div>
-    <div class="card">
+    <div  class="c">
+        <div class="c2">
+
+        
+        </div>
+    </div>
+    <!-- <div class="card">
         <div class="card__img"><svg xmlns="http://www.w3.org/2000/svg" width="100%">
                 <rect fill="#ffffff" width="540" height="450"></rect>
                 <defs>
@@ -301,7 +319,7 @@
             </div>
         </div>
     
-    </div>
+    </div> -->
     
 </body>
 </html>

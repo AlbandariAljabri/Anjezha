@@ -22,3 +22,6 @@ def department_details(request: HttpRequest, department_id):
 
     department_detail = Department.objects.get(id=department_id)
     return render(request,"service/department_details.html", {"department": department_detail})
+
+def display_task_view(request : HttpRequest):
+    return render(request , "service/display_task.html")

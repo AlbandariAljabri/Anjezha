@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+
+
+
+<div class="row d-flex justify-content-center container">
+    <div class="col-md-8">
+      <div class="card-hover-shadow-2x mb-3 card">
+        <div class="card-header-tab card-header">
+          <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i
+              class="fa fa-tasks"></i>&nbsp;Add Task</div>
+        </div>
+        <div class="card-body">
+          <form id="addTaskForm" method="post" action="{% url 'service:add_task_view' %}">
+            {% csrf_token %}
+            <!-- Your form fields go here -->
+            <div class="form-group">
+              <label for="name">Task Name:</label>
+              <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <!-- Add other form fields as needed -->
+
+            <button type="submit" class="btn btn-primary">Add Task</button>
+          </form>
+        </div>
+        <div class="d-block text-right card-footer">
+          <a href="{% url 'service:add_task_view' %}" class="btn btn-link btn-sm">Cancel</a>
+        </div>
+      </div>
+
+      <!-- Container for displaying newly added tasks -->
+      <div id="newTasksContainer"></div>
+    </div>
+  </div>
+
+  <!-- Include jQuery library -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!-- Include your JavaScript file -->
+{% endblock %}
+
+
+

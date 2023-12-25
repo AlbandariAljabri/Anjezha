@@ -47,4 +47,40 @@
         </div>
     </div>
 </div>
+
+
+<!-- Add comment -->
+
+<div class="container">
+    <form action="{% url 'service:add_comment_view' task.id %}" method="POST">
+        {% csrf_token %}
+
+<div class="card">
+    <p class="heading">Add comment</p>
+    
+   <div class="input-div">
+      <input type="text" class="input" placeholder="Full name">
+      <!-- {{contact.user.first_name}}{{contact.user.last_name} -->
+      </div>
+
+      <div class="input-div">
+        <input type="text" class="input" placeholder="Task">
+        </div> 
+
+      <div class="input-div">
+        <input class="input" type="text" placeholder="Content">
+      </div>
+
+      <div class="input-div">
+   <input class="input" type="file" name="image" accept="image/*" placeholder="Upload image">
+      </div>
+
+      <div class="button-div">
+        <button class="submit">Send</button>
+      </div>
+
+  </div>
+     </form>
+</div>
+
 {% endblock %}

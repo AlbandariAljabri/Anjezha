@@ -1,8 +1,10 @@
 from asyncio import tasks
 from django.shortcuts import render , redirect
 from django.http import HttpRequest , HttpResponse
-from .models import Contact
-from service.models import Task , Comment
+from .models import *
+from service.models import *
+from accounts.models import *
+
 
 
 # Create your views here.
@@ -23,15 +25,15 @@ def contact_view (request :HttpRequest):
         return render(request, "contact/contact.html", {"status" : Contact.status_choices,  "msg" : msg})
 
 
-def add_comment_view(request: HttpRequest, task_id):
+# def add_comment_view(request: HttpRequest, task_id):
+#     task = Task.objects.get(id=task_id)
 
-    if request.method == "POST":
-        if not request.user.is_authenticated:
-            return render(request, "main/not_authorized.html", status=401)
+#     if request.method == "POST":
+#         if not request.user.is_authenticated:
+#             return render(request, "main/not_authorized.html", status=401)
 
-        task = tasks.objects.get(id=task_id)
-        new_comment = Comment(task=task, user=request.user, content=request.POST["content"], comment=request.POST["comment"])
-        if 'image' in request.FILES: new_comment.image = request.FILES["image"]
-        new_comment.save()
-    
-        return redirect("service:movie_detail_view", task_id=new_comment.id)
+#         new_comment = Comment(task=task, user=request.user, content=request.POST["content"])
+#         if 'image' in request.FILES: new_comment.image = request.FILES["image"]
+#         new_comment.save()
+#         return redirect("contact:add_comment_view", task_id=task.id)
+#     return render(request , "contact/comment.html" , task_id=task.id)

@@ -66,3 +66,33 @@ $( document ).ready(function() {
         });
     });
 }); 
+
+
+// Initialization for ES Users
+import { Dropdown, Collapse, initMDB } from "mdb-ui-kit";
+
+initMDB({ Dropdown, Collapse });
+
+
+
+
+// custom.js
+
+$(document).ready(function () {
+    // Intercept the form submission
+    $('#addTaskForm').submit(function (e) {
+      e.preventDefault(); // Prevent the default form submission
+  
+      // Submit the form using AJAX
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function (data) {
+          // On success, append the new task to the container
+          $('#newTasksContainer').append(data);
+        }
+      });
+    });
+  });
+  

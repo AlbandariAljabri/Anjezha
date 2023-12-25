@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %} Tasks {% endblock %}
+
+{% block content %}
+
+<div class="Loginadmin"><span
+        style="color: #0B6903; font-size: 96px; font-family: Aclonica; font-weight: 400; word-wrap: break-word">LOGIN</span><span
+        style="color: #0B6903; font-size: 30px; font-family: Abhaya Libre Medium; font-weight: 500; word-wrap: break-word">Admin</span>
+</div>
+<form action="{% url 'accounts:login_view' %}" method="post">
+    {% csrf_token %}
+    <div class="Username"
+        style="color: #999999; font-size: 24px; font-family: Abel; font-weight: 400; word-wrap: break-word">Username
+    </div>
+
+    <input type="text" placeholder="Username" id="username" name="username" required minlength="3">
+    <br>
+    <div class="Password"
+        style="color: #999999; font-size: 24px; font-family: Abel; font-weight: 400; word-wrap: break-word">Password
+    </div> <input type="password" placeholder="Password" id="password" name="password" required minlength="8">
+
+    <button>Log In</button>
+
+</form>
+
+
+
+{% endblock %}

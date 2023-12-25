@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
-from .models import *
-from contact.models import *
-from accounts.models import *
+from accounts.models import Department
+from .models import Task,Comment
 
 # Create your views here.
 
@@ -64,6 +63,19 @@ def display_task_view(request : HttpRequest):
     return render(request , "service/display_task.html" , {"tasks" : tasks})
 
 
+def add_comment_view(request: HttpRequest, task_id):
+    task = Task.objects.get(id=task_id)
+    
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return render(request, "main/not_authorized.html", status=401)
+
+        new_comment = Comment(task=task, user=request.user, content=request.POST["content"])
+        if 'image' in request.FILES: new_comment.image = request.FILES["image"]
+        new_comment.save()
+        return redirect("contact:add_comment_view", task_id=task.id)
+    return render(request , "contact/comment.html" , task_id=task.id)
+  
 def add_task_view(request : HttpRequest):
     if request.method == 'POST':
         task=Task(

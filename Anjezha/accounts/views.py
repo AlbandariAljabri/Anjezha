@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.db import IntegrityError
+
 
 # Create your views here.
 
@@ -35,3 +37,21 @@ def user_profile_view(request: HttpRequest):
     # except:
     #     return render(request, 'main/not_found.html')
     return render(request, 'accounts/profile.html')
+
+
+def register_view (request:HttpRequest):
+    msg =None
+    if request.method == "POST":
+        try:
+                #create a new user
+                user = User.objects.create_user(username=request.POST["username"], first_name=request.POST["first_name"], last_name=request.POST["last_name"], email=request.POST["email"], password=request.POST["password"])
+                user.save()
+                return redirect("accounts:login_view")
+        except IntegrityError as e:
+            msg = f"Please select another username"
+        except Exception as e:
+            msg = f"something went wrong {e}"
+     
+    return render(request, "accounts/register.html", {"msg" : msg})
+
+

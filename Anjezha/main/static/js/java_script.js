@@ -76,7 +76,6 @@ initMDB({ Dropdown, Collapse });
 
 
 
-// custom.js
 
 $(document).ready(function () {
     // Intercept the form submission
@@ -95,4 +94,28 @@ $(document).ready(function () {
       });
     });
   });
+
+
+  $(document).ready(function () {
+    // Intercept the form submission
+    $('#addTaskForm').submit(function (e) {
+      e.preventDefault(); // Prevent the default form submission
+  
+      // Submit the form using AJAX
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function (data) {
+          // On success, append the new task to the container
+          $('#newTasksContainer').append(data);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          // On error, log the details to the console
+          console.error("AJAX error:", textStatus, errorThrown);
+        }
+      });
+    });
+  });
+  
   

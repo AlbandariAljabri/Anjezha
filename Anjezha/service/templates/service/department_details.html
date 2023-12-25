@@ -3,6 +3,8 @@
 {% block title %} Department Details {% endblock %}
 
 {% block content %}
+
+
 <section>
     <div>
         <div class="d-flex flex-column gap-1 p-5 border border-1 rounder-6 shadow h-100 align-items-start">
@@ -11,6 +13,62 @@
             <h4>{{ department.description }}</h4>
         </div>
     </div>
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+        id="button">
+        Edit </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'service:update_department' department.id %}"> Update </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalTasks"> Add Task </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal"> Delete </a>
+        </li>
+    </ul>
 </section>
+
+
+<div class="modal fade" id="ModalTasks" tabindex="-1" aria-labelledby="ModalTasks" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ModalTasks"> Tasks </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for task in task %}
+                <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <h5>{{ task.name}}</h5>
+                    </div>
+                    <a href="{% url 'service:add_department_task' department.id task.id %}"
+                        class="btn btn-secondary">Add</a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Close </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Department</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                you are going to delete the {{ department.title }} department, are you sure ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'service:delete_department' department.id %}" class="btn btn-danger">Yes, delete</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

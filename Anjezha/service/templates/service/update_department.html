@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %} Update Department {% endblock %}
+
+{% block content %}
+
+<div class="update">
+    <div class="row">
+        <h2> Update {{department.title}} </h2>
+        <div class="col">
+            <form action="{% url 'service:update_department' department.id %}" method="POST"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+                <label><b> Department title: </b></label>
+                <input class="form-control" type="text" name="title" placeholder="Enter department name.."
+                    value="{{department.title}}" />
+
+                <label><b> About The Department: </b></label>
+                <textarea class="form-control" name="description"> {{ department.description }} </textarea>
+
+                <label><b> Image: </b></label>
+                <input type="file" name="Image" class="form-control" accept="image/*" />
+
+                <input class="btn btn-secondary mt-2 " type="submit" value="Update Department" />
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

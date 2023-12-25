@@ -19,13 +19,43 @@ def add_department(request: HttpRequest):
 def display_department(request: HttpRequest):
 
     department = Department.objects.all()
-    return render(request, "service/display_department.html", {"departments": department})
+    return render(request, "service/display_department.html", {"department": department})
 
 
 def department_details(request: HttpRequest, department_id):
 
     department_detail = Department.objects.get(id=department_id)
-    return render(request, "service/department_details.html", {"department": department_detail})
+    task = Task.objects.all()
+
+    return render(request, "service/department_details.html", {"department": department_detail, "task": task})
+
+
+def update_department(request: HttpRequest, department_id):
+    department = Department.objects.get(id=department_id)
+
+    if request.method == "POST":
+       department.title = request.POST["name"]
+       department.description = request.POST["about"]
+       department.Image = request.FILES["image"]
+       department.save()
+
+       return redirect("service:display_department")
+    return render(request, "service/update_department.html", {"department":department})
+
+
+def delete_department(request: HttpRequest, department_id):
+
+    department = Department.objects.get(id=department_id)
+    department.delete()
+    return redirect("service:display_department")
+
+
+def add_department_task(request: HttpRequest, department_id, task_id):
+    department = Department.objects.get(id=department_id)
+    task = Task.objects.get(id=task_id)
+    department.task.add(task)
+    return redirect("service:department_details", department_id=department_id)
+
 
 def display_task_view(request : HttpRequest):
     return render(request , "service/display_task.html")

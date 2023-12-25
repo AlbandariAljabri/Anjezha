@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %} register {% endblock %}
+
+{% block content %}
+
+<div class="Loginadmin"><span
+        style="color: #0B6903; font-size: 96px; font-family: Aclonica; font-weight: 400; word-wrap: break-word">REGISTER</span><span
+        style="color: #0B6903; font-size: 30px; font-family: Abhaya Libre Medium; font-weight: 500; word-wrap: break-word">new member </span>
+</div>
+
+<form action="{% url 'accounts:register_view' %}" method="post">
+    {% csrf_token %}
+<!-- username -->
+        <div class="Username"
+            style="color: #999999; font-size: 24px; font-family: Abel; font-weight: 400; word-wrap: break-word">Username
+        </div>
+        <input type="text" id="username" name="username" required minlength="3">
+        <br>
+<!-- first name -->
+        <div class="First name"
+        style="color: #999999; font-size: 24px; font-family: Abel; font-weight: 400; word-wrap: break-word">First name
+    </div>
+    <input type="text"  id="first_name" name="first_name" required minlength="3">
+    <br>
+<!-- last name -->
+    <div class="Last name"
+    style="color: #999999; font-size: 24px; font-family: Abel; font-weight: 400; word-wrap: break-word">Last name
+    </div>
+    <input type="text"  id="last_name" name="last_name" required minlength="3">
+    <br>
+<!-- email -->
+    <div class="Email"
+    style="color: #999999; font-size: 24px; font-family: Abel; font-weight: 400; word-wrap: break-word">Email
+    </div>
+    <input type="text"  id="email" name="email" required minlength="3">
+    <br>
+<!-- password -->
+    <div class="Password"
+        style="color: #999999; font-size: 24px; font-family: Abel; font-weight: 400; word-wrap: break-word">Password
+    </div>
+     <input type="password"  id="password" name="password" required minlength="8">
+<br>
+    <input type="radio" id="supervisor" name="type" value="supervisor">
+    <label for="supervisor">Supervisor</label>
+
+    <input type="radio" id="worker" name="type" value="worker">
+    <label for="worker">Worker</label>
+<br>
+
+    <button>Register</button>
+
+</form>
+
+
+
+{% endblock %}

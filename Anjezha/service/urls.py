@@ -12,7 +12,5 @@ urlpatterns = [
     path("display/task/" , views.display_task_view , name="display_task_view"),
     path("comment/add/<task_id>/", views.add_comment_view, name="add_comment_view"),
     path("add/task/" , views.add_task_view , name="add_task_view"),
-
-
     path("add/<department_id>/<task_id>/", views.add_department_task, name="add_department_task"),
 ]

@@ -1,0 +1,103 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %} Home {% endblock %}
+<!-- <style>
+.card-img-top {
+        height: 100%; /* Set the height of the image container */
+        object-fit: cover; /* Make sure the image covers the container */
+    }
+</style> -->
+
+{% block content %}
+
+
+<div class="container tp-5 ">
+<br>
+    <div class="mx-auto text-center">
+        <h1>Welcome to admin page</h1>
+
+        <div class="mx-auto text-center d-flex justify-content-between">
+            <a href="{% url 'accounts:register_view' %}" class="ml-auto">
+            <input class="btn btn-light" placeholder="Add member"> </a>
+        </div>
+    
+        <div class="row row-cols-1 row-cols-md-3 p-5">
+            <div class="col mb-4">
+              <!-- Department Card -->
+              <div class="card">
+                <!--Card image-->
+                <div class="view overlay card-img">
+                    <a href="{% url 'service:display_department' %}">
+                    <img class="card-img-top" src="\static\images\department_icon.png" alt="Department image "></a>
+
+                    <div class="mask rgba-white-slight"></div>
+                </div>
+          
+                <!--Card content-->
+                <div class="card-body ">
+                  <!--Title-->
+                  <h4 class="card-title">Department</h4>
+                  <a href="{% url 'service:display_department' %}"><br>
+                    <input class="btn btn-light " placeholder="View" ></a>
+                </div>
+              </div>
+
+
+              <!-- Card -->
+            </div>
+            <div class="col mb-4">
+              <!-- Supervisor Card -->
+
+              <!-- display manage supervisor (admin) -->
+              <div class="card">
+                <!--Card image-->
+                <div class="view overlay">
+                <a href="{% url 'service:display_department' %}">
+                    <img class="card-img-top" src="\static\images\supervisor_icon.png" alt="Supervisor image "> </a>
+                    <div class="mask rgba-white-slight"></div>
+                </div>
+          
+                <!--Card content-->
+                <div class="card-body">
+          
+                  <!--Title-->
+                  <h4 class="card-title">Supervisor</h4><br>
+                  <a href="{% url 'service:display_department' %}"><input class="btn btn-light " placeholder="View" ></a>
+                </div>
+              </div>
+
+              <!-- Card -->
+            </div>
+            <div class="col mb-4">
+              <!-- Worker Card -->
+              <div class="card">
+          
+                <!--Card image-->
+                <div class="view overlay">
+                  <img class="card-img-top" src="\static\images\worker_icon.png"  alt="Worker image">
+                  <a href="{% url 'service:display_task_view' %}">
+                    <div class="mask rgba-white-slight"></div>
+                  </a>
+                </div>
+          
+                <!--Card content-->
+                <div class="card-body">
+          
+                  <!--Title-->
+                  <h4 class="card-title">Worker</h4><br>
+                  <a href="{% url 'service:display_task_view' %}">
+                    <input class="btn btn-light " placeholder="View" ></a>
+          
+                </div>
+          
+              </div>
+             
+            </div>
+
+          </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

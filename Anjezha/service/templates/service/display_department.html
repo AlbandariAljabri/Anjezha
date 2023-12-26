@@ -2,11 +2,9 @@
 {% block title %} All Department {% endblock %}
 {% block content %}
 
-
-<h3 class="title"><b> All Departments </b></h3>
 <div>
-    <button href="{% url 'service:add_department' %}" class="btn btn-secondary" type="botton" aria-e> Add new
-        department</button>
+    <h3 class="title"><b> All Departments </b></h3>
+    <a href="{% url 'service:add_department' %}" class="btn btn-secondary btn-lg " role="button" aria-disabled="true">Add new department </a>
 </div>
 <section class="container">
     <div class="row gap-1 row-cols-3 row-cols-md-4">
@@ -19,9 +17,9 @@
                     </a>
                     <h5> {{task.count}} tasks </h5>
                     <br>
-                    <button href="{% url 'service:department_details' department.id %}"
+                    <a href="{% url 'service:department_details' department.id %}"
                         class="btn btn-secondary text-black" type="botton" aria-e>
-                        View </button>
+                        View </a>
                 </div>
             </div>
         </div>

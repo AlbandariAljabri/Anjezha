@@ -56,6 +56,20 @@ def add_department_task(request: HttpRequest, department_id, task_id):
     return redirect("service:department_details", department_id=department_id)
 
 
+def add_department_worker(request: HttpRequest, department_id, worker_id):
+    department = Department.objects.get(id=department_id)
+    worker = Task.objects.get(id=worker_id)
+    department.worker.add(worker)
+    return redirect("service:department_details", department_id=department_id)
+
+
+def add_department_supervisor(request: HttpRequest, department_id, supervisor_id):
+    department = Department.objects.get(id=department_id)
+    supervisor = Task.objects.get(id=supervisor_id)
+    department.supervisor.add(supervisor)
+    return redirect("service:department_details", department_id=department_id)
+
+
 def display_task_view(request : HttpRequest):
     tasks = Task.objects.all()
     print("Tasks:", tasks)  # Add this line for debug

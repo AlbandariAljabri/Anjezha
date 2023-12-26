@@ -55,3 +55,5 @@ def register_view (request:HttpRequest):
     return render(request, "accounts/register.html", {"msg" : msg})
 
 
+def admin_home_view (request:HttpRequest):
+    return render(request, "accounts/admin_home.html")

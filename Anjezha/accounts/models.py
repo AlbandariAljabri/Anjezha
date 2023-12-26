@@ -11,9 +11,9 @@ class Department(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     image = models.ImageField(upload_to="img/", default="img/logo.png")
-    supervisor = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='supervised_department')
+    supervisor = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='supervised_department')
     workers = models.ManyToManyField(User, related_name='working_departments')
-    # task = models.ForeignKey(Task, related_name='assigned_tasks', on_delete=models.CASCADE)
+
 
     def __str__(self) -> str:
        return f"{self.title}"

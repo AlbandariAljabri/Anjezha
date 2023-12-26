@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             model_name="department",
             name="task",
             field=models.ForeignKey(
-                default=11,
+                default=2,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="assigned_tasks",
                 to="service.task",

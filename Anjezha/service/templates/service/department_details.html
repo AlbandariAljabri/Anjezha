@@ -11,6 +11,7 @@
             <img class="details-image" src="{{department.Image.url}}" />
             <h2>{{ department.title }}</h2>
             <h4>{{ department.description }}</h4>
+            <h5 href="{% url 'service:details_task_view' task.id %}"> {{ task.name }}<h5>
         </div>
     </div>
 

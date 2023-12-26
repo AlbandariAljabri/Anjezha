@@ -33,9 +33,9 @@ def update_department(request: HttpRequest, department_id):
     department = Department.objects.get(id=department_id)
 
     if request.method == "POST":
-       department.title = request.POST["name"]
-       department.description = request.POST["about"]
-       department.Image = request.FILES["image"]
+       department.title = request.POST["title"]
+       department.description = request.POST["description"]
+       department.image = request.FILES["image"]
        department.save()
 
        return redirect("service:display_department")

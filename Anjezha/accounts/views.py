@@ -51,10 +51,10 @@ def register_view (request:HttpRequest):
     msg =None
     if request.method == "POST":
         try:
-                #create a new user
-                user = User.objects.create_user(username=request.POST["username"], first_name=request.POST["first_name"], last_name=request.POST["last_name"], email=request.POST["email"], password=request.POST["password"])
-                user.save()
-                return redirect("accounts:login_view")
+            #create a new user
+            user = User.objects.create_user(username=request.POST["username"], first_name=request.POST["first_name"], last_name=request.POST["last_name"], email=request.POST["email"], password=request.POST["password"])
+            user.save()
+            return redirect("accounts:login_view")
         except IntegrityError as e:
             msg = f"Please select another username"
         except Exception as e:

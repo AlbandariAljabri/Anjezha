@@ -13,6 +13,8 @@
             <h4>{{ department.description }}</h4>
         </div>
     </div>
+
+    <!-- Edit department -->
     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
         id="button">
         Edit </button>
@@ -21,12 +23,19 @@
         </li>
         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalTasks"> Add Task </a>
         </li>
-        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal"> Delete </a>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalSupervisor"> Add Supervisor
+            </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalWorkers"> Add Worker </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal"> Delete department
+            </a>
         </li>
     </ul>
 </section>
 
 
+<!-- Add task button -->
 <div class="modal fade" id="ModalTasks" tabindex="-1" aria-labelledby="ModalTasks" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -52,7 +61,81 @@
     </div>
 </div>
 
+<!-- To display Supervisor and Workers -->
+<section>
+    <div>
+        <h3>Supervisor:</h3>
+        {% if department.supervisor %}
+        <p>{{ department.supervisor.first_name }} {{ department.supervisor.last_name }}</p>
+        {% else %}
+        <p>No supervisor assigned</p>
+        {% endif %}
 
+        <h3>Workers:</h3>
+        <ul>
+            {% for worker in department.workers.all %}
+            <li>{{ worker.first_name }} {{ worker.last_name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+<!-- Add Supervisor button -->
+<div class="modal fade" id="ModalSupervisor" tabindex="-1" aria-labelledby="ModalSupervisor" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ModalSupervisor">Supervisor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for supervisor in supervisors %}
+                <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="img-doctors-add" src="{{ supervisor.avatar.url}}" class="rounded-3 avatar" />
+                        <h5>{{ supervisor.name}}</h5>
+                    </div>
+                    <a href="{% url 'service:add_department_supervisor' department.id supervisor.id %}"
+                        class="btn btn-secondary">Add</a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Workers button -->
+<div class="modal fade" id="ModalWorkers" tabindex="-1" aria-labelledby="ModalWorkers" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ModalWorkers">Workers</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for worker in workers %}
+                <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="img-doctors-add" src="{{ worker.avatar.url}}" class="rounded-3 avatar" />
+                        <h5>{{ worker.name}}</h5>
+                    </div>
+                    <a href="{% url 'service:add_department_worker' department.id worker.id %}"
+                        class="btn btn-secondary">Add</a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- delete department button -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

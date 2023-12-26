@@ -82,13 +82,13 @@ def add_comment_view(request: HttpRequest, task_id):
     
     if request.method == "POST":
         if not request.user.is_authenticated:
-            return render(request, "main/not_authorized.html", status=401)
+            return render(request, "main/not_authrized.html", status=401)
 
         new_comment = Comment(task=task, user=request.user, content=request.POST["content"])
         if 'image' in request.FILES: new_comment.image = request.FILES["image"]
         new_comment.save()
         return redirect("contact:add_comment_view", task_id=task.id)
-    return render(request , "contact/comment.html" , task_id=task.id)
+    return render(request , "contact/display_task.html" , task_id=task.id)
   
 def add_task_view(request : HttpRequest):
     if request.method == 'POST':

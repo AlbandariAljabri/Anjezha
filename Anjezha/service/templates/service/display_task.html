@@ -41,7 +41,7 @@
 <!-- Add comment -->
 
 <div class="container">
-    <form action="{% url 'service:add_comment_view' task.id %}" method="POST">
+    <form action="{ url 'service:add_comment_view' task.id }" method="POST">
         {% csrf_token %}
 
 <div class="card">

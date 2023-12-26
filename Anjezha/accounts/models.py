@@ -16,6 +16,9 @@ class Department(models.Model):
     worker = models.ManyToManyField(User, related_name='working_departments')
     task = models.ForeignKey(Task, related_name='assigned_tasks', on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+       return f"{self.title}"
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -23,6 +26,9 @@ class Profile(models.Model):
     # nationality = CountryField()
     avatar = models.ImageField(upload_to="img/", default="img/avatar.png")
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-
+    
+    
     def __str__(self):
-        return f"{self.nationality.name} - {self.user.first_name}"
+      return f" - {self.user.first_name}" 
+
+   

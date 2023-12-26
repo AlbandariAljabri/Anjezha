@@ -8,8 +8,7 @@ from .models import Task,Comment
 
 def add_department(request: HttpRequest):
     if request.method == "POST":
-        new_department = Department(title=request.POST["title"], description=request.POST["description"],
-                                    Image=request.FILES["Image"])
+        new_department = Department(title=request.POST["title"], description=request.POST["description"], image=request.FILES["image"] )
         new_department.save()
         return redirect("service:display_department")
     return render(request, "service/add_department.html")
@@ -33,9 +32,10 @@ def update_department(request: HttpRequest, department_id):
     department = Department.objects.get(id=department_id)
 
     if request.method == "POST":
-       department.title = request.POST["name"]
-       department.description = request.POST["about"]
-       department.Image = request.FILES["image"]
+       department.title = request.POST["title"]
+       department.description = request.POST["description"]
+       if 'image' in request.FILES: department.image = request.FILES["image"]
+    #    department.image = request.FILES["image"]
        department.save()
 
        return redirect("service:display_department")
@@ -99,8 +99,7 @@ def add_task_view(request : HttpRequest):
         end_date = request.POST['end_date'],
         address = request.POST['address'],
         duration = request.POST['duration'],
-        workers = request.POST.getlist('workers'),
-        supervisor = request.user 
+
         )
         task.save()
 

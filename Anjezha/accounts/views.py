@@ -12,9 +12,17 @@ def login_view(request: HttpRequest):
     if request.method == "POST":
         user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
 
-        if user:
+        if user and request.user.is_superuser:
+            return redirect("accounts:admin_home_view")
+
+        elif user and request.user.is_staff:
+            return redirect("service:display_task_view")
+        
+        elif user and request.user.is_authenticated:
+            #if in group
             login(request, user)
-            return redirect("main:home_view")
+            return redirect("service:display_task_view")
+
         else:
             msg = "Please provide correct username and password"
 

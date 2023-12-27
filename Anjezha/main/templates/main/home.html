@@ -1,63 +1,64 @@
-{% extends 'main/base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-<title>{% block title %}Home {% endblock %}</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <title>{% block title %}Home {% endblock %}</title>
 
-
-{% block content %}
-<style>
+  <style>
     #bg-photo {
-  background: linear-gradient(#0000007e, #00000076), url('/static/images/Home.jpg');
-  background-size: cover;
-  background-position: center;
+      background: linear-gradient(#0000007e, #00000076), url('/static/images/Home.jpg');
+      background-size: cover;
+      background-position: center;
     }
+
     #links a {
-        background-color: white;
-        color:#03693f;
+      background-color: white;
+      color: #03693f;
     }
 
-    #links a:hover{
-        background-color:#03693f ;
-        color: #ffffff;
+    #links a:hover {
+      background-color: #03693f;
+      color: #ffffff;
     }
-    
+  </style>
+</head>
 
+<body>
 
-</style>
-
-<section id="bg-photo" class="min-vh-100 d-flex align-items-center text-center">
+  <section id="bg-photo" class="min-vh-100 d-flex align-items-center text-center">
     <div class="container">
       <div class="row">
         <div class="col-12">
           <div class="sub-content">
-          <h1 class="text-uppercase text-white fw-semibold display-1">Welcome To Anjezha</h1>
-          <span style="color: #ffffff; font-size: 30px; font-family: Abhaya Libre Medium; font-weight: 500; word-wrap: break-word"> in easy way</span>
+            <h1 class="text-uppercase text-white fw-semibold display-1">Welcome To Anjezha</h1>
+            <span
+              style="color: #ffffff; font-size: 30px; font-family: Abhaya Libre Medium; font-weight: 500; word-wrap: break-word">
+              in easy way</span>
 
 
-          <div class=" justify-content-center text-center tp-5 " >
-            <a  href="{% url 'accounts:login_view' %}" class="btn btn-light btn-lg " role="button " id="links"
-               aria-disabled="true">Admin</a>
-    
-            <a href="{% url 'accounts:login_view' %}" class="btn btn-light btn-lg " role="button" id="links"
-               aria-disabled="true">Supervisor</a>
-    
-            <a href="{% url 'accounts:login_view' %}" class="btn btn-light btn-lg " role="button" id="links"
-               aria-disabled="true">Worker</a>
-        </div>
+            <div class=" justify-content-center text-center tp-5 ">
+              <a href="{% url 'accounts:login_view' %}" class="btn btn-light btn-lg " role="button " id="links"
+                aria-disabled="true">Admin</a>
 
-        </div>
+              <a href="{% url 'accounts:login_view' %}" class="btn btn-light btn-lg " role="button" id="links"
+                aria-disabled="true">Supervisor</a>
+
+              <a href="{% url 'accounts:login_view' %}" class="btn btn-light btn-lg " role="button" id="links"
+                aria-disabled="true">Worker</a>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-
-
-
-<!-- <div class="d-flex align-items-center justify-content-center flex-column tp-5">
+  <!-- <div class="d-flex align-items-center justify-content-center flex-column tp-5">
     <div class="Loginadmin text-center">
         <span style="color: #0B6903; font-size: 96px; font-family: Aclonica; font-weight: 400; word-wrap: break-word">Anjezha</span>
         <span style="color: #0B6903; font-size: 30px; font-family: Abhaya Libre Medium; font-weight: 500; word-wrap: break-word"> in easy way</span>
@@ -65,8 +66,6 @@
 
 
 </div> -->
+</body>
 
-
-
-
-{% endblock %}
+</html>

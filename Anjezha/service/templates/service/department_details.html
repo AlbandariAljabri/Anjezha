@@ -4,34 +4,6 @@
 
 {% block content %}
 
-
-<section>
-    <div>
-        <div class="d-flex flex-column gap-1 p-5 border border-1 rounder-6 shadow h-100 align-items-start">
-            <img class="details-image" src="{{department.Image.url}}" />
-            <h2>{{ department.title }}</h2>
-            <h4>{{ department.description }}</h4>
-            <h5> {{ task.name }}<h5>
-        </div>
-    </div>
-
-    <!-- Edit department -->
-    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-        id="button">
-        Edit </button>
-    <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="{% url 'service:update_department' department.id %}"> Update </a>
-        </li>
-        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalSupervisor"> Add Supervisor
-            </a>
-        </li>
-        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalWorkers"> Add Worker </a>
-        </li>
-        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal"> Delete department
-            </a>
-        </li>
-    </ul>
-</section>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -764,6 +736,36 @@
         }
     </style>
 
+
+<section>
+    <div>
+        <div class="d-flex flex-column gap-1 p-5 border border-1 rounder-6 shadow h-100 align-items-start">
+            <img class="details-image" src="{{department.Image.url}}" />
+            <h2>{{ department.title }}</h2>
+            <h4>{{ department.description }}</h4>
+            <h5> {{ task.name }}<h5>
+        </div>
+    </div>
+
+    <!-- Edit department -->
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+        id="button">
+        Edit </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'service:update_department' department.id %}"> Update </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalSupervisor"> Add Supervisor
+            </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalWorkers"> Add Worker </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal"> Delete department
+            </a>
+        </li>
+    </ul>
+</section>
+
+
 <!-- display Supervisor -->
 <section>
     {% if department.supervisor %}
@@ -786,7 +788,7 @@
 {% if department.workers.count > 0 %}
 <h4 class="Doc">Workers in this department:</h4>
 <section class="row row-cols-12 row-cols-md-4 border-1">
-    {% for worker in department.workers.all %}
+    {% for worker in department.worker.all %}
     <div class="doc-v">
         <div class="d-flex gap-2 justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-3">
@@ -884,7 +886,7 @@
 
                 <h3>Workers:</h3>
                 <ul>
-                    {% for worker in department.workers.all %}
+                    {% for worker in department.worker.all %}
                     <li>{{ worker.first_name }} {{ worker.last_name }}</li>
                     {% endfor %}
                 </ul>
@@ -900,6 +902,7 @@
                     </div>
                     <a href="{% url 'service:add_department_supervisor' department.id supervisor.id %}"
                         class="btn btn-secondary"> Add </a>
+                        {% endfor %}
         </section>
 
         <!-- Add Supervisor button -->
@@ -941,11 +944,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {% for available_worker in available_workers %}
+                {% for available_worker in available_worker %}
                 <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
                     <div class="d-flex align-items-center gap-3">
                         <img class="img-doctors-add" src="{{ available_worker.avatar.url }}" class="rounded-3 avatar" />
                         <h5> {{ available_worker.user.first_name }} {{ available_worker.user.last_name }} </h5>
+                        {% endfor %}
 
         <!-- Add Workers button -->
         <div class="modal fade" id="ModalWorkers" tabindex="-1" aria-labelledby="ModalWorkers" aria-hidden="true">
@@ -956,7 +960,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        {% for worker in workers %}
+                        {% for worker in worker %}
                         <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
                             <div class="d-flex align-items-center gap-3">
                                 <img class="img-doctors-add" src="{{ worker.avatar.url}}" class="rounded-3 avatar" />
@@ -1014,6 +1018,6 @@
     </main>
     <!-- MAIN -->
 </section>
-<!-- CONTENT -->
+
 
 {% endblock %}

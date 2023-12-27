@@ -11,8 +11,7 @@ from .models import Task, Comment
 
 def add_department(request: HttpRequest):
     if request.method == "POST":
-        new_department = Department(title=request.POST["title"], description=request.POST["description"],
-                                    image=request.FILES["image"])
+        new_department = Department(title=request.POST["title"], description=request.POST["description"],image=request.FILES["image"])
         new_department.save()
         return redirect("service:display_department")
     return render(request, "service/add_department.html")
@@ -28,10 +27,9 @@ def department_details(request: HttpRequest, department_id):
 
     department = Department.objects.get(id=department_id)
     available_supervisors = Profile.objects.exclude(user=department.supervisor)
-    available_workers = Profile.objects.exclude(
-        user__in=department.workers.all())
+    available_worker = Profile.objects.exclude(user__in=department.worker.all())
 
-    return render(request, "service/department_details.html", {"department": department, 'available_supervisors': available_supervisors, 'available_workers': available_workers})
+    return render(request, "service/department_details.html", {"department": department, 'available_supervisors': available_supervisors, 'available_worker': available_worker})
 
 
 def update_department(request: HttpRequest, department_id):
@@ -68,7 +66,7 @@ def remove_department_worker(request: HttpRequest, department_id, worker_id):
 
     department = Department.objects.get(id=department_id)
     worker = Profile.objects.get(id=worker_id)
-    department.workers.remove(worker.user)
+    department.worker.remove(worker.user)
 
     return redirect("service:department_details", department_id=department_id)
 

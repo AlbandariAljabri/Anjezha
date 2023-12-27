@@ -8,8 +8,7 @@ from .models import Task,Comment
 
 def add_department(request: HttpRequest):
     if request.method == "POST":
-        new_department = Department(title=request.POST["title"], description=request.POST["description"],
-                                    Image=request.FILES["Image"])
+        new_department = Department(title=request.POST["title"], description=request.POST["description"], image=request.FILES["image"] )
         new_department.save()
         return redirect("service:display_department")
     return render(request, "service/add_department.html")
@@ -33,9 +32,9 @@ def update_department(request: HttpRequest, department_id):
     department = Department.objects.get(id=department_id)
 
     if request.method == "POST":
-       department.title = request.POST["title"]
-       department.description = request.POST["description"]
-       department.image = request.FILES["image"]
+       department.title = request.POST["name"]
+       department.description = request.POST["about"]
+       department.Image = request.FILES["image"]
        department.save()
 
        return redirect("service:display_department")
@@ -82,13 +81,13 @@ def add_comment_view(request: HttpRequest, task_id):
     
     if request.method == "POST":
         if not request.user.is_authenticated:
-            return render(request, "main/not_authorized.html", status=401)
+            return render(request, "main/not_authrized.html", status=401)
 
         new_comment = Comment(task=task, user=request.user, content=request.POST["content"])
         if 'image' in request.FILES: new_comment.image = request.FILES["image"]
         new_comment.save()
         return redirect("contact:add_comment_view", task_id=task.id)
-    return render(request , "contact/comment.html" , task_id=task.id)
+    return render(request , "contact/display_task.html" , task_id=task.id)
   
 def add_task_view(request : HttpRequest):
     if request.method == 'POST':
@@ -99,8 +98,7 @@ def add_task_view(request : HttpRequest):
         end_date = request.POST['end_date'],
         address = request.POST['address'],
         duration = request.POST['duration'],
-        workers = request.POST.getlist('workers'),
-        supervisor = request.user 
+
         )
         task.save()
 

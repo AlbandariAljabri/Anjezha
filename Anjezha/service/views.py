@@ -6,6 +6,9 @@ from .models import Task, Comment
 # Create your views here.
 
 
+
+# is_supervisor = booleanfield(false)
+
 def add_department(request: HttpRequest):
     if request.method == "POST":
         new_department = Department(title=request.POST["title"], description=request.POST["description"],
@@ -91,7 +94,6 @@ def replace_department_supervisor(request, department_id, supervisor_id):
 
 def display_task_view(request: HttpRequest):
     tasks = Task.objects.all()
-    print("Tasks:", tasks)  # Add this line for debug
 
     return render(request, "service/display_task.html", {"tasks": tasks})
 
@@ -124,10 +126,38 @@ def add_task_view(request: HttpRequest):
             workers=request.POST.getlist('workers'),
             supervisor=request.user
         )
+
+    return render(request , "contact/display_task.html" , task_id=task.id)
+  
+def add_task_view(request : HttpRequest):
+    if request.method == 'POST':
+        task=Task(name = request.POST['name'],description = request.POST['description'],start_date = request.POST['start_date'],end_date = request.POST['end_date'],address = request.POST['address'],duration = request.POST['duration'])
         task.save()
+        return redirect("service:display_task_view")  
 
         # Redirect to the task list page after adding a task
         return redirect('service:display_task_view')
 
     # If it's a GET request, simply render the form
     return render(request, "service/add_task.html")
+    return render(request, "service/add_task.html")
+
+
+def delete_task_view(request : HttpRequest , task_id):
+    task = Task.objects.get(id=task_id)
+    task.delete()
+    return redirect("service:display_task_view")
+
+def update_task_view(request : HttpRequest , task_id):
+    task = Task.objects.get(id=task_id)
+
+    if request.method == "POST":
+        task.name = request.POST['name']
+        task.description = request.POST['description']
+        task.start_date = request.POST['start_date']
+        task.end_date = request.POST['end_date']
+        task.address = request.POST['address']
+        task.duration = request.POST['duration']
+        task.save()
+        return redirect("service:display_task_view")
+    return render(request, "service/update_task.html", {"task":task})

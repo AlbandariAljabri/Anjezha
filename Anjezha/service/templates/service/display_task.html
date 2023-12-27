@@ -3,39 +3,102 @@
 
 {% block title %} Tasks {% endblock %}
 
-
-
-
-{% block content %} 
+{% block content %}
 
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card card-white">
                 <div class="card-body">
-           
-                    <ul class="nav nav-pills todo-nav">
-                        <li role="presentation" class="nav-item all-task active"><a href="#" class="nav-link">All</a></li>
-                        <li role="presentation" class="nav-item active-task"><a href="#" class="nav-link">Active</a></li>
+
+                    <ul class="nav nav-pills todo-nav ">
+                        <li role="presentation" class="nav-item all-task active"><a href="#" class="nav-link">All</a>
+                        </li>
+                        <li role="presentation" class="nav-item active-task"><a href="#" class="nav-link">Active</a>
+                        </li>
                         <li role="presentation" class="nav-item completed-task"><a href="#" class="nav-link">Completed</a></li>
+
+            
+                        <button class="btn btn-success"><a href="{% url 'service:add_task_view' %}" style="color: white;"> Add New Task </a></button>
+
                     </ul>
+
+                    
+                
                     {% for task in tasks %}
 
-                        <div class="todo-list">
-                            <div class="todo-item">
-                                <div class="checker"><span class=""><input type="checkbox"></span></div>
-                                <span>{{task.name}}</span>
-                                <a href="javascript:void(0);" class="float-right remove-todo-item"><i class="icon-close"></i></a>
+                    <div class="todo-list ">
+                        <div class="todo-item d-flex justify-content-between align-items-center ">
+                            <div class="d-flex">
+                            <div class="checker"><span class=""><input type="checkbox"></span></div>
+                            <span style="font-family: 'Roboto Slab', serif;">{{task.name}}</span> 
                             </div>
-                        
-                    {% endfor %}
-  
+
+                                <div id="accordion">
+                                    <div class="card-header" id="heading{{ task.id }}">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link d-flex align-items-center" style="color: green;" data-toggle="collapse"data-target="#collapse{{ task.id }}" aria-expanded="true"aria-controls="collapse{{ task.id }}"><span class="material-symbols-outlined">description</span>Task Details</button></h5>
+                                    </div>
+                                    <div id="collapse{{ task.id }}" class="collapse"
+                                        aria-labelledby="heading{{ task.id }}" data-parent="#accordion">
+                                
+                                        <div class="card-body align-items-center">
+                                            <strong><span class="material-symbols-outlined">info  </span>Task Description:</strong> {{ task.description }} <br>
+                                            <strong><span class="material-symbols-outlined ">alarm</span>Task Start Date:</strong> {{ task.start_date }} <br>
+                                            <strong><span class="material-symbols-outlined">alarm</span> Task End Date:</strong> {{ task.end_date }} <br>
+                                            <strong> <span class="material-symbols-outlined">location_on </span>Task Address :</strong> {{ task.address }} <br>
+                                            <strong><span class="material-symbols-outlined ">hourglass_top </span>Task Duration:</strong> {{ task.duration }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                    
+
+                            <div style="margin-right: 6px; ">
+                                <a href="{% url 'service:delete_task_view' task.id %}" style="color: green;"> <svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-trash3" viewBox="0 0 16 16">
+                                        <path
+                                            d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                                    </svg></a>
+                                <a href="{% url 'service:update_task_view' task.id %}" style="color: green;"> <svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-pencil" viewBox="0 0 16 16">
+                                        <path
+                                            d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                                    </svg> </a>
+                            </div>
+
+         
                     </div>
+                </div>
+                {% endfor %}
+
+                <!-- team member -->
+                <!-- <div class="divider d-flex align-items-center my-4">
+              <p class="text-center mx-3 mb-0" style="color: #a2aab7;">Team member</p>
+            </div>
+
+            <ul class="list-group rounded-0 list-group-horizontal justify-content-center pb-2">
+
+              <li class="list-group-item border-0 d-flex align-items-center p-0">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp" alt="avatar"
+                  class="rounded-circle me-n2" width="45">
+              </li>
+
+            </ul> -->
+<!-- end team member -->
+                
+
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+</div>
+
+
 
 
 <!-- Add comment -->
@@ -44,32 +107,33 @@
     <form action="{ url 'service:add_comment_view' task.id }" method="POST">
         {% csrf_token %}
 
-<div class="card">
-    <p class="heading">Add comment</p>
-    
-   <div class="input-div">
-      <input type="text" class="input" placeholder="Full name">
-      <!-- {{contact.user.first_name}}{{contact.user.last_name} -->
-      </div>
+        <div class="card">
+            <p class="heading">Add comment</p>
 
-      <div class="input-div">
-        <input type="text" class="input" placeholder="Task">
-        </div> 
+            <div class="input-div">
+                <input type="text" class="input" placeholder="Full name">
+                <!-- {{contact.user.first_name}}{{contact.user.last_name} -->
+            </div>
 
-      <div class="input-div">
-        <input class="input" type="text" placeholder="Content">
-      </div>
+            <div class="input-div">
+                <input type="text" class="input" placeholder="Task">
+            </div>
 
-      <div class="input-div">
-   <input class="input" type="file" name="image" accept="image/*" placeholder="Upload image">
-      </div>
+            <div class="input-div">
+                <input class="input" type="text" placeholder="Content">
+            </div>
 
-      <div class="button-div">
-        <button class="submit">Send</button>
-      </div>
+            <div class="input-div">
+                <input class="input" type="file" name="image" accept="image/*" placeholder="Upload image">
+            </div>
 
-  </div>
-     </form>
+            <div class="button-div">
+                <button class="submit">Send</button>
+            </div>
+
+        </div>
+    </form>
 </div>
+
 
 {% endblock %}

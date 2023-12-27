@@ -10,8 +10,8 @@ class Task(models.Model):
     end_date = models.DateField()
     address = models.URLField()
     duration =models.FloatField()
-    workers = models.ManyToManyField(User , related_name='assigned_tasks')
-    supervisor = models.ForeignKey(User, on_delete=models.PROTECT , related_name='supervised_tasks')
+    workers = models.ManyToManyField(User , related_name='assigned_tasks',null=True)
+    supervisor = models.ForeignKey(User, on_delete=models.PROTECT , related_name='supervised_tasks',null=True)
 
 
 class Comment(models.Model):

@@ -12,11 +12,15 @@ urlpatterns = [
     path("display/task/" , views.display_task_view , name="display_task_view"),
     path("comment/add/<task_id>/", views.add_comment_view, name="add_comment_view"),
     path("add/task/" , views.add_task_view , name="add_task_view"),
+    path('add_department_worker/<department_id> <worker_id>', views.add_department_worker, name="add_department_worker"),
+    path('add_department_supervisor/<department_id>/<supervisor_id>', views.add_department_supervisor, name="add_department_supervisor"),
+    path('remove/<department_id>/<worker_id>', views.remove_department_worker, name="remove_department_worker"),
+    path('replace_department_supervisor/<department_id>/<supervisor_id>/', views.replace_department_supervisor, name='replace_department_supervisor'),
     path("add/<department_id>/<task_id>/", views.add_department_task, name="add_department_task"),
-    path("add/<department_id> <worker_id>", views.add_department_worker, name="add_department_worker"),
-    path("add/<department_id> <supervisor_id>", views.add_department_supervisor, name="add_department_supervisor"),
+   
     path("delete/task/<task_id>/" , views.delete_task_view , name="delete_task_view"),
     path("update/task/<task_id>" , views.update_task_view , name="update_task_view")
+
 
 
 ]

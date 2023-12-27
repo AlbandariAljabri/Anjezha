@@ -3,76 +3,77 @@
 {% block title %} Department Details {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 
 <section>
     <div>
         <div class="d-flex flex-column gap-1 p-5 border border-1 rounder-6 shadow h-100 align-items-start">
-            <img class="details-image" src="{{department.image.url}}" />
+            <img class="details-image" src="{{department.Image.url}}" />
             <h2>{{ department.title }}</h2>
             <h4>{{ department.description }}</h4>
-            <h5 href="{% url 'service:details_task_view' task.id %}"> {{ task.name }}<h5>
+            <h5> {{ task.name }}<h5>
         </div>
     </div>
 
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Edit
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="{% url 'service:update_department' department.id %}">Update</a>
-          <a class="dropdown-item" href="#" data-bs-target="#ModalSupervisor">Add Supervisor</a>
-          <a class="dropdown-item" href="#" data-bs-target="#ModalWorkers">Add Worker</a>
-          <a class="dropdown-item" href="{% url 'service:delete_department' department.id %}" data-bs-target="#deleteModal">Delete department </a>
-        </div>
-      </div>
+    <!-- Edit department -->
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+        id="button">
+        Edit </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'service:update_department' department.id %}"> Update </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalSupervisor"> Add Supervisor
+            </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalWorkers"> Add Worker </a>
+        </li>
+        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal"> Delete department
+            </a>
+        </li>
+    </ul>
 </section>
 
 
-<!-- Add task button -->
-<div class="modal fade" id="ModalTasks" tabindex="-1" aria-labelledby="ModalTasks" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="ModalTasks"> Tasks </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                {% for task in task %}
-                <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
-                    <div class="d-flex align-items-center gap-3">
-                        <h5>{{ task.name}}</h5>
-                    </div>
-                    <a href="{% url 'service:add_department_task' department.id task.id %}"
-                        class="btn btn-secondary">Add</a>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Close </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- To display Supervisor and Workers -->
+<!-- display Supervisor -->
 <section>
-    <div>
-        <h3>Supervisor:</h3>
-        {% if department.supervisor %}
-        <p>{{ department.supervisor.first_name }} {{ department.supervisor.last_name }}</p>
+    {% if department.supervisor %}
+    <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
+        <div class="d-flex align-items-center gap-3">
+            <img class="img-doctors-add" src="{{ department.supervisor.profile.avatar.url }}"
+                class="rounded-3 avatar" />
+            <h5>{{ department.supervisor.first_name }} {{ department.supervisor.last_name }}</h5>
+        </div>
+        <a href="{% url 'service:replace_department_supervisor' department.id available_supervisor.id %}"
+            class="btn btn-secondary">Replace Supervisor</a>
         {% else %}
         <p>No supervisor assigned</p>
         {% endif %}
-
-        <h3>Workers:</h3>
-        <ul>
-            {% for worker in department.workers.all %}
-            <li>{{ worker.first_name }} {{ worker.last_name }}</li>
-            {% endfor %}
-        </ul>
     </div>
 </section>
+
+<!-- display Workers -->
+
+{% if department.workers.count > 0 %}
+<h4 class="Doc">Workers in this department:</h4>
+<section class="row row-cols-12 row-cols-md-4 border-1">
+    {% for worker in department.workers.all %}
+    <div class="doc-v">
+        <div class="d-flex gap-2 justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <img src="{{ available_worker.avatar.url }}" class="rounded-3 avatar" />
+                <li>{{ department.worker.first_name }} {{ department.worker.last_name }} </li>
+            </div>
+            </a>
+            {% if perms.worker.delete_worker %}
+            <a href="{% url 'service:remove_department_worker' department.id worker.id %}"
+                class="btn btn-danger text-white">Remove</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
 
 <!-- Add Supervisor button -->
 <div class="modal fade" id="ModalSupervisor" tabindex="-1" aria-labelledby="ModalSupervisor" aria-hidden="true">
@@ -83,14 +84,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {% for supervisor in supervisors %}
+                {% for available_supervisor in available_supervisors %}
                 <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
                     <div class="d-flex align-items-center gap-3">
-                        <img class="img-doctors-add" src="{{ supervisor.avatar.url}}" class="rounded-3 avatar" />
-                        <h5>{{ supervisor.name}}</h5>
+                        <img class="img-doctors-add" src="{{ available_supervisor.avatar.url }}"
+                            class="rounded-3 avatar" />
+                        <h5> {{ available_supervisor.user.first_name }} {{ available_supervisor.user.last_name }}
+                        </h5>
                     </div>
                     <a href="{% url 'service:add_department_supervisor' department.id supervisor.id %}"
-                        class="btn btn-secondary">Add</a>
+                        class="btn btn-secondary"> Add </a>
                 </div>
                 {% endfor %}
             </div>
@@ -110,11 +113,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {% for worker in workers %}
+                {% for available_worker in available_workers %}
                 <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
                     <div class="d-flex align-items-center gap-3">
-                        <img class="img-doctors-add" src="{{ worker.avatar.url}}" class="rounded-3 avatar" />
-                        <h5>{{ worker.name}}</h5>
+                        <img class="img-doctors-add" src="{{ available_worker.avatar.url }}" class="rounded-3 avatar" />
+                        <h5> {{ available_worker.user.first_name }} {{ available_worker.user.last_name }} </h5>
                     </div>
                     <a href="{% url 'service:add_department_worker' department.id worker.id %}"
                         class="btn btn-secondary">Add</a>
@@ -141,14 +144,12 @@
                 you are going to delete the {{ department.title }} department, are you sure ?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a href="{% url 'service:delete_department' department.id %}" class="btn btn-danger">Yes, delete</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Cancel </button>
+                <a href="{% url 'service:delete_department' department.id %}" class="btn btn-danger"> Yes, delete
+                </a>
             </div>
         </div>
     </div>
 </div>
-
-
-
 
 {% endblock %}

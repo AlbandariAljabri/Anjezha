@@ -42,13 +42,7 @@
             <input type="number" class="form-control" id="duration" name="duration" required>
           </div>
 
-          <div class="form-group">
-            <label for="workers">Workers:</label>
-            <!-- Assuming workers is a multiple select field -->
-            <select multiple class="form-control" id="workers" name="workers" required>
-              <!-- Populate workers dynamically based on your logic -->
-            </select>
-          </div>
+          
 
           <input type="submit" class="btn btn-primary" name="add task"> 
         </form>
@@ -67,29 +61,6 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
-<script>
-  $(document).ready(function () {
-    // Intercept the form submission
-    $('#addTaskForm').submit(function (e) {
-      e.preventDefault(); // Prevent the default form submission
-
-      // Submit the form using AJAX
-      $.ajax({
-        type: 'POST',
-        url: $(this).attr('action'),
-        data: $(this).serialize(),
-        success: function (data) {
-          // On success, append the new task to the container
-          $('#newTasksContainer').append(data);
-        },
-        error: function (xhr, textStatus, errorThrown) {
-          // On error, log the details to the console
-          console.error("AJAX error:", textStatus, errorThrown);
-        }
-      });
-    });
-  });
-</script>
 {% endblock %}
 
 

@@ -6,6 +6,9 @@ from .models import Task,Comment
 # Create your views here.
 
 
+
+# is_supervisor = booleanfield(false)
+
 def add_department(request: HttpRequest):
     if request.method == "POST":
         new_department = Department(title=request.POST["title"], description=request.POST["description"], image=request.FILES["image"] )

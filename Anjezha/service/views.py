@@ -92,6 +92,26 @@ def replace_department_supervisor(request, department_id, supervisor_id):
     department.save() #Set the new supervisor
     return redirect("service:department_details", department_id=department_id)
 
+# def display_task_view(request : HttpRequest):
+#     tasks = Task.objects.all()
+#     comment = Comment.objects.filter(task=tasks)[:4]
+#     comment_count = comment.count()
+
+#     return render(request , "service/display_task.html" , {"tasks" : tasks , "comment":comment ,"comment_count":comment_count})
+
+
+def display_task_view(request: HttpRequest):
+    tasks = Task.objects.all()
+    task_comments = {}
+
+    for task in tasks:
+        comments = Comment.objects.filter(task=task)[:4]
+        task_comments[task] = comments
+
+    comment_count = Comment.objects.all().count()
+
+    return render(request, "service/display_task.html", {"tasks": tasks, "task_comments": task_comments, "comment_count": comment_count})
+
 def display_task_view(request: HttpRequest):
     tasks = Task.objects.all()
 
@@ -102,33 +122,24 @@ def add_comment_view(request: HttpRequest, task_id):
     task = Task.objects.get(id=task_id)
 
     if request.method == "POST":
+
         if not request.user.is_authenticated:
-            return render(request, "main/not_authorized.html", status=401)
+            return render(request, "main/not_authrized.html")
+        
+
 
         new_comment = Comment(task=task, user=request.user,
                               content=request.POST["content"])
         if 'image' in request.FILES:
             new_comment.image = request.FILES["image"]
         new_comment.save()
+
         return redirect("contact:add_comment_view", task_id=task.id)
     return render(request, "contact/comment.html", task_id=task.id)
 
 
-def add_task_view(request: HttpRequest):
-    if request.method == 'POST':
-        task = Task(
-            name=request.POST['name'],
-            description=request.POST['description'],
-            start_date=request.POST['start_date'],
-            end_date=request.POST['end_date'],
-            address=request.POST['address'],
-            duration=request.POST['duration'],
-            workers=request.POST.getlist('workers'),
-            supervisor=request.user
-        )
 
-    return render(request , "contact/display_task.html" , task_id=task.id)
-  
+
 def add_task_view(request : HttpRequest):
     if request.method == 'POST':
         task=Task(name = request.POST['name'],description = request.POST['description'],start_date = request.POST['start_date'],end_date = request.POST['end_date'],address = request.POST['address'],duration = request.POST['duration'])

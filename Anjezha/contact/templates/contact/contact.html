@@ -88,28 +88,36 @@ justify-content: center;
 <!-- status_choices.choices -->
 
 <div class="container">
-    <form action="{% url 'contact:contact_view' %}" method="POST">
+
+  {% if msg %}
+  <div class="alert alert-danger" role="alert">
+      {{ msg }}
+  </div>
+  {% endif %}
+
+
+    <form action="{% url 'contact:contact_view' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
 <div class="card">
     <p class="heading">Contact us</p>
     
    <div class="input-div">
-      <input type="text" class="input" placeholder="Full name">
-      <!-- {{contact.user.first_name}}{{contact.user.last_name} -->
+      <input type="text" class="input"  name="username" value="{{ contact.user.username }}">
      
       </div>
       <div class="input-div">
-        <input type="text" class="input" placeholder="Subject">
+        <input type="text" class="input" placeholder="Subject" name="subject" id="subject">
         </div>
       <div class="input-div">
-      <input class="input" type="text" placeholder="Message">
+      <input class="input" type="text" placeholder="Message" name="message" id="message">
       </div>
       <div class="input-div">
-      <input class="input" type="file" placeholder="Upload file">
+      <input class="input" type="file" placeholder="Upload file" name="file" id="file">
       </div>
       <div class="button-div">
-        <button class="submit">Send</button>
+        <button type="submit" class="btn btn-success"><a href="{% url 'contact:thank_you_view' %}" ></a>Send</button>
+        
       </div>
   </div>
      </form>

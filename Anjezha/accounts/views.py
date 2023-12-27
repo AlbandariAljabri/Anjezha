@@ -12,6 +12,8 @@ from django.db import IntegrityError
 def login_view(request):
     msg = None
     if request.method == "POST":
+    
+
         username = request.POST.get("username")
         password = request.POST.get("password")
 

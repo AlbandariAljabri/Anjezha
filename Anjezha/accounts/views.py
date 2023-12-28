@@ -100,6 +100,7 @@ def update_user_view(request: HttpRequest):
             else:
                 return redirect("accounts:login_view")
         except IntegrityError as e:
+            print(e)
             msg = f"Please select another username"
         except Exception as e:
             msg = f"something went wrong {e}"

@@ -7,12 +7,12 @@ from .models import *
 # Create your views here.
 
 
-
 # is_supervisor = booleanfield(false)
 
 def add_department(request: HttpRequest):
     if request.method == "POST":
-        new_department = Department(title=request.POST["title"], description=request.POST["description"],image=request.FILES["image"])
+        new_department = Department(
+            title=request.POST["title"], description=request.POST["description"], image=request.FILES["image"])
         new_department.save()
         return redirect("service:display_department")
     return render(request, "service/add_department.html")
@@ -28,7 +28,8 @@ def department_details(request: HttpRequest, department_id):
 
     department = Department.objects.get(id=department_id)
     available_supervisors = Profile.objects.exclude(user=department.supervisor)
-    available_worker = Profile.objects.exclude(user__in=department.worker.all())
+    available_worker = Profile.objects.exclude(
+        user__in=department.worker.all())
 
     return render(request, "service/department_details.html", {"department": department, 'available_supervisors': available_supervisors, 'available_worker': available_worker})
 
@@ -80,52 +81,47 @@ def add_department_supervisor(request: HttpRequest, department_id, supervisor_id
 
     return redirect("service:department_details", department_id=department_id)
 
+
 def replace_department_supervisor(request, department_id, supervisor_id):
     department = Department.objects.get(id=department_id)
     new_supervisor = Profile.objects.get(id=supervisor_id)
-    
+
     if department.supervisor:
-        department.supervisor = None  #If there is a current supervisor, remove them
+        department.supervisor = None  # If there is a current supervisor, remove them
 
     department.supervisor = new_supervisor.user
-    department.save() #Set the new supervisor
+    department.save()  # Set the new supervisor
     return redirect("service:department_details", department_id=department_id)
 
 
-def display_task_view(request: HttpRequest , task_id):
+def display_task_view(request: HttpRequest, task_id):
     tasks = Task.objects.all()
 
-    if request.method=="POST":
-        new_comment = Comment(task=tasks, user=request.user, content=request.POST["content"])
-        if 'image' in request.FILES: new_comment.image = request.FILES["image"]
+    if request.method == "POST":
+        new_comment = Comment(task=tasks, user=request.user,
+                              content=request.POST["content"])
+        if 'image' in request.FILES:
+            new_comment.image = request.FILES["image"]
         new_comment.save()
 
-    return render(request, "service/display_task.html", {"tasks": tasks })
+    return render(request, "service/display_task.html", {"tasks": tasks})
 
 
 def add_comment_view(request: HttpRequest, task_id):
     task = Task.objects.get(id=task_id)
 
     if request.method == "POST":
+        comment = Comment.objects.filter(task=task)
+        comment_count = comment.count()
 
-    comment = Comment.objects.filter(task=tasks)
-    comment_count = comment.count()
-
-    return render(request, "service/display_task.html", {"tasks": tasks , "comment":comment , "comment_count":comment_count })
-
+    return render(request, "service/display_task.html", {"tasks": task, "comment": comment, "comment_count": comment_count})
 
 
-
-
-
-def add_task_view(request : HttpRequest):
+def add_task_view(request: HttpRequest):
     all_workers = User.objects.all()
-
-
 
     if request.method == 'POST':
         selected_worker_ids = request.POST.getlist('workers')
-
 
         task = Task(
             name=request.POST['name'],
@@ -143,20 +139,18 @@ def add_task_view(request : HttpRequest):
 
         task.workers.set(selected_worker_ids)
 
-
         return redirect("service:display_task_view")
 
-    return render(request, "service/add_task.html" , {"all_workers" : all_workers })
+    return render(request, "service/add_task.html", {"all_workers": all_workers})
 
 
-
-
-def delete_task_view(request : HttpRequest , task_id):
+def delete_task_view(request: HttpRequest, task_id):
     task = Task.objects.get(id=task_id)
     task.delete()
     return redirect("service:display_task_view")
 
-def update_task_view(request : HttpRequest , task_id):
+
+def update_task_view(request: HttpRequest, task_id):
     task = Task.objects.get(id=task_id)
 
     if request.method == "POST":
@@ -167,4 +161,4 @@ def update_task_view(request : HttpRequest , task_id):
         task.address = request.POST['address']
         task.save()
         return redirect("service:display_task_view")
-    return render(request, "service/update_task.html", {"task":task})
+    return render(request, "service/update_task.html", {"task": task})

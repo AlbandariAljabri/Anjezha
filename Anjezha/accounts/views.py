@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from .models import Profile
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -60,6 +60,16 @@ def register_view (request:HttpRequest):
             #create a new user
             user = User.objects.create_user(username=request.POST["username"], first_name=request.POST["first_name"], last_name=request.POST["last_name"], email=request.POST["email"], password=request.POST["password"])
             user.save()
+
+            is_supervisor = True if request.POST["type"] == "supervisor" else False
+
+            supervisor_group, created = Group.objects.get_or_create(name="supervisors")
+            worker_group, created = Group.objects.get_or_create(name="workers")
+
+            if is_supervisor:
+                user.groups.add(supervisor_group)
+            else:
+                user.groups.add(worker_group)
             return redirect("accounts:successfully_msg_view")
         except IntegrityError as e:
             msg = f"Please select another username"

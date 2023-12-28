@@ -20,7 +20,10 @@ def add_department(request: HttpRequest):
 def display_department(request: HttpRequest):
 
     department = Department.objects.all()
-    return render(request, "department/display_department.html", {"department": department})
+    workers = User.objects.filter(groups__name="workers")
+    supervisors = User.objects.filter(groups__name="supervisors")
+
+    return render(request, "service/display_department.html", {"department": department ,'supervisors' : supervisors})
 
 
 def department_details(request: HttpRequest, department_id):
@@ -53,9 +56,10 @@ def delete_department(request: HttpRequest, department_id):
 
 
 def add_department_worker(request: HttpRequest, department_id, worker_id):
+
     department = Department.objects.get(id=department_id)
     worker = Profile.objects.get(id=worker_id)
-    department.workers.add(worker.user)
+    department.worker.add(worker.user)
 
     return redirect("department:department_details", department_id=department_id)
 

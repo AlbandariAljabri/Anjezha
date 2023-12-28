@@ -6,6 +6,13 @@
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
@@ -743,6 +750,7 @@
     }
 </style>
 
+
 <!-- CONTENT -->
 <section id="content">
     <!-- MAIN -->
@@ -773,12 +781,13 @@
                         Edit
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="{% url 'service:update_department' department.id %}">Update</a>
-                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalSupervisor">Add
+                        <a class="dropdown-item"
+                            href="{% url 'department:update_department' department.id %}">Update</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalSupervisor">Add
                             Supervisor</a>
-                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalWorkers">Add
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalWorkers">Add
                             Worker</a>
-                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal">Delete
                             department </a>
                     </div>
                 </div>
@@ -794,7 +803,7 @@
                         class="rounded-3 avatar" />
                     <h5>{{ department.supervisor.first_name }} {{ department.supervisor.last_name }}</h5>
                 </div>
-                <a href="{% url 'service:replace_department_supervisor' department.id available_supervisor.id %}"
+                <a href="{% url 'department:replace_department_supervisor' department.id available_supervisor.id %}"
                     class="btn btn-secondary">Replace</a>
                 {% else %}
                 <p>No supervisor assigned</p>
@@ -815,7 +824,7 @@
                         <li>{{ department.worker.first_name }} {{ department.worker.last_name }} </li>
                     </div>
                     {% if perms.worker.delete_worker %}
-                    <a href="{% url 'service:remove_department_worker' department.id worker.id %}"
+                    <a href="{% url 'department:remove_department_worker' department.id worker.id %}"
                         class="btn btn-danger text-white">Remove</a>
                     {% endif %}
                 </div>
@@ -842,7 +851,7 @@
                                 <h5>{{ available_supervisor.user.first_name }} {{ available_supervisor.user.last_name }}
                                 </h5>
                             </div>
-                            <a href="{% url 'service:add_department_supervisor' department.id available_supervisor.id %}"
+                            <a href="{% url 'department:add_department_supervisor' department.id available_supervisor.id %}"
                                 class="btn btn-secondary">Add</a>
                         </div>
                         {% endfor %}
@@ -869,7 +878,7 @@
                                 <img class="img-doctors-add" src="{{ available_worker.avatar.url }}"
                                     class="rounded-3 avatar" />
                                 <h5> {{ available_worker.user.first_name }} {{ available_worker.user.last_name }} </h5>
-                                <a href="{% url 'service:add_department_worker' department.id available_worker.id %}"
+                                <a href="{% url 'department:add_department_worker' department.id available_worker.id %}"
                                     class="btn btn-secondary">Add</a>
                             </div>
                             {% endfor %}
@@ -896,14 +905,12 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <a href="{% url 'service:delete_department' department.id %}" class="btn btn-danger">Yes,
+                        <a href="{% url 'department:delete_department' department.id %}" class="btn btn-danger">Yes,
                             delete</a>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </main>
     <!-- MAIN -->
 </section>

@@ -758,7 +758,7 @@
     <h2> Update {{department.title}} </h2>
     <div class="row">
         <div class="col">
-            <form action="{% url 'service:update_department' department.id %}" method="POST"
+            <form action="{% url 'department:update_department' department.id %}" method="POST"
                 enctype="multipart/form-data">
                 {% csrf_token %}
                 <label><b> Department Title: </b></label>

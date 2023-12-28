@@ -9,9 +9,13 @@ class Task(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     address = models.URLField()
-    duration =models.FloatField()
     workers = models.ManyToManyField(User , related_name='assigned_tasks',null=True)
     supervisor = models.ForeignKey(User, on_delete=models.PROTECT , related_name='supervised_tasks',null=True)
+
+    def get_selected_workers(self):
+        return self.workers.all()
+    def duration(self):
+        return self.end_date - self.start_date
 
 
 class Comment(models.Model):

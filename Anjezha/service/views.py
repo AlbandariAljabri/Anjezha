@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
-from accounts.models import Department, Profile
-from .models import Task, Comment
+from django.contrib.auth.models import User
+from accounts.models import *
+from .models import *
 
 # Create your views here.
 
@@ -113,7 +114,7 @@ def display_task_view(request: HttpRequest):
 def display_task_view(request: HttpRequest):
     tasks = Task.objects.all()
 
-    return render(request, "service/display_task.html", {"tasks": tasks})
+    return render(request, "service/display_task.html", {"tasks": tasks })
 
 
 def add_comment_view(request: HttpRequest, task_id):
@@ -139,17 +140,36 @@ def add_comment_view(request: HttpRequest, task_id):
 
 
 def add_task_view(request : HttpRequest):
+    all_workers = User.objects.all()
+
+
+
     if request.method == 'POST':
-        task=Task(name = request.POST['name'],description = request.POST['description'],start_date = request.POST['start_date'],end_date = request.POST['end_date'],address = request.POST['address'],duration = request.POST['duration'])
+        selected_worker_ids = request.POST.getlist('workers')
+
+
+        task = Task(
+            name=request.POST['name'],
+            description=request.POST['description'],
+            start_date=request.POST['start_date'],
+            end_date=request.POST['end_date'],
+            address=request.POST['address'],
+        )
+
+        supervisor_id = request.user.id
+        supervisor = User.objects.get(id=supervisor_id)
+        task.supervisor = supervisor
+
         task.save()
-        return redirect("service:display_task_view")  
 
-        # Redirect to the task list page after adding a task
-        return redirect('service:display_task_view')
+        task.workers.set(selected_worker_ids)
 
-    # If it's a GET request, simply render the form
-    return render(request, "service/add_task.html")
-    return render(request, "service/add_task.html")
+
+        return redirect("service:display_task_view")
+
+    return render(request, "service/add_task.html" , {"all_workers" : all_workers })
+
+
 
 
 def delete_task_view(request : HttpRequest , task_id):
@@ -166,7 +186,6 @@ def update_task_view(request : HttpRequest , task_id):
         task.start_date = request.POST['start_date']
         task.end_date = request.POST['end_date']
         task.address = request.POST['address']
-        task.duration = request.POST['duration']
         task.save()
         return redirect("service:display_task_view")
     return render(request, "service/update_task.html", {"task":task})

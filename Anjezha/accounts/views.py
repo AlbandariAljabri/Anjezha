@@ -43,14 +43,14 @@ def logout_view(request: HttpRequest):
     return redirect("accounts:login_view")
 
 
-def user_profile_view(request: HttpRequest ,user_id):
+def user_profile_view(request: HttpRequest, user_id):
 
     try:
         user = User.objects.get(id=user_id)
 
     except:
         return render(request, 'main/not_found.html')
-    return render(request, 'accounts/profile.html')
+    return render(request, 'accounts/profile.html', {"user":user})
 
 # Register
 def register_view (request:HttpRequest):
@@ -60,13 +60,18 @@ def register_view (request:HttpRequest):
             #create a new user
             user = User.objects.create_user(username=request.POST["username"], first_name=request.POST["first_name"], last_name=request.POST["last_name"], email=request.POST["email"], password=request.POST["password"])
             user.save()
-            return redirect("accounts:login_view")
+            return redirect("accounts:successfully_msg_view")
         except IntegrityError as e:
             msg = f"Please select another username"
         except Exception as e:
             msg = f"something went wrong {e}"
      
     return render(request, "accounts/register.html", {"msg" : msg})
+
+def successfully_msg_view(request:HttpRequest):
+
+ return render(request, 'accounts/successfully_msg.html')
+
 
 
 def update_user_view(request: HttpRequest):
@@ -100,6 +105,11 @@ def update_user_view(request: HttpRequest):
             msg = f"something went wrong {e}"
 
     return render(request, "accounts/update_profile.html", {"msg" : msg})
+
+
+
+
+
 
 def admin_home_view (request:HttpRequest):
     return render(request, "accounts/admin_home.html")

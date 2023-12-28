@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,12 +27,12 @@
             margin-left: 400px;
 
         }
-    
+
         .left {
             width: 66%;
             height: 100%;
         }
-    
+
         .form {
             display: flex;
             flex-direction: column;
@@ -42,7 +43,7 @@
             backdrop-filter: blur(20px);
             position: relative;
         }
-    
+
         .form::before {
             position: absolute;
             content: "";
@@ -50,10 +51,10 @@
             height: 40%;
             right: 1%;
             z-index: -1;
-           
             filter: blur(70px);
             border-radius: 50%;
         }
+
         .container::after {
             position: absolute;
             content: "";
@@ -63,8 +64,9 @@
             border-radius: 50%;
             z-index: -1;
         }
-    
-        .input,button {
+
+        .input,
+        button {
             background: rgba(253, 253, 253, 0);
             outline: none;
             border: 1px solid rgba(255, 0, 0, 0);
@@ -77,11 +79,11 @@
             font-weight: 500;
             font-size: 1.1em;
         }
-    
+
         .input-block {
             position: relative;
         }
-    
+
         label {
             position: absolute;
             left: 15%;
@@ -89,25 +91,27 @@
             pointer-events: none;
             color: gray;
         }
-    
+
         .input:focus+label,
         .input:valid+label {
             transform: translateY(-170%) scale(0.9);
             transition: all 0.4s;
         }
-    
+
         button {
             background-color: #3aa854;
             color: white;
             font-size: medium;
             box-shadow: 2px 4px 8px rgba(70, 70, 70, 0.178);
         }
+
         .input {
             box-shadow: inset 4px 4px 4px rgba(165, 163, 163, 0.315),
                 4px 4px 4px rgba(218, 218, 218, 0.13);
         }
     </style>
 </head>
+
 <body>
     {% if msg %}
     <div class="alert alert-danger" role="alert">
@@ -116,28 +120,29 @@
     {% endif %}
     <div class="container">
         <a href="{% url 'main:home_view'%}" class="brand">
-            <img src="/static/images/logo.png" width="300" height="200" alt="Anjezha Logo" loading="lazy"/><br>
-          </a>
-    
+            <img src="/static/images/logo.png" width="300" height="200" alt="Anjezha Logo" loading="lazy" /><br>
+        </a>
+
         <div class="left">
-            
+
             <form action="{% url 'accounts:login_view' %}" method="post" class="form">
                 {% csrf_token %}
                 <div class="Loginadmin">
-                    <span style="color: #0B6903; font-size: 66px; font-family: Aclonica; font-weight: 400; word-wrap: break-word">LOGIN</span>
+                    <span
+                        style="color: #0B6903; font-size: 66px; font-family: Aclonica; font-weight: 400; word-wrap: break-word">LOGIN</span>
                     <!-- if request.user.is_superuser -->
                     <!-- <span style="color: #0B6903; font-size: 10px; font-family: Abhaya Libre Medium; font-weight: 500; word-wrap: break-word">Admin</span> -->
                     <!-- elif request.user.is_staff -->
                     <!-- <span style="color: #0B6903; font-size: 10px; font-family: Abhaya Libre Medium; font-weight: 500; word-wrap: break-word">Supervisor</span> -->
                     <!-- else request.user.is_authenticated -->
                     <!-- <span style="color: #0B6903; font-size: 10px; font-family: Abhaya Libre Medium; font-weight: 500; word-wrap: break-word">Worker</span> -->
-            </div>
+                </div>
                 <div class="input-block">
                     <input class="input" type="text" id="username" name="username" required minlength="3">
                     <label for="email">Username</label>
                 </div>
                 <div class="input-block">
-                    <input class="input" type="password"  id="password" name="password" required minlength="8">
+                    <input class="input" type="password" id="password" name="password" required minlength="8">
                     <label for="pass">Password</label>
                 </div>
                 <div class="input-block">
@@ -146,7 +151,7 @@
             </form>
         </div>
     </div>
-    
-</body>
-</html>
 
+</body>
+
+</html>

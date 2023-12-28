@@ -1,518 +1,183 @@
 {% extends 'main/base.html' %}
 {% load static %}
-{% block title %} My Profile {% endblock %}
+{% block title %} Update My Profile {% endblock %}
 
 {% block content %}
-
-
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+   .card {
+    --main-color: #000;
+    --submain-color: #78858F;
+    --bg-color: #fff;
+    font-family: system-ui, -apple-system, 'Segoe UI', 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 1200px;
+    height: 384px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+    background: var(--bg-color);
+  }
 
-    /* CONTENT */
-    #content {
-        position: relative;
-        width: calc(100% - 280px);
-        left: 280px;
-        transition: .3s ease;
+  .card__img {
+    height: 192px;
+    width: 100%;
+  }
+
+  .card__img svg {
+    height: 100%;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .card__avatar {
+    position: absolute;
+    width: 114px;
+    height: 114px;
+    background: var(--bg-color);
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: calc(50% - 57px);
+  }
+
+  .card__title {
+    margin-top: 60px;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--main-color);
+  }
+
+  .card__subtitle {
+    margin-top: 10px;
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--submain-color);
+  }
+
+  .card__btn {
+    margin-top: 15px;
+    width: 76px;
+    height: 31px;
+    border: 2px solid var(--main-color);
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--main-color);
+    background: var(--bg-color);
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+
+  .card__btn-solid {
+    background: var(--main-color);
+    color: var(--bg-color);
+  }
+
+  .card__btn:hover {
+    background: var(--main-color);
+    color: var(--bg-color);
+  }
+
+  .card__btn-solid:hover {
+    background: var(--bg-color);
+    color: var(--main-color);
+  }
+
+
+  /* card-2 */
+  .card-2 {
+    width: 1200px;
+    height: 150px;
+    border-radius: 1rem;
+    background-color: rgb(255, 255, 255);
+    padding: 2rem;
+    margin: auto;
+    margin-top: 10px;
+  }
+
+  .infos {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    grid-gap: 1rem;
+    gap: 1rem;
+  }
+
+  .info {
+    height: 7rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .coolinput {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    position: static;
+    max-width: 240px;
+  }
+
+  .coolinput label.text {
+    font-size: 0.75rem;
+    color: #398c3b;
+    font-weight: 700;
+    position: relative;
+    top: 0.5rem;
+    margin: 0 0 0 7px;
+    padding: 0 3px;
+    background: #ffffff;
+    width: fit-content;
+    border-radius: 50px;
+  }
+
+  .coolinput input[type=text].input {
+    padding: 11px 10px;
+    font-size: 0.75rem;
+    border: 2px #4aaf4c solid;
+    border-radius: 5px;
+    background: #ffffff;
+  }
+
+  .coolinput input[type=text].input:focus {
+    outline: none;
+  }
+
+  .coolinput input[type=email].input {
+        padding: 11px 10px;
+        font-size: 0.75rem;
+        border: 2px #4aaf4c solid;
+        border-radius: 5px;
+        background: #ffffff;
     }
 
-    #sidebar.hide~#content {
-        width: calc(100% - 60px);
-        left: 60px;
+    .coolinput input[type=date].input {
+        padding: 10px 10px;
+        font-size: 0.75rem;
+        border: 2px #4aaf4c solid;
+        border-radius: 5px;
+        background: #ffffff;
     }
-
-
-
-
-    /* NAVBAR */
-    #content nav {
-        height: 56px;
-        background: var(--light);
-        padding: 0 24px;
-        display: flex;
-        align-items: center;
-        grid-gap: 24px;
-        font-family: var(--lato);
-        position: sticky;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-    }
-
-    #content nav::before {
-        content: '';
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        bottom: -40px;
-        left: 0;
-        border-radius: 50%;
-        box-shadow: -20px -20px 0 var(--light);
-    }
-
-    #content nav a {
-        color: var(--dark);
-    }
-
-    #content nav .bx.bx-menu {
-        cursor: pointer;
-        color: var(--dark);
-    }
-
-    #content nav .nav-link {
-        font-size: 16px;
-        transition: .3s ease;
-    }
-
-    #content nav .nav-link:hover {
-        color: var(--blue);
-    }
-
-    #content nav form {
-        max-width: 400px;
-        width: 100%;
-        margin-right: auto;
-    }
-
-    #content nav form .form-input {
-        display: flex;
-        align-items: center;
-        height: 36px;
-    }
-
-    #content nav form .form-input input {
-        flex-grow: 1;
-        padding: 0 16px;
-        height: 100%;
-        border: none;
-        background: var(--grey);
-        border-radius: 36px 0 0 36px;
-        outline: none;
-        width: 100%;
-        color: var(--dark);
-    }
-
-    #content nav form .form-input button {
-        width: 36px;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: var(--blue);
-        color: var(--light);
-        font-size: 18px;
-        border: none;
-        outline: none;
-        border-radius: 0 36px 36px 0;
-        cursor: pointer;
-    }
-
-    #content nav .notification {
-        font-size: 20px;
-        position: relative;
-    }
-
-    #content nav .notification .num {
-        position: absolute;
-        top: -6px;
-        right: -6px;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        border: 2px solid var(--light);
-        background: var(--red);
-        color: var(--light);
-        font-weight: 700;
-        font-size: 12px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    #content nav .profile img {
-        width: 36px;
-        height: 36px;
-        object-fit: cover;
-        border-radius: 50%;
-    }
-
-    #content nav .switch-mode {
-        display: block;
-        min-width: 50px;
-        height: 25px;
-        border-radius: 25px;
-        background: var(--grey);
-        cursor: pointer;
-        position: relative;
-    }
-
-    #content nav .switch-mode::before {
-        content: '';
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        bottom: 2px;
-        width: calc(25px - 4px);
-        background: var(--blue);
-        border-radius: 50%;
-        transition: all .3s ease;
-    }
-
-    #content nav #switch-mode:checked+.switch-mode::before {
-        left: calc(100% - (25px - 4px) - 2px);
-    }
-
-    /* NAVBAR */
-
-
-
-
-
-    /* MAIN */
-    #content main {
-        width: 100%;
-        padding: 36px 24px;
-        font-family: var(--poppins);
-        max-height: calc(100vh - 56px);
-        overflow-y: auto;
-    }
-
-    #content main .head-title {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        grid-gap: 16px;
-        flex-wrap: wrap;
-    }
-
-    #content main .head-title .left h1 {
-        font-size: 36px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        color: var(--dark);
-    }
-
-    #content main .head-title .left .breadcrumb {
-        display: flex;
-        align-items: center;
-        grid-gap: 16px;
-    }
-
-    #content main .head-title .left .breadcrumb li {
-        color: var(--dark);
-    }
-
-    #content main .head-title .left .breadcrumb li a {
-        color: var(--dark-grey);
-        pointer-events: none;
-    }
-
-    #content main .head-title .left .breadcrumb li a.active {
-        color: var(--blue);
-        pointer-events: unset;
-    }
-
-    #content main .head-title .btn-download {
-        height: 36px;
-        padding: 0 16px;
-        border-radius: 36px;
-        background: var(--blue);
-        color: var(--light);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        grid-gap: 10px;
-        font-weight: 500;
+    .coolinput input[type=file].input {
+        padding: 9px 10px;
+        font-size: 0.75rem;
+        border: 2px #4aaf4c solid;
+        border-radius: 5px;
+        background: #ffffff;
     }
 
 
 
 
-    #content main .box-info {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        grid-gap: 24px;
-        margin-top: 36px;
+    .card__btn-solid {
+        background: var(--main-color);
+        color: var(--bg-color);
     }
 
-    #content main .box-info li {
-        padding: 24px;
-        background: var(--light);
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        grid-gap: 24px;
-    }
-
-    #content main .box-info li .bx {
-        width: 80px;
-        height: 80px;
-        border-radius: 10px;
-        font-size: 36px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    #content main .box-info li:nth-child(1) .bx {
-        background: var(--light-blue);
-        color: var(--blue);
-    }
-
-    #content main .box-info li:nth-child(2) .bx {
-        background: var(--light-yellow);
-        color: var(--yellow);
-    }
-
-    #content main .box-info li:nth-child(3) .bx {
-        background: var(--light-orange);
-        color: var(--orange);
-    }
-
-    #content main .box-info li .text h3 {
-        font-size: 24px;
-        font-weight: 600;
-        color: var(--dark);
-    }
-
-    #content main .box-info li .text p {
-        color: var(--dark);
-    }
-
-
-
-
-
-    #content main .table-data {
-        display: flex;
-        flex-wrap: wrap;
-        grid-gap: 24px;
-        margin-top: 24px;
-        width: 100%;
-        color: var(--dark);
-    }
-
-    #content main .table-data>div {
-        border-radius: 20px;
-        background: var(--light);
-        padding: 24px;
-        overflow-x: auto;
-    }
-
-    #content main .table-data .head {
-        display: flex;
-        align-items: center;
-        grid-gap: 16px;
-        margin-bottom: 24px;
-    }
-
-    #content main .table-data .head h3 {
-        margin-right: auto;
-        font-size: 24px;
-        font-weight: 600;
-    }
-
-    #content main .table-data .head .bx {
-        cursor: pointer;
-    }
-
-    #content main .table-data .order {
-        flex-grow: 1;
-        flex-basis: 500px;
-    }
-
-    #content main .table-data .order table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    #content main .table-data .order table th {
-        padding-bottom: 12px;
-        font-size: 13px;
-        text-align: left;
-        border-bottom: 1px solid var(--grey);
-    }
-
-    #content main .table-data .order table td {
-        padding: 16px 0;
-    }
-
-    #content main .table-data .order table tr td:first-child {
-        display: flex;
-        align-items: center;
-        grid-gap: 12px;
-        padding-left: 6px;
-    }
-
-    #content main .table-data .order table td img {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    #content main .table-data .order table tbody tr:hover {
-        background: var(--grey);
-    }
-
-    #content main .table-data .order table tr td .status {
-        font-size: 10px;
-        padding: 6px 16px;
-        color: var(--light);
-        border-radius: 20px;
-        font-weight: 700;
-    }
-
-    #content main .table-data .order table tr td .status.completed {
-        background: var(--blue);
-    }
-
-    #content main .table-data .order table tr td .status.process {
-        background: var(--yellow);
-    }
-
-    #content main .table-data .order table tr td .status.pending {
-        background: var(--orange);
-    }
-
-
-    #content main .table-data .todo {
-        flex-grow: 1;
-        flex-basis: 300px;
-    }
-
-    #content main .table-data .todo .todo-list {
-        width: 100%;
-    }
-
-    #content main .table-data .todo .todo-list li {
-        width: 100%;
-        margin-bottom: 16px;
-        background: var(--grey);
-        border-radius: 10px;
-        padding: 14px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    #content main .table-data .todo .todo-list li .bx {
-        cursor: pointer;
-    }
-
-    #content main .table-data .todo .todo-list li.completed {
-        border-left: 10px solid var(--blue);
-    }
-
-    #content main .table-data .todo .todo-list li.not-completed {
-        border-left: 10px solid var(--orange);
-    }
-
-    #content main .table-data .todo .todo-list li:last-child {
-        margin-bottom: 0;
-    }
-
-    /* MAIN */
-    /* CONTENT */
-
-
-
-
-
-
-
-
-
-    @media screen and (max-width: 768px) {
-        #sidebar {
-            width: 200px;
-        }
-
-        #content {
-            width: calc(100% - 60px);
-            left: 200px;
-        }
-
-        #content nav .nav-link {
-            display: none;
-        }
-    }
-
-
-
-
-
-
-    @media screen and (max-width: 576px) {
-        #content nav form .form-input input {
-            display: none;
-        }
-
-        #content nav form .form-input button {
-            width: auto;
-            height: auto;
-            background: transparent;
-            border-radius: none;
-            color: var(--dark);
-        }
-
-        #content nav form.show .form-input input {
-            display: block;
-            width: 100%;
-        }
-
-        #content nav form.show .form-input button {
-            width: 36px;
-            height: 100%;
-            border-radius: 0 36px 36px 0;
-            color: var(--light);
-            background: var(--red);
-        }
-
-        #content nav form.show~.notification,
-        #content nav form.show~.profile {
-            display: none;
-        }
-
-        #content main .box-info {
-            grid-template-columns: 1fr;
-        }
-
-        #content main .table-data .head {
-            min-width: 420px;
-        }
-
-        #content main .table-data .order table {
-            min-width: 420px;
-        }
-
-        #content main .table-data .todo .todo-list {
-            min-width: 420px;
-        }
-    }
-
-    .c {
-        background: rgba(11.10, 105.37, 2.90, 0.70);
-
-        float: right;
-        width: 700px;
-        height: 700px;
-        shape-outside: circle(50% at 50%);
-        clip-path: circle(50% at -10%);
-        transform: rotate(180deg);
-        margin-right: -10px;
-        margin-top: 100px;
-
-    }
-
-    .c2 {
-        background: rgb(121, 121, 121);
-        border-radius: 50%;
-        width: 100px;
-        height: 100px;
-        margin-top: 600px
-    }
-
+    /*  */
+    /*  */
     .form-control:focus {
         box-shadow: none;
         border-color: #6ac868
@@ -546,11 +211,40 @@
     .labels {
         font-size: 11px
     }
-</style>
 
+    .containerr {
+    width: 100%;
+    height: 100%;
+    --s: 84px;
+    --c1: #79994f;
+    --c2: #717246;
+    --c3: #3b3b06;
+
+    --_g: 0 120deg, #0000 0;
+    background: conic-gradient(from 0deg at calc(500% / 6) calc(100% / 3),
+        var(--c3) var(--_g)),
+      conic-gradient(from -120deg at calc(100% / 6) calc(100% / 3),
+        var(--c2) var(--_g)),
+      conic-gradient(from 120deg at calc(100% / 3) calc(500% / 6),
+        var(--c1) var(--_g)),
+      conic-gradient(from 120deg at calc(200% / 3) calc(500% / 6),
+        var(--c1) var(--_g)),
+      conic-gradient(from -180deg at calc(100% / 3) 50%,
+        var(--c2) 60deg,
+        var(--c1) var(--_g)),
+      conic-gradient(from 60deg at calc(200% / 3) 50%,
+        var(--c1) 60deg,
+        var(--c3) var(--_g)),
+      conic-gradient(from -60deg at 50% calc(100% / 3),
+        var(--c1) 120deg,
+        var(--c2) 0 240deg,
+        var(--c3) 0);
+    background-size: calc(var(--s) * 1.732) var(--s);
+  }
+</style>
 <!-- CONTENT -->
 <section id="content">
-    {% if msg %}
+    <!-- {% if msg %}
     <div class="alert alert-danger" role="alert">
         {{ msg }}
     </div>
@@ -587,8 +281,8 @@
                             </div>
                         </div>
                         <div class="row mt-3">
-                            <!-- <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text"
-                                class="form-control" placeholder="enter phone number" value=""></div> -->
+                            <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text"
+                                    class="form-control" placeholder="enter phone number" value=""></div>
 
                             <div class="col-md-12">
                                 <label class="labels">Email </label>
@@ -598,23 +292,21 @@
                         </div>
                         <div class="row mt-3">
 
-                            <!-- <div class="col-md-6"><label class="labels">Nationality</label><input type="text"
-                                class="form-control" placeholder="Nationality" value=""></div> -->
+                            <div class="col-md-6"><label class="labels">Nationality</label><input type="text"
+                                    class="form-control" placeholder="Nationality" value=""></div>
                             <div class="col-md-6">
                                 <label class="labels">Birth Date</label>
                                 <input type="date" class="form-control" placeholder="Birth Date" name="birth_date"
-                                     value="{{request.user.profile.birth_date.isoformat }}" name="input">
+                                    value="{{request.user.profile.birth_date.isoformat }}" name="input">
 
                                 <label for="input" class="text">Avatar:</label>
                                 <input class="input" type="file" name="avatar" placeholder="choose avatar" />
                             </div>
-
-
-
                         </div>
                         <div class="mt-5 text-center">
-                            <button><input class="btn btn-primary profile-button" type="submit" value="Save Profile" /></button>
-                            <!-- <button class="btn btn-primary profile-button" type="button">Save Profile</button> -->
+                            <button><input class="btn btn-primary profile-button" type="submit"
+                                    value="Save Profile" /></button>
+                            <button class="btn btn-primary profile-button" type="button">Save Profile</button>
                             {% if request.user.is_authenticated and request.user.id == user.id %}
                             <a href="{% url 'accounts:update_user_view'%}"><button class="btn btn-secondary "
                                     type="button">Edit </button></a>
@@ -626,10 +318,70 @@
             </div>
 
         </div>
+    </div> -->
+    
+    {% if msg %}
+<div class="alert alert-danger" role="alert">
+    {{ msg }}
+</div>
+{% endif %}
+    <!-- Card-1 -->
+    <div class="card">
+        <div class="card__img">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" class="containerr"></svg>
+          </div>
+        <div class="card__avatar">
+            <img class="w-100 rounded-circle" src="{{ user.profile.avatar.url }}" />
+        </div>
+        <div class="card__title">
+            {{ user.first_name }} {{ user.last_name }}
+        </div>
+        <div class="card__subtitle">{{user.profile.job}}</div>
+    
+        <form action="{% url 'accounts:update_user_view' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="card__wrapper">
+                {% if request.user.is_authenticated and request.user.id == user.id %}
+                <a href="{% url 'accounts:update_user_view'%}"><button class="card__btn">Edit</button></a>
+                {% endif %}
+                <input class="card__btn card__btn-solid" type="submit" value="Done"/>
+            </div>        
     </div>
+    
+    <!-- Card-2 -->
+    <div class="card-2">
+        <div class="infos">
+            <div class="coolinput">
+                <label for="input" class="text">First Name:</label>
+                <input type="text" placeholder="first name" name="first_name" class="input" required minlength="3"
+                    value="{{ request.user.first_name }}">
+            </div>
+            <div class="coolinput">
+                <label for="input" class="text">Last Name:</label>
+                <input type="text" placeholder="Last Name" name="last_name" class="input" required minlength="3"
+                    value="{{ request.user.last_name }}">
+            </div>
+            <div class="coolinput">
+                <label for="input" class="text">Email:</label>
+                <input type="email" placeholder="example@gmail.com" name="email" class="input" required minlength="3"
+                    value="{{ request.user.email}}">
+            </div>
+            <div class="coolinput">
+                <label for="input" class="text">Birth Date:</label>
+                <input type="date" placeholder="Birth Date" name="birth_date" class="input" required
+                    value="{{ request.user.profile.birth_date.isoformat }}">
+            </div>
+            <div class="coolinput">
+                <label for="input" class="text">Avatar:</label>
+                <input class="input" type="file" name="avatar" placeholder="choose avatar" />
+            </div>
+            </form>
+        </div>
+    </div>
+    
+    
+
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 {% endblock %}

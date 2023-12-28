@@ -47,7 +47,26 @@
                                             <strong><span class="material-symbols-outlined ">alarm</span>Task Start Date:</strong> {{ task.start_date }} <br>
                                             <strong><span class="material-symbols-outlined">alarm</span> Task End Date:</strong> {{ task.end_date }} <br>
                                             <strong> <span class="material-symbols-outlined">location_on </span>Task Address :</strong> {{ task.address }} <br>
-                                            <strong><span class="material-symbols-outlined ">hourglass_top </span>Task Duration:</strong> {{ task.duration }}
+                                            <strong><span class="material-symbols-outlined ">hourglass_top </span>Task Duration:</strong> {{ task.duration }}<br>
+                                                <!-- team member -->
+                                                    <div class="divider d-flex align-items-center my-4">
+                                                <p class="text-center mx-3 mb-0" style="color: #a2aab7;">Team member</p>
+                                                </div>
+
+                                                <ul class="list-group rounded-0 list-group-horizontal justify-content-center pb-2">
+
+                                                <li class="list-group-item border-0 d-flex align-items-center p-0">
+                                                    
+                                                    {% for worker in task.workers.all %}
+                             
+                                                    <li class="d-flex">{{ worker.username }}</li>
+                                                    <img width="50px" src="{{ worker.profile.avatar.url }}" alt="avatar" class="d-flex rounded-circle me-n2">
+                                    
+                                                    {% endfor %}
+                                                </li>
+
+                                                </ul>
+                                    <!-- end team member -->
                                         </div>
                                     </div>
                                 </div>
@@ -74,20 +93,7 @@
                 </div>
                 {% endfor %}
 
-                <!-- team member -->
-                <!-- <div class="divider d-flex align-items-center my-4">
-              <p class="text-center mx-3 mb-0" style="color: #a2aab7;">Team member</p>
-            </div>
 
-            <ul class="list-group rounded-0 list-group-horizontal justify-content-center pb-2">
-
-              <li class="list-group-item border-0 d-flex align-items-center p-0">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp" alt="avatar"
-                  class="rounded-circle me-n2" width="45">
-              </li>
-
-            </ul> -->
-<!-- end team member -->
                 
 
 
@@ -179,4 +185,76 @@
 </div>
 
 
+<script>
+
+$( document ).ready(function() {
+    
+    "use strict";
+    
+    var todo = function() { 
+        $('.todo-list .todo-item input').click(function() {
+        if($(this).is(':checked')) {
+            $(this).parent().parent().parent().toggleClass('complete');
+        } else {
+            $(this).parent().parent().parent().toggleClass('complete');
+        }
+    });
+    
+    $('.todo-nav .all-task').click(function() {
+        $('.todo-list').removeClass('only-active');
+        $('.todo-list').removeClass('only-complete');
+        $('.todo-nav li.active').removeClass('active');
+        $(this).addClass('active');
+    });
+    
+    $('.todo-nav .active-task').click(function() {
+        $('.todo-list').removeClass('only-complete');
+        $('.todo-list').addClass('only-active');
+        $('.todo-nav li.active').removeClass('active');
+        $(this).addClass('active');
+    });
+    
+    $('.todo-nav .completed-task').click(function() {
+        $('.todo-list').removeClass('only-active');
+        $('.todo-list').addClass('only-complete');
+        $('.todo-nav li.active').removeClass('active');
+        $(this).addClass('active');
+    });
+    
+    $('#uniform-all-complete input').click(function() {
+        if($(this).is(':checked')) {
+            $('.todo-item .checker span:not(.checked) input').click();
+        } else {
+            $('.todo-item .checker span.checked input').click();
+        }
+    });
+    
+    $('.remove-todo-item').click(function() {
+        $(this).parent().remove();
+    });
+    };
+    
+    todo();
+    
+    $(".add-task").keypress(function (e) {
+        if ((e.which == 13)&&(!$(this).val().length == 0)) {
+            $('<div class="todo-item"><div class="checker"><span class=""><input type="checkbox"></span></div> <span>' + $(this).val() + '</span> <a href="javascript:void(0);" class="float-right remove-todo-item"><i class="icon-close"></i></a></div>').insertAfter('.todo-list .todo-item:last-child');
+            $(this).val('');
+        } else if(e.which == 13) {
+            alert('Please enter new task');
+        }
+        $(document).on('.todo-list .todo-item.added input').click(function() {
+            if($(this).is(':checked')) {
+                $(this).parent().parent().parent().toggleClass('complete');
+            } else {
+                $(this).parent().parent().parent().toggleClass('complete');
+            }
+        });
+        $('.todo-list .todo-item.added .remove-todo-item').click(function() {
+            $(this).parent().remove();
+        });
+    });
+}); 
+  
+  </script>
 {% endblock %}

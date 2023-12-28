@@ -10,6 +10,8 @@ urlpatterns = [
     path("register/", views.register_view, name="register_view"),
     path("update/", views.update_user_view, name="update_user_view"),
     path("AdminHome/", views.admin_home_view, name="admin_home_view"),
+    path('successfully/', views.successfully_msg_view, name='successfully_msg_view'),
+
 
 
 

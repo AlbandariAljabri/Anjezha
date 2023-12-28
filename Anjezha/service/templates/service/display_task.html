@@ -104,10 +104,10 @@
 <section>
     <div class="container my-5 py-5 ">
         {% if comment_count > 0 %}
-        <h4 class="mb-0">Recent comments {{reviews_count}} </h4>  
+        <h4 class="mb-0">Recent comments {{comment_count}} </h4>  
 
       <div class="row row-cols-1 row-cols-md-4 mt-3  d-flex ">
-        {% for comment in comment %} 
+        {% for comment in comments %} 
         <div class="col">
           <div class="card text-dark">
             <div class="card-body p-4">
@@ -146,37 +146,22 @@
 <!-- Add comment -->
 
 <div class="container">
-    <form action="{ url 'service:add_comment_view' task.id }" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'service:add_comment_view' task.id %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
-<div class="card">
-    <p class="heading">Add comment</p>
-    
-   <div class="input-div">
-      <input type="text" class="input" placeholder="{{comment.user.first_name}}{{comment.user.last_name}}">
-      </div>
-
-      <div class="input-div">
-        <input type="text" class="input" placeholder="Task" name="task">
-        </div> 
-
-      <div class="input-div">
-        <input class="input" type="text" placeholder="Content" name="content">
-      </div>
         <div class="card">
             <p class="heading">Add comment</p>
 
             <div class="input-div">
-                <input type="text" class="input" placeholder="Full name">
-                <!-- {{contact.user.first_name}}{{contact.user.last_name} -->
+                <input type="text" class="input" placeholder="{{ request.user.first_name }} {{ request.user.last_name }}" >
             </div>
 
             <div class="input-div">
-                <input type="text" class="input" placeholder="Task">
+                <input type="text" class="input" placeholder="Task" name="task">
             </div>
 
             <div class="input-div">
-                <input class="input" type="text" placeholder="Content">
+                <input class="input" type="text" placeholder="Content" name="content">
             </div>
 
             <div class="input-div">
@@ -187,9 +172,7 @@
         <input class="submit btn btn-success" type="submit" placeholder="Submit">
 
     </div>
-            <div class="button-div">
-                <button class="submit">Send</button>
-            </div>
+           
 
         </div>
     </form>

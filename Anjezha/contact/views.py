@@ -14,9 +14,7 @@ def contact_view (request :HttpRequest):
 
         try:
             new_msg= Contact(user=request.user, subject=request.POST["subject"], message=request.POST["message"], status='Unread')
-            if "file" in request.FILES:
-              new_msg.file = request.FILES["file"]
-
+            if "file" in request.FILES:  new_msg.file = request.FILES["file"]
             new_msg.save()
             return redirect("contact:thank_you_view")
         

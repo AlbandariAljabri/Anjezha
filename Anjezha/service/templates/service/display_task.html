@@ -67,7 +67,7 @@
                                             <li class="list-group-item border-0 d-flex align-items-center p-0">
 
                                                 <label for="name">Supervisor:<br>
-                                                    👷🏻‍♂️ {{ request.user.first_name}} {{ request.user.last_name}}
+                                                    👷🏻‍♂️ {{ task.supervisor.first_name}} {{ task.supervisor.last_name}}
                                                 </label>
 
                                                 {% for worker in task.workers.all %}

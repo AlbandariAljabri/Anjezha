@@ -9,17 +9,17 @@ from .models import *
 
 
 
-def display_task_view(request: HttpRequest, task_id):
-    tasks = Task.objects.all()
+# def display_task_view(request: HttpRequest, task_id):
+#     tasks = Task.objects.all()
 
-    if request.method == "POST":
-        new_comment = Comment(task=tasks, user=request.user,
-                              content=request.POST["content"])
-        if 'image' in request.FILES:
-            new_comment.image = request.FILES["image"]
-        new_comment.save()
+#     if request.method == "POST":
+#         new_comment = Comment(task=tasks, user=request.user,
+#                               content=request.POST["content"])
+#         if 'image' in request.FILES:
+#             new_comment.image = request.FILES["image"]
+#         new_comment.save()
 
-    return render(request, "service/display_task.html", {"tasks": tasks})
+#     return render(request, "service/display_task.html", {"tasks": tasks})
 # is_supervisor = booleanfield(false)
 
 
@@ -44,17 +44,16 @@ def add_comment_view(request: HttpRequest, task_id):
     return render(request, "service/comment.html", { "comment":comment , "comment_count":comment_count , "task":task})
 
     
-    return render(request, "service/display_task.html", {"tasks": tasks })
 
 
 # def add_comment_view(request: HttpRequest, task_id):
 #     task = Task.objects.get(id=task_id)
 
-    if request.method == "POST":
-        comment = Comment.objects.filter(task=task)
-        comment_count = comment.count()
+    # if request.method == "POST":
+    #     comment = Comment.objects.filter(task=task)
+    #     comment_count = comment.count()
 
-    return render(request, "service/display_task.html", {"tasks": task, "comment": comment, "comment_count": comment_count})
+    # return render(request, "service/display_task.html", {"tasks": task, "comment": comment, "comment_count": comment_count})
 #     if request.method == "POST":
 
 #         comment = Comment.objects.filter(task=task)

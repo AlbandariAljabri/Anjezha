@@ -42,7 +42,7 @@ def logout_view(request: HttpRequest):
 
     return redirect("accounts:login_view")
 
-
+# Profile
 def user_profile_view(request: HttpRequest, user_id):
 
     try:
@@ -78,12 +78,12 @@ def register_view (request:HttpRequest):
      
     return render(request, "accounts/register.html", {"msg" : msg})
 
+# Successfully msg
 def successfully_msg_view(request:HttpRequest):
 
  return render(request, 'accounts/successfully_msg.html')
 
-
-
+# Update
 def update_user_view(request: HttpRequest):
     msg = None
 
@@ -117,10 +117,6 @@ def update_user_view(request: HttpRequest):
 
     return render(request, "accounts/update_profile.html", {"msg" : msg})
 
-
-
-
-
-
+# Home
 def admin_home_view (request:HttpRequest):
     return render(request, "accounts/admin_home.html")

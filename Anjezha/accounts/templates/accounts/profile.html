@@ -196,7 +196,7 @@
     <div class="card__title">
       {{ user.first_name }} {{ user.last_name }}
     </div>
-    <div class="card__subtitle">{{user.profile.department}}</div>
+    <div class="card__subtitle"> Department : {{user.profile.department.title}}</div>
     <div class="card__wrapper">
       {% if request.user.is_authenticated and request.user.id == user.id %}
       <a href="{% url 'accounts:update_user_view'%}"><button class="card__btn">Edit</button></a>

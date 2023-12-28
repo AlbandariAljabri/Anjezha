@@ -5,9 +5,6 @@ from department.models import *
 # from django_countries.fields import CountryField
 
 
-
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField()

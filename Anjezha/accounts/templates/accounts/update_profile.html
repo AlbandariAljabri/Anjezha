@@ -4,7 +4,7 @@
 
 {% block content %}
 <style>
-   .card {
+  .card {
     --main-color: #000;
     --submain-color: #78858F;
     --bg-color: #fff;
@@ -146,73 +146,74 @@
   }
 
   .coolinput input[type=email].input {
-        padding: 11px 10px;
-        font-size: 0.75rem;
-        border: 2px #4aaf4c solid;
-        border-radius: 5px;
-        background: #ffffff;
-    }
+    padding: 11px 10px;
+    font-size: 0.75rem;
+    border: 2px #4aaf4c solid;
+    border-radius: 5px;
+    background: #ffffff;
+  }
 
-    .coolinput input[type=date].input {
-        padding: 10px 10px;
-        font-size: 0.75rem;
-        border: 2px #4aaf4c solid;
-        border-radius: 5px;
-        background: #ffffff;
-    }
-    .coolinput input[type=file].input {
-        padding: 9px 10px;
-        font-size: 0.75rem;
-        border: 2px #4aaf4c solid;
-        border-radius: 5px;
-        background: #ffffff;
-    }
+  .coolinput input[type=date].input {
+    padding: 10px 10px;
+    font-size: 0.75rem;
+    border: 2px #4aaf4c solid;
+    border-radius: 5px;
+    background: #ffffff;
+  }
+
+  .coolinput input[type=file].input {
+    padding: 9px 10px;
+    font-size: 0.75rem;
+    border: 2px #4aaf4c solid;
+    border-radius: 5px;
+    background: #ffffff;
+  }
 
 
 
 
-    .card__btn-solid {
-        background: var(--main-color);
-        color: var(--bg-color);
-    }
+  .card__btn-solid {
+    background: var(--main-color);
+    color: var(--bg-color);
+  }
 
-    /*  */
-    /*  */
-    .form-control:focus {
-        box-shadow: none;
-        border-color: #6ac868
-    }
+  /*  */
+  /*  */
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #6ac868
+  }
 
-    .profile-button {
-        background: #428a41;
-        box-shadow: none;
-        border: none
-    }
+  .profile-button {
+    background: #428a41;
+    box-shadow: none;
+    border: none
+  }
 
-    .profile-button:hover {
-        background: #6bc16a
-    }
+  .profile-button:hover {
+    background: #6bc16a
+  }
 
-    .profile-button:focus {
-        background: #428a41;
-        box-shadow: none
-    }
+  .profile-button:focus {
+    background: #428a41;
+    box-shadow: none
+  }
 
-    .profile-button:active {
-        background: #428a41;
-        box-shadow: none
-    }
+  .profile-button:active {
+    background: #428a41;
+    box-shadow: none
+  }
 
-    .back:hover {
-        color: #428a41;
-        cursor: pointer
-    }
+  .back:hover {
+    color: #428a41;
+    cursor: pointer
+  }
 
-    .labels {
-        font-size: 11px
-    }
+  .labels {
+    font-size: 11px
+  }
 
-    .containerr {
+  .containerr {
     width: 100%;
     height: 100%;
     --s: 84px;
@@ -244,143 +245,64 @@
 </style>
 <!-- CONTENT -->
 <section id="content">
-    <!-- {% if msg %}
-    <div class="alert alert-danger" role="alert">
-        {{ msg }}
-    </div>
-    {% endif %}
-
-    <div class="container rounded bg-white mt-5 mb-5">
-        <div class="row">
-            <div class="col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
-                        width="150px" src="{{ user.profile.avatar.url }}"><span
-                        class="font-weight-bold">@{{user.username}}</span><span
-                        class="text-black-50">{{department.title}}</span>
-                    <span> </span>
-                </div>
-            </div>
-            <div class="col-md-5 border-right">
-                <div class="p-3 py-5">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right">Profile</h4>
-                    </div>
-                    <form action="{% url 'accounts:update_user_view' %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-
-                        <div class="row mt-2">
-                            <div class="col-md-6">
-                                <label class="labels">First Name </label>
-                                <input type="text" class="form-control" placeholder="first name"
-                                    value="{{request.user.first_name }}" name="first_name" required minlength="3">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="labels">Last Name </label>
-                                <input type="text" class="form-control" value="{{request.user.last_name }}"
-                                    placeholder="Last Name" name="last_name" required minlength="3">
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text"
-                                    class="form-control" placeholder="enter phone number" value=""></div>
-
-                            <div class="col-md-12">
-                                <label class="labels">Email </label>
-                                <input type="email" class="form-control" placeholder="Example@gmail.com"
-                                    value="{{request.user.email}}" name="email" required minlength="3">
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-
-                            <div class="col-md-6"><label class="labels">Nationality</label><input type="text"
-                                    class="form-control" placeholder="Nationality" value=""></div>
-                            <div class="col-md-6">
-                                <label class="labels">Birth Date</label>
-                                <input type="date" class="form-control" placeholder="Birth Date" name="birth_date"
-                                    value="{{request.user.profile.birth_date.isoformat }}" name="input">
-
-                                <label for="input" class="text">Avatar:</label>
-                                <input class="input" type="file" name="avatar" placeholder="choose avatar" />
-                            </div>
-                        </div>
-                        <div class="mt-5 text-center">
-                            <button><input class="btn btn-primary profile-button" type="submit"
-                                    value="Save Profile" /></button>
-                            <button class="btn btn-primary profile-button" type="button">Save Profile</button>
-                            {% if request.user.is_authenticated and request.user.id == user.id %}
-                            <a href="{% url 'accounts:update_user_view'%}"><button class="btn btn-secondary "
-                                    type="button">Edit </button></a>
-                            {% endif %}
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-
-        </div>
-    </div> -->
-    
-    {% if msg %}
-<div class="alert alert-danger" role="alert">
+  {% if msg %}
+  <div class="alert alert-danger" role="alert">
     {{ msg }}
-</div>
-{% endif %}
-    <!-- Card-1 -->
-    <div class="card">
-        <div class="card__img">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100%" class="containerr"></svg>
-          </div>
-        <div class="card__avatar">
-            <img class="w-100 rounded-circle" src="{{ user.profile.avatar.url }}" />
-        </div>
-        <div class="card__title">
-            {{ user.first_name }} {{ user.last_name }}
-        </div>
-        <div class="card__subtitle">{{user.profile.job}}</div>
-    
-        <form action="{% url 'accounts:update_user_view' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="card__wrapper">
-                {% if request.user.is_authenticated and request.user.id == user.id %}
-                <a href="{% url 'accounts:update_user_view'%}"><button class="card__btn">Edit</button></a>
-                {% endif %}
-                <input class="card__btn card__btn-solid" type="submit" value="Done"/>
-            </div>        
+  </div>
+  {% endif %}
+  <!-- Card-1 -->
+  <div class="card">
+    <div class="card__img">
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" class="containerr"></svg>
     </div>
-    
-    <!-- Card-2 -->
-    <div class="card-2">
-        <div class="infos">
-            <div class="coolinput">
-                <label for="input" class="text">First Name:</label>
-                <input type="text" placeholder="first name" name="first_name" class="input" required minlength="3"
-                    value="{{ request.user.first_name }}">
-            </div>
-            <div class="coolinput">
-                <label for="input" class="text">Last Name:</label>
-                <input type="text" placeholder="Last Name" name="last_name" class="input" required minlength="3"
-                    value="{{ request.user.last_name }}">
-            </div>
-            <div class="coolinput">
-                <label for="input" class="text">Email:</label>
-                <input type="email" placeholder="example@gmail.com" name="email" class="input" required minlength="3"
-                    value="{{ request.user.email}}">
-            </div>
-            <div class="coolinput">
-                <label for="input" class="text">Birth Date:</label>
-                <input type="date" placeholder="Birth Date" name="birth_date" class="input" 
-                    value="{{ request.user.profile.birth_date.isoformat }}">
-            </div>
-            <div class="coolinput">
-                <label for="input" class="text">Avatar:</label>
-                <input class="input" type="file" name="avatar" placeholder="choose avatar" />
-            </div>
-            </form>
-        </div>
+    <div class="card__avatar">
+      <img class="w-100 rounded-circle" src="{{ user.profile.avatar.url }}" />
     </div>
-    
-    
+    <div class="card__title">
+      {{ user.first_name }} {{ user.last_name }}
+    </div>
+    <div class="card__subtitle">{{user.profile.department.title}}</div>
 
+    <form action="{% url 'accounts:update_user_view' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="card__wrapper">
+        {% if request.user.is_authenticated and request.user.id == user.id %}
+        <a href="{% url 'accounts:update_user_view'%}"><button class="card__btn">Edit</button></a>
+        {% endif %}
+        <input class="card__btn card__btn-solid" type="submit" value="Done" />
+      </div>
+  </div>
+
+  <!-- Card-2 -->
+  <div class="card-2">
+    <div class="infos">
+      <div class="coolinput">
+        <label for="input" class="text">First Name:</label>
+        <input type="text" placeholder="first name" name="first_name" class="input" required minlength="3"
+          value="{{ request.user.first_name }}">
+      </div>
+      <div class="coolinput">
+        <label for="input" class="text">Last Name:</label>
+        <input type="text" placeholder="Last Name" name="last_name" class="input" required minlength="3"
+          value="{{ request.user.last_name }}">
+      </div>
+      <div class="coolinput">
+        <label for="input" class="text">Email:</label>
+        <input type="email" placeholder="example@gmail.com" name="email" class="input" required minlength="3"
+          value="{{ request.user.email}}">
+      </div>
+      <div class="coolinput">
+        <label for="input" class="text">Birth Date:</label>
+        <input type="date" placeholder="Birth Date" name="birth_date" class="input"
+          value="{{ request.user.profile.birth_date.isoformat }}">
+      </div>
+      <div class="coolinput">
+        <label for="input" class="text">Avatar:</label>
+        <input class="input" type="file" name="avatar" placeholder="choose avatar" />
+      </div>
+      </form>
+    </div>
+  </div>
 </section>
 
 

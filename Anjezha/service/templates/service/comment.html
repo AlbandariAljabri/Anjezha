@@ -56,11 +56,11 @@
 
             <div class="input-div">
                 <input type="text" class="input" name= "{{ request.user.username }}"
-                value="{{ request.user.username }} " >
+                value="{{ request.user.username }} " disabled >
             </div>
 
             <div class="input-div">
-                <input type="text" class="input" placeholder="Task" name="task">
+                <input type="text" class="input" placeholder="{{task.name}}" name="task" disabled>
             </div>
 
             <div class="input-div">

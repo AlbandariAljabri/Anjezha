@@ -23,7 +23,7 @@ def display_department(request: HttpRequest):
     workers = User.objects.filter(groups__name="workers")
     supervisors = User.objects.filter(groups__name="supervisors")
 
-    return render(request, "service/display_department.html", {"department": department ,'supervisors' : supervisors})
+    return render(request, "department/display_department.html", {"department": department ,'supervisors' : supervisors})
 
 
 def department_details(request: HttpRequest, department_id):

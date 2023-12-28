@@ -16,6 +16,8 @@ class Task(models.Model):
         return self.workers.all()
     def duration(self):
         return self.end_date - self.start_date
+    def __str__(self):
+        return f"{self.name} task created by  {self.supervisor}"
 
 
 class Comment(models.Model):
@@ -23,3 +25,6 @@ class Comment(models.Model):
     task = models.ForeignKey(Task , on_delete=models.CASCADE)
     content = models.TextField()
     image = models.ImageField(upload_to="img/" , default="img/logo.png")
+
+    def __str__(self):
+        return f"{self.user} : {self.content}"

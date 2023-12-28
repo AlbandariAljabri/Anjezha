@@ -17,6 +17,7 @@ class Department(models.Model):
        return f"{self.title}"
 
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField()

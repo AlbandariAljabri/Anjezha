@@ -92,29 +92,23 @@ def replace_department_supervisor(request, department_id, supervisor_id):
     return redirect("service:department_details", department_id=department_id)
 
 
-def display_task_view(request: HttpRequest , task_id):
+def display_task_view(request: HttpRequest ):
     tasks = Task.objects.all()
-
-    if request.method=="POST":
-        new_comment = Comment(task=tasks, user=request.user, content=request.POST["content"])
-        if 'image' in request.FILES: new_comment.image = request.FILES["image"]
-        new_comment.save()
-
     return render(request, "service/display_task.html", {"tasks": tasks })
 
 
 def add_comment_view(request: HttpRequest, task_id):
     task = Task.objects.get(id=task_id)
+   
+    if request.method=="POST":
+        new_comment = Comment(task=task, user=request.user, content=request.POST["content"])
+        if 'image' in request.FILES: new_comment.image = request.FILES["image"]
+        new_comment.save()
 
-    if request.method == "POST":
-
-    comment = Comment.objects.filter(task=tasks)
+    comment = Comment.objects.filter(task=task)
     comment_count = comment.count()
 
-    return render(request, "service/display_task.html", {"tasks": tasks , "comment":comment , "comment_count":comment_count })
-
-
-
+    return render(request, "service/comment.html", { "comment":comment , "comment_count":comment_count , "task":task})
 
 
 

@@ -752,7 +752,7 @@
 
 <div>
     <h3 class="title"><b> All Departments </b></h3>
-    <a href="{% url 'service:add_department' %}" class="btn btn-secondary btn-lg " role="button"
+    <a href="{% url 'department:add_department' %}" class="btn btn-secondary btn-lg " role="button"
         aria-disabled="true">Add new department </a>
 </div>
 <section class="container">
@@ -773,6 +773,10 @@
         </div>
         {% endfor %}
     </div>
+
+    {% for supervisor in supervisors %}
+<h2>{{supervisor.username}}</h2>
+{% endfor %}
 </section>
 
     </main>

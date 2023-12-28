@@ -226,8 +226,8 @@
       </div>
       <div class="coolinput">
         <label for="input" class="text">Birth Date:</label>
-        <input type="date" placeholder="{{request.user.profile.birth_date.isoformat }}" name="input" class="input"
-          disabled>
+        <input type="date"  value="{{ request.user.profile.birth_date.isoformat }}"name="input" class="input"
+          disabled >
       </div>
     </div>
   </div>

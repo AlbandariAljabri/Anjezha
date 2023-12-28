@@ -1,12 +1,8 @@
 {% extends 'main/base.html' %}
 {% load static %}
-{% block title %} Department Details {% endblock %}
+{% block title %} Add Department {% endblock %}
 
 {% block content %}
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -42,8 +38,8 @@
     }
 
     /* html {
-          overflow-x: hidden;
-      } */
+      overflow-x: hidden;
+  } */
 
     body.dark {
         --light: #0C0C1E;
@@ -734,14 +730,9 @@
     .signup-link a {
         text-decoration: underline;
     }
-
-    .details-image {
-        width: 700px;
-        height: auto;
-        border: 15px;
-        padding-left: 150px;
-    }
 </style>
+
+
 
 <!-- CONTENT -->
 <section id="content">
@@ -756,159 +747,38 @@
                     </li>
                     <li><i class='bx bx-chevron-right'></i></li>
                     <li>
-                        <a class="active" href="#">Details department </a>
+                        <a class="active" href="#">Add department </a>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <section>
-            <div class="d-flex flex-column gap-1 p-5 border border-1 rounder-6 shadow h-100 align-items-start">
-                <img class="details-image" src="{{department.image.url}}" />
-                <h2>{{ department.title }}</h2>
-                <h4>{{ department.description }}</h4>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Edit
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="{% url 'service:update_department' department.id %}">Update</a>
-                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalSupervisor">Add
-                            Supervisor</a>
-                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalWorkers">Add
-                            Worker</a>
-                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete
-                            department </a>
-                    </div>
+        <h2 class="title"><b> Add New Department </b></h2>
+        <section class="container">
+            <div class="row">
+                <div class="col-6 justify-content-center">
+                    <form action="{% url 'department:add_department' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label><b> Department Title:</b></label>
+                        <input class="form-control" type="text" name="title" placeholder="Department name..." required />
+        
+                        <label><b> Description:</b></label>
+                        <textarea class="form-control" name="description" placeholder="Descripe the department..."
+                            required></textarea>
+        
+                        <label><b> Department Image: </b></label>
+                        <input type="file" name="image" class="form-control" accept="image/*" />
+        
+                        <br>
+                        <input class="btn btn-secondary" type="submit" value="Create Department" />
+        
+                    </form>
                 </div>
             </div>
         </section>
-
-        <!-- display Supervisor -->
-        <section>
-            {% if department.supervisor %}
-            <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
-                <div class="d-flex align-items-center gap-3">
-                    <img class="img-doctors-add" src="{{ department.supervisor.profile.avatar.url }}"
-                        class="rounded-3 avatar" />
-                    <h5>{{ department.supervisor.first_name }} {{ department.supervisor.last_name }}</h5>
-                </div>
-                <a href="{% url 'department:replace_department_supervisor' department.id available_supervisor.id %}"
-                    class="btn btn-secondary">Replace</a>
-                {% else %}
-                <p>No supervisor assigned</p>
-                {% endif %}
-            </div>
-        </section>
-
-        <!-- display Workers -->
-
-        {% if department.workers.count > 0 %}
-        <h4 class="Doc">Workers in this department:</h4>
-        <section class="row row-cols-12 row-cols-md-4 border-1">
-            {% for worker in department.worker.all %}
-            <div class="doc-v">
-                <div class="d-flex gap-2 justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-3">
-                        <img src="{{ available_worker.avatar.url }}" class="rounded-3 avatar" />
-                        <li>{{ department.worker.first_name }} {{ department.worker.last_name }} </li>
-                    </div>
-                    {% if perms.worker.delete_worker %}
-                    <a href="{% url 'department:remove_department_worker' department.id worker.id %}"
-                        class="btn btn-danger text-white">Remove</a>
-                    {% endif %}
-                </div>
-            </div>
-            {% endfor %}
-        </section>
-        {% endif %}
-
-
-        <!-- Add Supervisor button -->
-        <div class="modal fade" id="ModalSupervisor" tabindex="-1" aria-labelledby="ModalSupervisor" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="ModalSupervisor">Supervisor</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        {% for available_supervisor in available_supervisors %}
-                        <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
-                            <div class="d-flex align-items-center gap-3">
-                                <img class="img-doctors-add" src="{{ available_supervisor.avatar.url }}"
-                                    class="rounded-3 avatar" />
-                                <h5>{{ available_supervisor.user.first_name }} {{ available_supervisor.user.last_name }}
-                                </h5>
-                            </div>
-                            <a href="{% url 'department:add_department_supervisor' department.id available_supervisor.id %}"
-                                class="btn btn-secondary">Add</a>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Workers button -->
-        <div class="modal fade" id="ModalWorkers" tabindex="-1" aria-labelledby="ModalWorkers" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="ModalWorkers">Workers</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        {% for available_worker in available_worker %}
-                        <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
-                            <div class="d-flex align-items-center gap-3">
-                                <img class="img-doctors-add" src="{{ available_worker.avatar.url }}"
-                                    class="rounded-3 avatar" />
-                                <h5> {{ available_worker.user.first_name }} {{ available_worker.user.last_name }} </h5>
-                                <a href="{% url 'department:add_department_worker' department.id available_worker.id %}"
-                                    class="btn btn-secondary">Add</a>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- delete department button -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Department</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        you are going to delete the {{ department.title }} department, are you sure ?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <a href="{% url 'department:delete_department' department.id %}" class="btn btn-danger">Yes,
-                            delete</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
     </main>
     <!-- MAIN -->
 </section>
-
+<!-- CONTENT -->
 
 {% endblock %}

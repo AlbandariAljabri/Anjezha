@@ -1,8 +1,9 @@
 {% extends 'main/base.html' %}
 {% load static %}
-{% block title %} Add Department {% endblock %}
+{% block title %} Update Department {% endblock %}
 
 {% block content %}
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -747,38 +748,39 @@
                     </li>
                     <li><i class='bx bx-chevron-right'></i></li>
                     <li>
-                        <a class="active" href="#">Add department </a>
+                        <a class="active" href="#">Update department </a>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <h2 class="title"><b> Add New Department </b></h2>
-        <section class="container">
-            <div class="row">
-                <div class="col-6 justify-content-center">
-                    <form action="{% url 'service:add_department' %}" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <label><b> Department Title:</b></label>
-                        <input class="form-control" type="text" name="title" placeholder="Department name..." required />
-        
-                        <label><b> Description:</b></label>
-                        <textarea class="form-control" name="description" placeholder="Descripe the department..."
-                            required></textarea>
-        
-                        <label><b> Department Image: </b></label>
-                        <input type="file" name="image" class="form-control" accept="image/*" />
-        
-                        <br>
-                        <input class="btn btn-secondary" type="submit" value="Create Department" />
-        
-                    </form>
-                </div>
-            </div>
-        </section>
+<div class="update">
+    <h2> Update {{department.title}} </h2>
+    <div class="row">
+        <div class="col">
+            <form action="{% url 'department:update_department' department.id %}" method="POST"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+                <label><b> Department Title: </b></label>
+                <input class="form-control" type="text" name="title" placeholder="Enter department name.."
+                    value="{{department.title}}" />
+
+                <label><b> About The Department: </b></label>
+                <textarea class="form-control" name="description"> {{ department.description }} </textarea>
+
+                <label><b> Image: </b></label>
+                <input type="file" name="image" class="form-control" accept="image/*" />
+
+                <input class="btn btn-secondary mt-2 " type="submit" value="Update Department" />
+            </form>
+        </div>
+    </div>
+</div>
+
     </main>
     <!-- MAIN -->
 </section>
 <!-- CONTENT -->
+
 
 {% endblock %}

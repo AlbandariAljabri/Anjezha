@@ -100,14 +100,15 @@
       <div class="card">
         <p class="heading">Contact us</p>
 
-        <!-- <div class="input-div">
-      <input type="text" class="input"  name="username" placeholder="" readonly>
-      </div> -->
         <div class="input-div">
-          <input type="text" class="input" placeholder="Subject" name="subject" id="subject">
+            <input type="text" class="input" name= "{{ request.user.first_name }} {{ request.user.last_name }}"
+                value="{{ request.user.first_name }} {{ request.user.last_name }}" disabled >  
+       </div>
+        <div class="input-div">
+          <input type="text" class="input" placeholder="Subject" name="subject" id="subject" required>
         </div>
         <div class="input-div">
-          <input class="input" type="text" placeholder="Message" name="message" id="message">
+          <input class="input" type="text" placeholder="Message" name="message" id="message" required>
         </div>
         <div class="input-div">
           <input class="input" type="file" placeholder="Upload file" name="file" id="file">

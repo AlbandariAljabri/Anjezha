@@ -35,7 +35,12 @@
                             <img src="{{dep.image.url}}" /><br>
                             <a href="{% url 'department:department_details' dep.id %}"> {{ dep.title }}
                             </a>
+                            {%  if dep.task.count > 0 %}
                             <h5> {{dep.task.count}} tasks </h5>
+                            {%else%}
+                            <h5> No task added </h5>
+                            {%endif%}
+
                             <br>
                             <a href="{% url 'department:department_details' dep.id %}"
                                 class="btn btn-secondary text-black" type="botton" aria-e>

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User 
 from service.models import *
 from department.models import *
 # from django_countries.fields import CountryField
@@ -17,3 +17,4 @@ class Profile(models.Model):
       return f" - {self.user.first_name}" 
 
    
+

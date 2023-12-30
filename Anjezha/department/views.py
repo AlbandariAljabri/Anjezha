@@ -11,7 +11,8 @@ from accounts.models import *
 
 def add_department(request: HttpRequest):
     if request.method == "POST":
-        new_department = Department(title=request.POST["title"], description=request.POST["description"],image=request.FILES["image"])
+        new_department = Department(
+            title=request.POST["title"], description=request.POST["description"], image=request.FILES["image"])
         new_department.save()
         return redirect("department:display_department")
     return render(request, "department/add_department.html")
@@ -20,19 +21,17 @@ def add_department(request: HttpRequest):
 def display_department(request: HttpRequest):
 
     department = Department.objects.all()
-    workers = User.objects.filter(groups__name="workers")
-    supervisors = User.objects.filter(groups__name="supervisors")
 
-    return render(request, "department/display_department.html", {"department": department ,'supervisors' : supervisors})
+    return render(request, "department/display_department.html", {"department": department})
 
 
 def department_details(request: HttpRequest, department_id):
 
     department = Department.objects.get(id=department_id)
-    available_supervisors = Profile.objects.exclude(user=department.supervisor)
-    available_worker = Profile.objects.exclude(user__in=department.worker.all())
+    workers = User.objects.filter(groups__name="workers")
+    supervisors = User.objects.filter(groups__name="supervisors")
 
-    return render(request, "department/department_details.html", {"department": department, 'available_supervisors': available_supervisors, 'available_worker': available_worker})
+    return render(request, "department/department_details.html", {"department": department, 'supervisors': supervisors, 'workers': workers})
 
 
 def update_department(request: HttpRequest, department_id):
@@ -56,41 +55,38 @@ def delete_department(request: HttpRequest, department_id):
 
 
 def add_department_worker(request: HttpRequest, department_id, worker_id):
-
     department = Department.objects.get(id=department_id)
-    worker = Profile.objects.get(id=worker_id)
-    department.worker.add(worker.user)
+    workers = User.objects.get(id=worker_id)
+    department.worker.add(workers)
 
     return redirect("department:department_details", department_id=department_id)
 
 
 def remove_department_worker(request: HttpRequest, department_id, worker_id):
-    if not request.user.has_perm("worker.delete_worker"):
-        return render(request, "main/not_authrized.html")
 
     department = Department.objects.get(id=department_id)
-    worker = Profile.objects.get(id=worker_id)
-    department.worker.remove(worker.user)
+    workers = User.objects.get(id=worker_id)
+    department.worker.remove(workers)
 
     return redirect("department:department_details", department_id=department_id)
 
 
 def add_department_supervisor(request: HttpRequest, department_id, supervisor_id):
     department = Department.objects.get(id=department_id)
-    supervisor = Profile.objects.get(id=supervisor_id)
-    department.supervisor = supervisor.user
+    supervisor = User.objects.get(id=supervisor_id)
+    department.supervisor = supervisor
     department.save()
 
     return redirect("department:department_details", department_id=department_id)
 
+
 def replace_department_supervisor(request, department_id, supervisor_id):
     department = Department.objects.get(id=department_id)
-    new_supervisor = Profile.objects.get(id=supervisor_id)
-    
+    new_supervisor = User.objects.get(id=supervisor_id)
+
     if department.supervisor:
-        department.supervisor = None  #If there is a current supervisor, remove them
+        department.supervisor = None  # If there is a current supervisor, remove them
 
     department.supervisor = new_supervisor.user
-    department.save() #Set the new supervisor
+    department.save()  # Set the new supervisor
     return redirect("department:department_details", department_id=department_id)
-

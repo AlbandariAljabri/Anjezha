@@ -1,0 +1,55 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %} Update Department {% endblock %}
+
+{% block content %}
+
+<!-- CONTENT -->
+<section id="content">
+    <!-- MAIN -->
+    <main>
+        <div class="head-title">
+            <div class="left">
+                <h1>Admin Dashboard</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">Dashboard</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li>
+                        <a class="active" href="#">Update department </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="update">
+            <h2> Update {{department.title}} </h2>
+            <div class="row">
+                <div class="col">
+                    <form action="{% url 'department:update_department' department.id %}" method="POST"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label><b> Department Title: </b></label>
+                        <input class="form-control" type="text" name="title" placeholder="Enter department name.."
+                            value="{{department.title}}" />
+
+                        <label><b> About The Department: </b></label>
+                        <textarea class="form-control" name="description"> {{ department.description }} </textarea>
+
+                        <label><b> Image: </b></label>
+                        <input type="file" name="image" class="form-control" accept="image/*" />
+
+                        <input class="btn btn-secondary mt-2 " type="submit" value="Update Department" />
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <!-- MAIN -->
+</section>
+<!-- CONTENT -->
+
+
+{% endblock %}

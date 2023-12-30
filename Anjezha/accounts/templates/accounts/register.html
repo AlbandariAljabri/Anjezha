@@ -1,0 +1,155 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %} register {% endblock %}
+
+{% block content %}
+<style>
+
+    .form {
+        background-color: #fff;
+        display: inline-flex;
+        flex-direction: row;
+        padding: 1rem;
+        gap: 9px;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-title {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        font-weight: 600;
+        text-align: center;
+        color: #3f9c47;
+    }
+    .input-container {
+  position: relative;
+}
+    .input-container input, .form button {
+        outline: none;
+        border: 1px solid #e5e7eb;
+        margin: 10px 0;
+    }
+
+    .input-container input {
+        background-color: #fff;
+        padding: 0.5rem;
+        padding-right: 3rem;
+        font-size: 0.675rem;
+        line-height: 1.25rem;
+        width: 200px;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .submit {
+        display: block;
+        background-color: #4F46E5;
+        color: #ffffff;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        width: 150px;
+        height: 45px;
+        border-radius: 0.5rem;
+        text-transform: uppercase;
+    }
+
+    .radio{
+        font-size: 12px;
+        justify-content: center;
+        align-content: center;
+    }
+
+    .radio input{
+        margin-top: 50px;
+    }
+   .form button{
+    margin-top: 35px;
+   }
+
+
+</style>
+
+<!-- CONTENT -->
+<section id="content">
+    <!-- MAIN -->
+    <main>
+        <div class="head-title">
+            <div class="left">
+                <h1>Admin Dashboard</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">Dashboard</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li>
+                        <a class="active" href="#">Add member </a>
+                    </li>
+                </ul>
+                <p class="form-title">REGISTER new member</p>
+            </div>
+        </div>
+
+        <form class="form" action="{% url 'accounts:register_view' %}" method="post"  enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- username -->
+            <div class="input-container">
+                <div class="Username"
+                    style="color: #999999; font-size: 20px; font-family: Abel; font-weight: 400; word-wrap: break-word">
+                    Username</div>
+                <input type="text" placeholder="Enter Username" id="username" name="username" required minlength="3">
+                <span>
+                </span>
+            </div>
+
+            <!-- first name -->
+            <div class="input-container">
+                <div class="First name"
+                    style="color: #999999; font-size: 20px; font-family: Abel; font-weight: 400; word-wrap: break-word">
+                    First name</div>
+                <input type="text" placeholder="First Name" id="first_name" name="first_name" required minlength="3">
+            </div>
+         
+            <!-- last name -->
+            <div class="input-container">
+                <div class="Last name"
+                    style="color: #999999; font-size: 20px; font-family: Abel; font-weight: 400; word-wrap: break-word">
+                    Last Name</div>
+                <input type="text" placeholder="Last Name" id="last_name" name="last_name" required minlength="3">
+            </div>
+      
+            <!-- email -->
+            <div class="input-container">
+                <div class="Email"
+                    style="color: #999999; font-size: 20px; font-family: Abel; font-weight: 400; word-wrap: break-word">
+                    Email</div>
+                <input type="email" placeholder="Email" id="email" name="email" required minlength="3">
+            </div>
+       
+            <!-- password -->
+            <div class="input-container">
+                <div class="Password"
+                    style="color: #999999; font-size: 20px; font-family: Abel; font-weight: 400; word-wrap: break-word">
+                    Password
+                </div>
+                <input type="password" placeholder="Password" id="password" name="password" required minlength="8">
+            </div>
+
+            <div class="radio">
+                <input type="radio" id="supervisor" name="type" value="supervisor">
+                <label for="supervisor">Supervisor</label>
+
+                <input type="radio" id="worker" name="type" value="worker">
+                <label for="worker">Worker</label>
+            </div>
+
+            <button class="submit">Register</button>
+        </form>
+    </main>
+    <!-- MAIN -->
+</section>
+<!-- CONTENT -->
+
+
+
+{% endblock %}

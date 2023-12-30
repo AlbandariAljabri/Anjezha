@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <title>{% block title %}Home {% endblock %}</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300&family=Teko:wght@600&family=Vina+Sans&display=swap');
+
+    #bg-photo {
+      background: linear-gradient(#0000007e, #00000076), url('/static/images/Home.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    h1,
+    h6 {
+      font-family: 'Dosis';
+    }
+
+    .button {
+      background-color: #04AA6D;
+      color: white;
+      padding: 8px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 20px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+
+    .button1 {
+      background-color: white;
+      color: black;
+    }
+
+    .button1:hover {
+      background-color: #04AA6D;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section id="bg-photo" class="min-vh-100 d-flex align-items-center text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="sub-content">
+
+            <h1 class="text-uppercase text-white fw-semibold display-1 animate__animated animate__fadeInUp">Welcome To
+              Anjezha</h1>
+            <h6 style="color: #ffffff; font-size: 30px;  font-weight: 500; word-wrap: break-word"
+              class="animate__animated animate__fadeInUp">
+              in easy way</h6>
+
+
+            <div class=" justify-content-center text-center tp-5 animate__animated animate__fadeInUp ">
+              <a href="{% url 'accounts:login_view' %}" class="btn btn-light btn-lg button button1  " role="button "
+                aria-disabled="true">Admin</a>
+
+              <a href="{% url 'accounts:login_view' %}" class="btn btn-light btn-lg button button1" role="button"
+                aria-disabled="true">Supervisor</a>
+
+              <a href="{% url 'accounts:login_view' %}" class="btn btn-light btn-lg button button1" role="button"
+                aria-disabled="true">Worker</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- <div class="d-flex align-items-center justify-content-center flex-column tp-5">
+    <div class="Loginadmin text-center">
+        <span style="color: #0B6903; font-size: 96px; font-family: Aclonica; font-weight: 400; word-wrap: break-word">Anjezha</span>
+        <span style="color: #0B6903; font-size: 30px; font-family: Abhaya Libre Medium; font-weight: 500; word-wrap: break-word"> in easy way</span>
+    </div>
+
+
+</div> -->
+</body>
+</html>

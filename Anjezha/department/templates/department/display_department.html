@@ -21,35 +21,29 @@
             </div>
         </div>
 
+<div>
+    <h3 class="title"><b> All Departments </b></h3>
+    <a href="{% url 'department:add_department' %}" class="btn btn-secondary btn-lg " role="button"
+        aria-disabled="true">Add new department </a>
+</div>
+<section class="container">
+    <div class="row gap-1 row-cols-3 row-cols-md-4">
+        {% for dep in department %}
         <div>
-            <h3 class="title"><b> All Departments </b></h3>
-            <a href="{% url 'department:add_department' %}" class="btn btn-secondary btn-lg " role="button"
-                aria-disabled="true">Add new department </a>
-        </div>
-        <section class="container">
-            <div class="row gap-1 row-cols-3 row-cols-md-4">
-                {% for dep in department %}
-                <div>
-                    <div class="col">
-                        <div class="d-flex flex-column gap-1 p-3 border border-1 rounder-6 shadow h-100">
-                            <img src="{{dep.image.url}}" /><br>
-                            <a href="{% url 'department:department_details' dep.id %}"> {{ dep.title }}
-                            </a>
-                            {%  if dep.task.count > 0 %}
-                            <h5> {{dep.task.count}} tasks </h5>
-                            {%else%}
-                            <h5> No task added </h5>
-                            {%endif%}
-
-                            <br>
-                            <a href="{% url 'department:department_details' dep.id %}"
-                                class="btn btn-secondary text-black" type="botton" aria-e>
-                                View </a>
-                        </div>
-                    </div>
+            <div class="col">
+                <div class="d-flex flex-column gap-1 p-3 border border-1 rounder-6 shadow h-100">
+                    <img src="{{dep.image.url}}" /><br>
+                    <a href="{% url 'department:department_details' dep.id %}"> {{ dep.title }}
+                    </a>
+                    <h5> {{dep.task.count}} tasks </h5>
+                    <br>
+                    <a href="{% url 'department:department_details' dep.id %}" class="btn btn-secondary text-black" type="botton" aria-e>
+                        View </a>
                 </div>
-                {% endfor %}
             </div>
+        </div>
+        {% endfor %}
+    </div>
 
             {% for supervisor in supervisors %}
             <h2>{{supervisor.username}}</h2>

@@ -26,12 +26,15 @@ def display_department(request: HttpRequest):
 
 
 def department_details(request: HttpRequest, department_id):
+    msg = None
+    try:
+        department = Department.objects.get(id=department_id)
+        workers = User.objects.filter(groups__name="workers")
+        supervisors = User.objects.filter(groups__name="supervisors")
+    except Exception as e:
+        msg = {e}
 
-    department = Department.objects.get(id=department_id)
-    workers = User.objects.filter(groups__name="workers")
-    supervisors = User.objects.filter(groups__name="supervisors")
-
-    return render(request, "department/department_details.html", {"department": department, 'supervisors': supervisors, 'workers': workers})
+    return render(request, "department/department_details.html", {"department": department, 'supervisors': supervisors, 'workers': workers, "msg": msg})
 
 
 def update_department(request: HttpRequest, department_id):

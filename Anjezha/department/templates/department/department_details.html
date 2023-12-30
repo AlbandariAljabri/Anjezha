@@ -70,7 +70,7 @@
                         class="rounded-3 avatar" />
                     <h5>{{ department.supervisor.first_name }} {{ department.supervisor.last_name }}</h5>
                 </div>
-                <a href="{% url 'department:replace_department_supervisor' department.id available_supervisor.id %}"
+                <a href="{% url 'department:replace_department_supervisor' department.id supervisor.id %}"
                     class="btn btn-secondary">Replace</a>
                 {% else %}
                 <p>No supervisor assigned</p>
@@ -130,6 +130,10 @@
                 </div>
             </div>
         </div>
+
+        {% if msg %}
+        {{ msg }}
+        {% endif %}
 
         <!-- Add Workers button -->
         <div class="modal fade" id="ModalWorkers" tabindex="-1" aria-labelledby="ModalWorkers" aria-hidden="true">

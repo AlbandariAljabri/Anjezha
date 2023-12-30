@@ -4,7 +4,9 @@ from django.contrib.auth.models import User, Group
 from .models import Profile
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from django.contrib.auth.forms import PasswordChangeForm
 
 # Create your views here.
 
@@ -28,7 +30,8 @@ def login_view(request):
                 return redirect("service:display_task_view")
             else:
                 login(request, user)
-                return redirect("service:display_task_view")
+                return redirect("accounts:reset_password_view")
+                   
         else:
             msg = "Please provide correct username and password"
 
@@ -120,3 +123,21 @@ def update_user_view(request: HttpRequest):
 # Home
 def admin_home_view (request:HttpRequest):
     return render(request, "accounts/admin_home.html")
+
+
+# reset password
+
+def reset_password_view(request: HttpRequest):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('accounts:login_view')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, "accounts/reset_password.html", {"form": form })
+

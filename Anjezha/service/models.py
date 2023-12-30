@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -9,8 +10,9 @@ class Task(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     address = models.URLField()
-    workers = models.ManyToManyField(User , related_name='assigned_tasks',null=True)
+    workers = models.ManyToManyField(User , related_name='assigned_tasks')
     supervisor = models.ForeignKey(User, on_delete=models.PROTECT , related_name='supervised_tasks',null=True)
+    created_at = models.DateTimeField(default=timezone.now, blank=True)
 
     def get_selected_workers(self):
         return self.workers.all()

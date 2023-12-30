@@ -97,27 +97,26 @@
     <form action="{% url 'contact:contact_view' %}" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
 
-      <div class="card">
-        <p class="heading">Contact us</p>
-
-        <!-- <div class="input-div">
+<div class="card">
+    <p class="heading">Contact us</p>
+    
+   <!-- <div class="input-div">
       <input type="text" class="input"  name="username" placeholder="" readonly>
       </div> -->
-        <div class="input-div">
-          <input type="text" class="input" placeholder="Subject" name="subject" id="subject">
+      <div class="input-div">
+        <input type="text" class="input" placeholder="Subject" name="subject" id="subject">
         </div>
-        <div class="input-div">
-          <input class="input" type="text" placeholder="Message" name="message" id="message">
-        </div>
-        <div class="input-div">
-          <input class="input" type="file" placeholder="Upload file" name="file" id="file">
-        </div>
-        <div class="button-div">
-          <button type="submit" class="btn btn-success"><a href="{% url 'contact:thank_you_view' %}"></a>Send</button>
-
-        </div>
+      <div class="input-div">
+      <input class="input" type="text" placeholder="Message" name="message" id="message">
       </div>
-    </form>
+      <div class="input-div">
+      <input class="input" type="file" placeholder="Upload file" name="file" id="file">
+      </div>
+      <div class="button-div">
+        <button type="submit" class="btn btn-success"><a href="{% url 'contact:thank_you_view' %}" ></a>Send</button>
+        
+      </div>
   </div>
-</section>
+     </form>
+</div>
 {% endblock%}

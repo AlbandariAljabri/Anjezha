@@ -114,15 +114,10 @@
                             {% endif %}
                         </div>
                     {% endfor %}
-                    </div>
-                    
-                   
                 </div>
             </div>
         </div>
     </div>
-</div>
-</div>
 </div>
 </div>
 
@@ -186,11 +181,11 @@
 
             <div class="input-div">
                 <input type="text" class="input"
-                    placeholder="{{ request.user.first_name }} {{ request.user.last_name }}" disabled>
+                    placeholder="{{ request.user.first_name }} {{ request.user.last_name }}">
             </div>
 
             <div class="input-div">
-                <input type="text" class="input" placeholder="{{ task.name}}" name="task" disabled>
+                <input type="text" class="input" placeholder="Task" name="task">
             </div>
 
             <div class="input-div">

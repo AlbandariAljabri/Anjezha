@@ -201,6 +201,8 @@
       {% if request.user.is_authenticated and request.user.id == user.id %}
       <a href="{% url 'accounts:update_user_view'%}"><button class="card__btn">Edit</button></a>
       <a href="{% url 'accounts:reset_password_view' %}"><button class="card__btn">Reset password</button></a>
+      <a href=""><button class="card__btn"> {{ supervisor_rating }}</button></a>
+
       {% endif %}
     </div>
 

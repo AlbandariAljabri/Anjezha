@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect , get_object_or_404
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.models import User
 from accounts.models import *
@@ -30,37 +30,37 @@ def display_task_view(request: HttpRequest ):
     return render(request, "service/display_task.html", {"tasks": tasks })
 
 
-def add_comment_view(request: HttpRequest, task_id):
-    task = Task.objects.get(id=task_id)
-   
-    if request.method=="POST":
-        new_comment = Comment(task=task, user=request.user, content=request.POST["content"])
-        if 'image' in request.FILES: new_comment.image = request.FILES["image"]
-        new_comment.save()
-
-    comment = Comment.objects.filter(task=task)
-    comment_count = comment.count()
-
-    return render(request, "service/comment.html", { "comment":comment , "comment_count":comment_count , "task":task})
-
-    
-    return render(request, "service/display_task.html", {"tasks": tasks })
 
 
-# def add_comment_view(request: HttpRequest, task_id):
-#     task = Task.objects.get(id=task_id)
+
+def add_comment_view(request: HttpRequest, task_id, parent_comment_id=None):
+    task = get_object_or_404(Task, id=task_id)
 
     if request.method == "POST":
-        comment = Comment.objects.filter(task=task)
-        comment_count = comment.count()
+        content = request.POST["content"]
+        parent_comment = None
 
-    return render(request, "service/display_task.html", {"tasks": task, "comment": comment, "comment_count": comment_count})
-#     if request.method == "POST":
+        if parent_comment_id:
+            parent_comment = Comment.objects.get(id=parent_comment_id)
 
-#         comment = Comment.objects.filter(task=task)
-#         comment_count = comment.count()
+        new_comment = Comment.objects.create(
+            task=task,
+            user=request.user,
+            content=content,
+            parent_comment=parent_comment
+        )
 
-#     return render(request, "service/display_task.html", {"task": task , "comment":comment , "comment_count":comment_count })
+        if 'image' in request.FILES:
+            new_comment.image = request.FILES["image"]
+
+        new_comment.save()
+
+    comments = Comment.objects.filter(task=task, parent_comment=None)
+    comment_count = comments.count()
+
+    return render(request, "service/comment.html", {"comments": comments, "comment_count": comment_count, "task": task})
+
+
 
 
 

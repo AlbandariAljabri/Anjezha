@@ -12,5 +12,4 @@ urlpatterns = [
     path('add_department_worker/<department_id> <worker_id>',views.add_department_worker, name="add_department_worker"),
     path('add_department_supervisor/<department_id>/<supervisor_id>',views.add_department_supervisor, name="add_department_supervisor"),
     path('remove/<department_id>/<worker_id>',views.remove_department_worker, name="remove_department_worker"),
-    path('replace_department_supervisor/<department_id>/<supervisor_id>/',views.replace_department_supervisor, name='replace_department_supervisor'),
 ]

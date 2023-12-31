@@ -68,10 +68,10 @@
                 <div class="d-flex align-items-center gap-3">
                     <img class="img-doctors-add" src="{{ department.supervisor.profile.avatar.url }}"
                         class="rounded-3 avatar" />
+                    <h4>Supervisor for this department: </h4>
                     <h5>{{ department.supervisor.first_name }} {{ department.supervisor.last_name }}</h5>
                 </div>
-                <a href="{% url 'department:replace_department_supervisor' department.id supervisor.id %}"
-                    class="btn btn-secondary">Replace</a>
+
                 {% else %}
                 <p>No supervisor assigned</p>
                 {% endif %}
@@ -80,10 +80,10 @@
 
         <!-- display Workers -->
 
-        {% if department.workers.count > 0 %}
+        {% if department.worker.count > 0 %}
         <h4>Workers in this department:</h4>
         <section class="row row-cols-12 row-cols-md-4 border-1">
-            {% for worker in department.workers.all %}
+            {% for worker in department.worker.all %}
             <div>
                 <div class="d-flex gap-2 justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-3">

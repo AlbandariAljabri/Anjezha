@@ -81,15 +81,3 @@ def add_department_supervisor(request: HttpRequest, department_id, supervisor_id
     department.save()
 
     return redirect("department:department_details", department_id=department_id)
-
-
-def replace_department_supervisor(request, department_id, supervisor_id):
-    department = Department.objects.get(id=department_id)
-    new_supervisor = User.objects.get(id=supervisor_id)
-
-    if department.supervisor:
-        department.supervisor = None  # If there is a current supervisor, remove them
-
-    department.supervisor = new_supervisor.user
-    department.save()  # Set the new supervisor
-    return redirect("department:department_details", department_id=department_id)

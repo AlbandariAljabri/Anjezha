@@ -7,6 +7,9 @@ from django.db import IntegrityError
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 
 # Create your views here.
@@ -61,30 +64,41 @@ def user_profile_view(request: HttpRequest, user_id):
     return render(request, 'accounts/profile.html', {"user":user})
 
 # Register
-def register_view (request:HttpRequest):
+def register_view (request):
     msg =None
     if request.method == "POST":
-        try:
-            #create a new user
-            user = User.objects.create_user(username=request.POST["username"], first_name=request.POST["first_name"], last_name=request.POST["last_name"], email=request.POST["email"], password=request.POST["password"])
+      try:
+            user = User.objects.create_user(
+                username=request.POST["username"],
+                first_name=request.POST["first_name"],
+                last_name=request.POST["last_name"],
+                email=request.POST["email"],
+                password=request.POST["password"]
+            )
             user.save()
-
-            is_supervisor = True if request.POST["type"] == "supervisor" else False
-
-            supervisor_group, created = Group.objects.get_or_create(name="supervisors")
-            worker_group, created = Group.objects.get_or_create(name="workers")
+            is_supervisor = request.POST.get("type") == "supervisor"
 
             if is_supervisor:
-                user.groups.add(supervisor_group)
+                user.groups.add(Group.objects.get_or_create(name="supervisors")[0])
             else:
-                user.groups.add(worker_group)
+                user.groups.add(Group.objects.get_or_create(name="workers")[0])
+
+
+            # Sending email
+            subject = f'{user.first_name} {user.last_name} , Information Profile . '
+            message = f'Dear Mr.{user.first_name} {user.last_name},\nWelcome Aboard! We are happy to have you at anjezha :)\n\nPlease find your login details below:\n\nUsername: {user.username}\nPassword: {request.POST["password"]}\n\nFor any inquiries, please do not hesitate to contact our IT department at anjezhaa@gmail.com.\n\nWe look forward to working with you.\n\nBest regards,\n[Anjezha Team]'
+            from_email = 'anjezhaa@gmail.com'
+            to_email = user.email
+
+            send_mail(subject, message, from_email, [to_email], fail_silently=False)
             return redirect("accounts:successfully_msg_view")
-        except IntegrityError as e:
+
+      except IntegrityError as e:
             msg = f"Please select another username"
-        except Exception as e:
+      except Exception as e:
             msg = f"something went wrong {e}"
-     
-    return render(request, "accounts/register.html", {"msg" : msg})
+
+    return render(request, "accounts/register.html", {"msg": msg})
 
 # Successfully msg
 def successfully_msg_view(request:HttpRequest):

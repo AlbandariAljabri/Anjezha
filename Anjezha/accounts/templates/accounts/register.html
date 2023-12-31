@@ -89,6 +89,11 @@
                 <p class="form-title">REGISTER new member</p>
             </div>
         </div>
+        {% if msg %}
+    <div class="alert alert-danger" role="alert">
+        {{ msg }}
+    </div>
+    {% endif %}
 
         <form class="form" action="{% url 'accounts:register_view' %}" method="post"  enctype="multipart/form-data">
             {% csrf_token %}
@@ -145,6 +150,7 @@
 
             <button class="submit">Register</button>
         </form>
+
     </main>
     <!-- MAIN -->
 </section>

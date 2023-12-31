@@ -61,6 +61,21 @@ def add_comment_view(request: HttpRequest, task_id, parent_comment_id=None):
     return render(request, "service/comment.html", {"comments": comments, "comment_count": comment_count, "task": task})
 
 
+def reply_view(request: HttpRequest, task_id, comment_id):
+
+    task = get_object_or_404(Task, id=task_id)
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    if request.method == "POST":
+        content = request.POST["content"]
+        image = request.FILES["image"] if 'image' in request.FILES else None
+
+        add_comment_view(task, request.user, content, parent_comment=comment, image=image)
+
+    comments = Comment.objects.filter(task=task, parent_comment=None)
+
+    return render(request, "service/comment.html", {"comments": comments,  "task": task})
+   
 
 
 

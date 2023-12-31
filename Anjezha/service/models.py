@@ -13,6 +13,7 @@ class Task(models.Model):
     workers = models.ManyToManyField(User , related_name='assigned_tasks')
     supervisor = models.ForeignKey(User, on_delete=models.PROTECT , related_name='supervised_tasks',null=True)
     created_at = models.DateTimeField(default=timezone.now, blank=True)
+    completed = models.BooleanField(default=False)
 
     def get_selected_workers(self):
         return self.workers.all()

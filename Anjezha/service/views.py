@@ -9,25 +9,35 @@ from .models import *
 
 
 
-def display_task_view(request: HttpRequest, task_id):
-    tasks = Task.objects.all()
-
-    if request.method == "POST":
-        new_comment = Comment(task=tasks, user=request.user,
-                              content=request.POST["content"])
-        if 'image' in request.FILES:
-            new_comment.image = request.FILES["image"]
-        new_comment.save()
-
-    return render(request, "service/display_task.html", {"tasks": tasks})
-# is_supervisor = booleanfield(false)
 
 
 
 def display_task_view(request: HttpRequest ):
-    tasks = Task.objects.filter(supervisor=request.user)
+    supervisors = User.objects.filter(groups__name="supervisors")
+
+    if request.user in supervisors:
+        tasks = Task.objects.filter(supervisor=request.user)
+    else:
+        tasks = Task.objects.filter(workers=request.user)
 
     return render(request, "service/display_task.html", {"tasks": tasks })
+
+
+def mark_task_completed(request, task_id):
+    # Check if the user is a supervisor
+    supervisors = User.objects.filter(groups__name="supervisors")
+
+    if request.user in supervisors:
+        task = Task.objects.get(pk=task_id)
+        if task.completed == False:
+            task.completed = True
+            task.save()
+        else:
+            task.completed = False
+            task.save()
+
+    
+    return redirect("service:display_task_view")
 
 
 

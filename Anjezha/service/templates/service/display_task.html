@@ -16,7 +16,7 @@
                         <li role="presentation" class="nav-item completed-task"><a href="#"
                                 class="nav-link">Completed</a></li>
 
-                        {% if not request.user.is_superuser %}
+                        {% if task.supervisor %}
                         <button class="btn btn-success"><a href="{% url 'service:add_task_view' %}"
                                 style="color: white;"> Add New Task </a></button>
                         {% endif %}
@@ -29,9 +29,19 @@
                     <div class="todo-list ">
                         <div class="todo-item d-flex justify-content-between align-items-center ">
                             <div class="d-flex">
-                                <div class="checker"><span class=""><input type="checkbox"></span></div>
-                                <span style="font-family: 'Roboto Slab', serif;">{{task.name}}</span>
+                                <form method="post" action="{% url 'service:mark_task_completed' task.id %}">
+                                    {% csrf_token %}
+                             
+
+                                    <input type="checkbox" name="task_id" id="task_{{ task.id }}" value="{{ task.id }}" {% if task.completed %}checked{% endif %}>
+
+  <!-- yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy -->
+                                    <input type="submit" value="mark as completed"> 
+                                </form>
+
+                                <span style="font-family: 'Roboto Slab', serif; ">{{task.name}}</span>
                             </div>
+
 
                             <div id="accordion">
                                 <div class="card-header" id="heading{{ task.id }}">
@@ -76,10 +86,15 @@
                                             <img width="50px" src="{{ worker.profile.avatar.url }}" alt="avatar"
                                                 class="d-flex rounded-circle me-n2"/>
 
-                                            {% endfor %}
                                             </li>
 
                                         </ul>
+                                        {% endfor %}
+
+                                     
+                                          
+                                    
+                                      
                                         <!-- end team member -->
                                     </div>
                                 </div>
@@ -87,7 +102,7 @@
                           
 
 
-                            {% if not request.user.is_superuser %}
+                            {% if task.supervisor %}
 
                             <div style="margin-right: 6px; ">
                                 <a href="{% url 'service:delete_task_view' task.id %}" style="color: green;"> <svg
@@ -112,9 +127,14 @@
                                     </svg> </a>
                             </div>
                             {% endif %}
+                            
                         </div>
+                        <div class=" d-flex Start-0 top-0" style="opacity: 50%;">{{ task.created_at }}</div>
+
                     {% endfor %}
+                    
                 </div>
+                
             </div>
         </div>
     </div>

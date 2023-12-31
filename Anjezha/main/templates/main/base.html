@@ -713,6 +713,12 @@
           <span class="text">Message</span>
         </a>
       </li>
+      <li class="active">
+        <a href="{% url 'contact:contact_view'%}">
+          <i class='bx bxs-dashboard'></i>
+          <span class="text">Contact</span>
+        </a>
+      </li>
       <li>
         <a href="{% url 'service:display_task_view' %}">
           <i class='bx bxs-message-dots'></i>
@@ -727,12 +733,7 @@
           <span class="text">Dashboard</span>
         </a>
       </li>
-      <li class="active">
-        <a href="{% url 'contact:contact_view'%}">
-          <i class='bx bxs-dashboard'></i>
-          <span class="text">Contact</span>
-        </a>
-      </li>
+     
       {% endif %}
     </ul>
     <ul class="side-menu">

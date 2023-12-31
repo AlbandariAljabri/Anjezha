@@ -1,0 +1,35 @@
+<!-- accounts/templates/accounts/rate_worker.html -->
+
+{% extends 'main/base.html' %}
+{% block title %} Rate Worker {% endblock %}
+
+{% block content %}
+<section id="content">
+  {% if msg %}
+  <div class="alert alert-danger" role="alert">
+    {{ msg }}
+  </div>
+  {% endif %}
+
+  <h1>Rate Worker</h1>
+  <form method="post" action="{% url 'accounts:rate_worker_view' %}" class="form">
+    {% csrf_token %}
+    
+    <div class="input-container">
+      <label for="worker_username">Select Worker:</label>
+      <select name="worker_username" required>
+        {% for worker in workers %}
+          <option value="{{ worker.username }}">{{ worker.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="input-container">
+      <label for="rating">Rating:</label>
+      <input type="number" name="supervisor_rating" min="1" max="5" required>
+    </div>
+
+    <button type="submit" class="submit">Submit Rating</button>
+  </form>
+</section>
+{% endblock %}

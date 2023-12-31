@@ -81,3 +81,4 @@ def add_department_supervisor(request: HttpRequest, department_id, supervisor_id
     department.save()
 
     return redirect("department:department_details", department_id=department_id)
+

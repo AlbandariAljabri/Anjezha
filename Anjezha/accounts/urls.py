@@ -13,6 +13,9 @@ urlpatterns = [
     path('successfully/', views.successfully_msg_view, name='successfully_msg_view'),
     path('reset/password/', views.reset_password_view, name='reset_password_view'),
     path('rate/worker/', views.rate_worker_view, name='rate_worker_view'),
+    path('rate/profile/<user_id>', views.worker_rating_view, name='worker_rating_view'),
+
+
 
 
 

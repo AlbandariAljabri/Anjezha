@@ -22,8 +22,12 @@ def login_view(request):
 
         user = authenticate(request, username=username, password=password)
 
+
         if user:
-            if user.is_superuser:
+            if not user.last_login:
+                login(request, user)
+                return redirect("accounts:reset_password_view")
+            elif user.is_superuser:
                 login(request, user)
                 return redirect("accounts:admin_home_view")
             elif user.is_staff:
@@ -31,7 +35,7 @@ def login_view(request):
                 return redirect("service:display_task_view")
             else:
                 login(request, user)
-                return redirect("accounts:reset_password_view")
+                return redirect("service:display_task_view")
                    
         else:
             msg = "Please provide correct username and password"
@@ -134,45 +138,41 @@ def reset_password_view(request: HttpRequest):
             user = form.save()
             update_session_auth_hash(request, user)
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('accounts:user_profile_view')
+            return redirect('accounts:user_profile_view', user_id=request.user.id)
         else:
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, "accounts/reset_password.html", {"form": form })
 
-
-
-#view supervisor rating
+#superviser write rating
 def rate_worker_view(request):
     msg = None
     workers = User.objects.filter(groups__name="workers")
 
     if request.method == 'POST':
         worker_username = request.POST.get('worker_username')
-        rating = request.POST.get('rating')
+        rating_value = request.POST.get('supervisor_rating')
 
-        if worker_username and rating:
+        if worker_username and rating_value:
             try:
-                worker_profile = Profile.objects.get(user__username=worker_username)
-                worker_profile.supervisor_rating = int(rating)
+                worker = User.objects.get(username=worker_username)
+                worker_profile = worker.profile
+                worker_profile.supervisor_rating = int(rating_value)
                 worker_profile.save()
                 return redirect('accounts:rate_worker_view')
-            except Profile.DoesNotExist as e:
-                print(f"Error: {e}")
-                msg = f"Worker profile not found for username: {worker_username}"
-            except ValueError as e:
-                print(f"Error: {e}")
+            except User.DoesNotExist:
+                msg = f"Worker with username {worker_username} not found."
+            except ValueError:
                 msg = "Invalid rating value."
 
     return render(request, 'accounts/rate_worker.html', {"workers": workers, "msg": msg})
 
-# view rating
-def worker_rating_view(request: HttpRequest):
+
+#worker view his rating
+def worker_rating_view(request, user_id):
     try:
-        profile = request.user.profile
-        supervisor_rating = profile.supervisor_rating
-        return render(request, 'accounts/worker_profile.html', {"supervisor_rating": supervisor_rating})
-    except Exception as e:
-        msg = f"Something went wrong: {e}"
-        return render(request, 'main/not_found.html', {"msg": msg})
+        user = User.objects.get(id=user_id)
+        return render(request, 'accounts/profile.html', {"user": user})
+    except User.DoesNotExist:
+        return redirect('main:not_found_view')

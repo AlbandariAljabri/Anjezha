@@ -694,6 +694,12 @@
       <span class="text">Anjezha</span>
     </a>
     <ul class="side-menu top">
+      <li class="active">
+        <a href="{% url 'contact:contact_view'%}">
+          <i class='bx bxs-dashboard'></i>
+          <span class="text">Contact</span>
+        </a>
+      </li>
       {% if request.user.is_superuser %}
       <li class="active">
         <a href="{% url 'accounts:admin_home_view'%}">
@@ -713,12 +719,6 @@
           <span class="text">Message</span>
         </a>
       </li>
-      <li class="active">
-        <a href="{% url 'contact:contact_view'%}">
-          <i class='bx bxs-dashboard'></i>
-          <span class="text">Contact</span>
-        </a>
-      </li>
       <li>
         <a href="{% url 'service:display_task_view' %}">
           <i class='bx bxs-message-dots'></i>
@@ -726,6 +726,7 @@
         </a>
       </li>
       {% endif %}
+     
       {% if not request.user.is_superuser %}
       <li class="active">
         <a href="{% url 'service:display_task_view'%}">
@@ -735,6 +736,16 @@
       </li>
      
       {% endif %}
+      {% if not request.user.is_supervisors %}
+      <li class="active">
+        <a href="{% url 'accounts:rate_worker_view'%}">
+          <i class='bx bxs-dashboard'></i>
+          <span class="text">Rate worker</span>
+        </a>
+      </li>
+     
+      {% endif %}
+
     </ul>
     <ul class="side-menu">
       <li>

@@ -9,18 +9,6 @@ from .models import *
 
 
 
-def display_task_view(request: HttpRequest, task_id):
-    tasks = Task.objects.all()
-
-    if request.method == "POST":
-        new_comment = Comment(task=tasks, user=request.user,
-                              content=request.POST["content"])
-        if 'image' in request.FILES:
-            new_comment.image = request.FILES["image"]
-        new_comment.save()
-
-    return render(request, "service/display_task.html", {"tasks": tasks})
-# is_supervisor = booleanfield(false)
 
 
 

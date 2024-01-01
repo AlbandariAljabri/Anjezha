@@ -13,8 +13,7 @@ urlpatterns = [
     path('successfully/', views.successfully_msg_view, name='successfully_msg_view'),
     path('reset/password/', views.reset_password_view, name='reset_password_view'),
     path('rate/worker/', views.rate_worker_view, name='rate_worker_view'),
-
-
-
+    path("display/supervisor/", views.display_supervisor, name= "display_supervisor"),
+    path("display/worker/", views.display_worker, name= "display_worker"),
 
 ]

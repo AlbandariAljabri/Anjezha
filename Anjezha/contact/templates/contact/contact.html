@@ -10,21 +10,23 @@
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-  
-  
-  .container{
+
+
+  .container {
     width: 85%;
     background: #fff;
     border-radius: 6px;
     padding: 20px 60px 30px 40px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   }
-  .container .content{
+
+  .container .content {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  .container .content .left-side{
+
+  .container .content .left-side {
     width: 25%;
     height: 100%;
     display: flex;
@@ -34,7 +36,8 @@
     margin-top: 15px;
     position: relative;
   }
-  .content .left-side::before{
+
+  .content .left-side::before {
     content: '';
     position: absolute;
     height: 70%;
@@ -44,40 +47,48 @@
     transform: translateY(-50%);
     background: #afafb6;
   }
-  .content .left-side .details{
+
+  .content .left-side .details {
     margin: 14px;
     text-align: center;
   }
-  .content .left-side .details i{
+
+  .content .left-side .details i {
     font-size: 30px;
     color: #27975b;
     margin-bottom: 10px;
   }
-  .content .left-side .details .topic{
+
+  .content .left-side .details .topic {
     font-size: 18px;
     font-weight: 500;
   }
+
   .content .left-side .details .text-one,
-  .content .left-side .details .text-two{
+  .content .left-side .details .text-two {
     font-size: 14px;
     color: #afafb6;
   }
-  .container .content .right-side{
+
+  .container .content .right-side {
     width: 75%;
     margin-left: 75px;
   }
-  .content .right-side .topic-text{
+
+  .content .right-side .topic-text {
     font-size: 23px;
     font-weight: 600;
     color: #27975b;
   }
-  .right-side .input-box{
+
+  .right-side .input-box {
     height: 50px;
     width: 100%;
     margin: 12px 0;
   }
+
   .right-side .input-box input,
-  .right-side .input-box textarea{
+  .right-side .input-box textarea {
     height: 100%;
     width: 100%;
     border: none;
@@ -88,17 +99,21 @@
     padding: 0 15px;
     resize: none;
   }
-  .right-side .message-box{
+
+  .right-side .message-box {
     min-height: 110px;
   }
-  .right-side .input-box textarea{
+
+  .right-side .input-box textarea {
     padding-top: 6px;
   }
-  .right-side .button{
+
+  .right-side .button {
     display: inline-block;
     margin-top: 12px;
   }
-  .right-side .button input[type="submit"]{
+
+  .right-side .button input[type="submit"] {
     color: #fff;
     font-size: 18px;
     outline: none;
@@ -109,45 +124,53 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  .button input[type="submit"]:hover{
+
+  .button input[type="submit"]:hover {
     background: #27975b;
   }
+
   @media (max-width: 950px) {
-    .container{
+    .container {
       width: 90%;
-      padding: 30px 40px 40px 35px ;
+      padding: 30px 40px 40px 35px;
     }
-    .container .content .right-side{
-     width: 75%;
-     margin-left: 55px;
+
+    .container .content .right-side {
+      width: 75%;
+      margin-left: 55px;
+    }
   }
-  }
+
   @media (max-width: 820px) {
-    .container{
+    .container {
       margin: 40px 0;
       height: 100%;
     }
-    .container .content{
+
+    .container .content {
       flex-direction: column-reverse;
     }
-   .container .content .left-side{
-     width: 100%;
-     flex-direction: row;
-     margin-top: 40px;
-     justify-content: center;
-     flex-wrap: wrap;
-   }
-   .container .content .left-side::before{
-     display: none;
-   }
-   .container .content .right-side{
-     width: 100%;
-     margin-left: 0;
-   }
+
+    .container .content .left-side {
+      width: 100%;
+      flex-direction: row;
+      margin-top: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .container .content .left-side::before {
+      display: none;
+    }
+
+    .container .content .right-side {
+      width: 100%;
+      margin-left: 0;
+    }
   }
-  </style>
-    
-    
+</style>
+
+
 
 <section id="content">
   <main>
@@ -244,13 +267,13 @@
         <div class="address details">
           <a href="{% url 'main:home_view'%}" class="brand">
             <img src="/static/images/logo.png" width="250" height="150" alt="Anjezha Logo" loading="lazy" /><br>
-        </a>
+          </a>
           <i class="fas fa-map-marker-alt"></i>
           <div class="topic">Address</div>
           <div class="text-one">Saudi Arabia</div>
           <div class="text-two">Riyadh</div>
         </div>
-        
+
         <div class="email details">
           <div class="topic">Email</div>
           <div class="text-two">Anjezhaa@gmail.com</div>
@@ -260,26 +283,27 @@
         <div class="topic-text">Send us a message</div>
         <p> It's my pleasure to help you.</p>
 
-      <form action="{% url 'contact:contact_view' %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-         <div class="input-box">
-      <input type="text" class="input"  name="{{request.user.username}}" placeholder="{{request.user.username}}" disabled >
-        </div>
-        <div class="input-box">
-          <input type="text" placeholder="Subject" id="subject" name="subject" required>
-        </div>
-        <div class="input-box message-box">
-            <textarea  placeholder="Message" id="message" name="message" rows="4" required></textarea><br><br>
-        </div>
-        <div class="input-box">
-          <input class="input" type="file" placeholder="Upload file" name="file" id="file">
-        </div>
-        <div class="button">
-          <input type="submit" value="Submit" >
-        </div>
-      </form>
-    </div>
+        <form action="{% url 'contact:contact_view' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="input-box">
+            <input type="text" class="input" name="{{request.user.username}}" placeholder="{{request.user.username}}"
+              disabled>
+          </div>
+          <div class="input-box">
+            <input type="text" placeholder="Subject" id="subject" name="subject" required>
+          </div>
+          <div class="input-box message-box">
+            <textarea placeholder="Message" id="message" name="message" rows="4" required></textarea><br><br>
+          </div>
+          <div class="input-box">
+            <input class="input" type="file" placeholder="Upload file" name="file" id="file">
+          </div>
+          <div class="button">
+            <input type="submit" value="Submit">
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </section>
-{% endblock%}
+{% endblock %}

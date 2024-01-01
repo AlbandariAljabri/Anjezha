@@ -8,13 +8,11 @@
 <style>
     .styled-table {
         border-collapse: collapse;
-        margin: 90px;
-        margin-top: -7px;
         font-size: 0.9em;
         font-family: sans-serif;
         width: 1000px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-        margin-top: 100px;
+        margin: 50px;
     }
 
     .styled-table thead tr {
@@ -128,7 +126,7 @@
             {% for message in message %}
 
             <tr class="active-row">
-                <td><a href="#">{{message.name}}</a></td>
+                <td><a href="{% url 'contact:display_message_view' message.id %}">{{request.user.username}}</a></td>
                 <td>{{message.subject}}</td>
                 <td>{{message.created_at}}</td>
                 <td>{{message.status}}</td>

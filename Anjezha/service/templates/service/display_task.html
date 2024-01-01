@@ -2,8 +2,75 @@
 {% block title %} Tasks {% endblock %}
 
 {% block content %}
+<!-- SIDEBAR -->
 <section id="content">
-<div class="container">
+    <main>
+    <div class="head-title">
+        <div class="left">
+          <h1>Admin Dashboard</h1>
+          <ul class="breadcrumb">
+            <li>
+              <a href="#">Dashboard</a>
+            </li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li>
+              <a class="active" href="#">Tasks</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>
+<section id="sidebar">
+    <a href="#" class="brand">
+      <img src="/static/images/anjezha-logo.png" width="60" height="60" alt="Anjezha Logo" loading="lazy" style="margin-top: 10px;"/>
+      <span class="text">Anjezha</span>
+    </a>
+    <ul class="side-menu top">
+      
+      {% if request.user.is_superuser %}
+      <li>
+        <a href="{% url 'accounts:admin_home_view'%}">
+          <i class='bx bxs-dashboard'></i>
+          <span class="text">Dashboard</span>
+        </a>
+      </li>
+      <li >
+        <a href="{% url 'accounts:register_view' %}">
+          <i class="bx bi-person-plus-fill"></i>
+          <span class="text">Add Member</span>
+        </a>
+      </li>
+      <li >
+        <a href="{% url 'contact:message_view' %}">
+          <i class="bx bi-envelope-fill"></i>
+          <span class="text">Messages</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="{% url 'service:display_task_view' %}">
+          <i class="bx bi-list-check"></i>
+          <span class="text">Tasks</span>
+        </a>
+      </li>
+      {% endif %}
+      <li>
+        <a href="{% url 'contact:contact_view'%}">
+          <i class='bx bxs-message-dots'></i>
+          <span class="text">Contact</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="side-menu">
+      <li>
+        <a href="{% url 'accounts:logout_view'%}" class="logout">
+          <i class='bx bxs-log-out-circle'></i>
+          <span class="text">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+  <!-- SIDEBAR -->
+<div class="container" style="margin-top: -20px;">
     <div class="row">
         <div class="col-md-12">
             <div class="card card-white">
@@ -15,7 +82,6 @@
                         </li>
                         <li role="presentation" class="nav-item completed-task"><a href="#"
                                 class="nav-link">Completed</a></li>
-
                         {% if task.supervisor %}
                         <button class="btn btn-success"><a href="{% url 'service:add_task_view' %}"
                                 style="color: white;"> Add New Task </a></button>
@@ -142,7 +208,6 @@
 </div>
 
 </section>
-
 
 
 {% endblock %}

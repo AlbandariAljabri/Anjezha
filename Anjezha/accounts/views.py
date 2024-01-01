@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.mail import send_mail
 from django.conf import settings
+from department.models import Department
 
 
 
@@ -45,8 +46,6 @@ def login_view(request):
     return render(request, "accounts/login.html", {"msg": msg})
 
 # Logout
-
-
 def logout_view(request: HttpRequest):
 
     if request.user.is_authenticated:
@@ -55,19 +54,17 @@ def logout_view(request: HttpRequest):
     return redirect("accounts:login_view")
 
 # Profile
-
-
 def user_profile_view(request: HttpRequest, user_id):
-
     try:
         user = User.objects.get(id=user_id)
-
+        profile = Profile.objects.get(user=user)
+        supervisor_department = profile.user.supervised_department  
     except:
         return render(request, 'main/not_found.html')
-    return render(request, 'accounts/profile.html', {"user": user})
+
+    return render(request, 'accounts/profile.html', {"supervisor_department": supervisor_department,"user": user})
 
 # Register
-
 def register_view (request):
     msg =None
     if request.method == "POST":
@@ -105,15 +102,11 @@ def register_view (request):
     return render(request, "accounts/register.html", {"msg": msg})
 
 # Successfully msg
-
-
 def successfully_msg_view(request: HttpRequest):
 
     return render(request, 'accounts/successfully_msg.html')
 
 # Update
-
-
 def update_user_view(request: HttpRequest):
     msg = None
 
@@ -150,11 +143,8 @@ def update_user_view(request: HttpRequest):
     return render(request, "accounts/update_profile.html", {"msg": msg})
 
 # Home
-
-
 def admin_home_view(request: HttpRequest):
     return render(request, "accounts/admin_home.html")
-
 
 # reset password
 def reset_password_view(request: HttpRequest):
@@ -198,7 +188,6 @@ def rate_worker_view(request):
     return render(request, 'accounts/rate_worker.html', {"workers": workers, "msg": msg})
 
 # view rating
-
 def display_supervisor(request: HttpRequest):
 
     supervisors = User.objects.filter(groups__name="supervisors")

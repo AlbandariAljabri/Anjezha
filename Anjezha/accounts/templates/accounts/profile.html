@@ -12,6 +12,7 @@
     width: 1200px;
     height: 384px;
     margin: auto;
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -56,13 +57,12 @@
   }
 
   .card__btn {
-    margin-top: 15px;
-    width: 76px;
-    height: 31px;
+    width: 100px;
+    height: 30px;
     border: 2px solid var(--main-color);
     border-radius: 4px;
-    font-weight: 700;
-    font-size: 11px;
+    font-weight: 400;
+    font-size: 10px;
     color: var(--main-color);
     background: var(--bg-color);
     text-transform: uppercase;
@@ -196,12 +196,16 @@
     <div class="card__title">
       {{ user.first_name }} {{ user.last_name }}
     </div>
-    <div class="card__subtitle"> Department : {{user.profile.department.title}}</div>
+    {% if supervisor_department %}
+    <div class="card__subtitle"> Department :{{ supervisor_department.title }}</div>
+{% else %}
+    <p>Supervisor's Department: Not assigned</p>
+{% endif %}
     <div class="card__wrapper">
       {% if request.user.is_authenticated and request.user.id == user.id %}
       <a href="{% url 'accounts:update_user_view'%}"><button class="card__btn">Edit</button></a>
       <a href="{% url 'accounts:reset_password_view' %}"><button class="card__btn">Reset password</button></a>
-      <a><button class="card__btn"> Rating:  {{ user.profile.supervisor_rating }}</button></a>
+      <a><button class="card__btn card__btn-solid"> Rating:{{ user.profile.supervisor_rating }}</button></a>
 
       {% endif %}
     </div>

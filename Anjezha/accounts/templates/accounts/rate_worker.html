@@ -4,14 +4,190 @@
 {% block title %} Rate Worker {% endblock %}
 
 {% block content %}
+
+<style>
+  .subscribe {
+  position: relative;
+  height: 240px;
+  width: 340px;
+  padding: 20px;
+  background-color: #FFF;
+  border-radius: 4px;
+  color: #333;
+  box-shadow: 0px 0px 60px 5px rgba(0, 0, 0, 0.4);
+}
+
+.subscribe:after {
+  position: absolute;
+  content: "";
+  right: -10px;
+  bottom: 18px;
+  width: 0;
+  height: 0;
+  border-left: 0px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #1a044e;
+}
+
+.subscribe p {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  line-height: 28px;
+}
+
+.subscribe input {
+  border: none;
+  border-bottom: 1px solid #d4d4d4;
+  width: 82%;
+  background: transparent;
+  transition: all .25s ease;
+}
+
+.subscribe input:focus {
+  outline: none;
+  border-bottom: 1px solid #0d095e;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', 'sans-serif';
+}
+
+.subscribe .submit-btn {
+  position: absolute;
+  border-radius: 30px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  background-color: #0f0092;
+  color: #FFF;
+  padding: 12px 25px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  right: -10px;
+  bottom: -20px;
+  cursor: pointer;
+  transition: all .25s ease;
+  box-shadow: -5px 6px 20px 0px rgba(26, 26, 26, 0.4);
+}
+
+.subscribe .submit-btn:hover {
+  background-color: #07013d;
+  box-shadow: -5px 6px 20px 0px rgba(88, 88, 88, 0.569);
+}
+</style>
+<!-- SIDEBAR -->
 <section id="content">
+  <main>
+  <div class="head-title">
+      <div class="left">
+        <h1>Supervisor Dashboard</h1>
+        <ul class="breadcrumb">
+          <li>
+            <a href="#">Dashboard</a>
+          </li>
+          <li><i class='bx bx-chevron-right'></i></li>
+          <li>
+            <a class="active" href="#">Rate worker</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+<section id="sidebar">
+  <a href="#" class="brand">
+    <img src="/static/images/anjezha-logo.png" width="60" height="60" alt="Anjezha Logo" loading="lazy" style="margin-top: 10px;"/>
+    <span class="text">Anjezha</span>
+  </a>
+  <ul class="side-menu top">
+    
+    {% if request.user.is_superuser %}
+    <li>
+      <a href="{% url 'accounts:admin_home_view'%}">
+        <i class='bx bxs-dashboard'></i>
+        <span class="text">Dashboard</span>
+      </a>
+    </li>
+    <li >
+      <a href="{% url 'accounts:register_view' %}">
+        <i class="bx bi-person-plus-fill"></i>
+        <span class="text">Add Member</span>
+      </a>
+    </li>
+    <li >
+      <a href="{% url 'contact:message_view' %}">
+        <i class="bx bi-envelope-fill"></i>
+        <span class="text">Messages</span>
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'service:display_task_view' %}">
+        <i class="bx bi-list-check"></i>
+        <span class="text">Tasks</span>
+      </a>
+    </li>
+    {% endif %}
+    {% if not request.user.is_superuser %}
+    <li>
+      <a href="{% url 'service:display_task_view'%}">
+        <i class='bx bxs-dashboard'></i>
+        <span class="text">Dashboard</span>
+      </a>
+    </li>
+
+    <li class="active">
+      <a href="{% url 'accounts:rate_worker_view'%}">
+        <i class="bx bi-star-fill"></i>
+        <span class="text">Rate worker</span>
+      </a>
+    </li>
+   
+    {% endif %}
+    <li>
+      <a href="{% url 'contact:contact_view'%}">
+        <i class='bx bxs-message-dots'></i>
+        <span class="text">Contact</span>
+      </a>
+    </li>
+  </ul>
+  <ul class="side-menu">
+    <li>
+      <a href="{% url 'accounts:logout_view'%}" class="logout">
+        <i class='bx bxs-log-out-circle'></i>
+        <span class="text">Logout</span>
+      </a>
+    </li>
+  </ul>
+</section>
+<!-- SIDEBAR -->
+<section id="content">
+
   {% if msg %}
   <div class="alert alert-danger" role="alert">
     {{ msg }}
   </div>
   {% endif %}
 
-  <h1>Rate Worker</h1>
+
+  <div class="subscribe">
+    <p>Rate Worker</p>
+    <form method="post" action="{% url 'accounts:rate_worker_view' %}" class="form">
+      {% csrf_token %}
+      <label for="worker_username">Select Worker:</label>
+      <select name="worker_username" required>
+        {% for worker in workers %}
+          <option value="{{ worker.username }}">{{ worker.username }}</option>
+        {% endfor %}
+      </select>
+      <br>
+      <label for="supervisor_rating">Rating:</label>
+      <input type="number" name="supervisor_rating" min="1" max="5" required>
+
+      <input type="submit" value="Submit Rating" class="submit-btn">
+    </form>
+  </div>
+
+  <!--  -->
+  <!-- <h1>Rate Worker</h1>
   <form method="post" action="{% url 'accounts:rate_worker_view' %}" class="form">
     {% csrf_token %}
     
@@ -30,7 +206,7 @@
       <input type="number" name="supervisor_rating" min="1" max="5" required>
     </div>
 
-    <button type="submit" class="submit">Submit Rating</button>
-  </form>
+    <button type="submit" class="submit-btn">Submit Rating</button>
+  </form> -->
 </section>
 {% endblock %}

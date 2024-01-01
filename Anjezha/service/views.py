@@ -9,25 +9,96 @@ from .models import *
 
 
 
-def display_task_view(request: HttpRequest, task_id):
-    tasks = Task.objects.all()
-
-    if request.method == "POST":
-        new_comment = Comment(task=tasks, user=request.user,
-                              content=request.POST["content"])
-        if 'image' in request.FILES:
-            new_comment.image = request.FILES["image"]
-        new_comment.save()
-
-    return render(request, "service/display_task.html", {"tasks": tasks})
-# is_supervisor = booleanfield(false)
 
 
 
 def display_task_view(request: HttpRequest ):
-    tasks = Task.objects.filter(supervisor=request.user)
+    supervisors = User.objects.filter(groups__name="supervisors")
+    workers = User.objects.filter(groups__name="workers")
 
-    return render(request, "service/display_task.html", {"tasks": tasks })
+
+    is_worker = request.user.groups.filter(name='workers').exists()
+    is_supervisor = request.user.groups.filter(name='supervisors').exists()
+
+    sort_order = request.GET.get('sort_order', 'ascending')
+    created_at_filter = request.GET.get('created_at', '')
+    completion_filter = request.GET.get('completion', '')
+
+    if request.user in supervisors:
+        tasks = Task.objects.filter(supervisor=request.user)
+    else:
+        tasks = Task.objects.filter(workers=request.user)
+
+    # Apply filters
+    if created_at_filter:
+        tasks = tasks.filter(created_at=created_at_filter)
+
+    if request.user.groups.filter(name='supervisors').exists():
+        if completion_filter == 'completed':
+            tasks = tasks.filter(supervisor_status="completed")
+        elif completion_filter == 'not_completed':
+            tasks = tasks.filter(supervisor_status="uncompleted")
+
+
+    if request.user.groups.filter(name='workers').exists():
+        if completion_filter == 'in_progress':
+            tasks = tasks.filter(worker_status="in_progress")
+        elif completion_filter == 'none':
+            tasks = tasks.filter(worker_status="none")
+
+    # Apply sorting
+    if sort_order == 'ascending':
+        tasks = tasks.order_by('created_at')
+    elif sort_order == 'descending':
+        tasks = tasks.order_by('-created_at')
+
+    return render(request, "service/display_task.html", {"tasks": tasks , "supervisors" : supervisors , "is_worker":is_worker ,"is_supervisor" :is_supervisor , "supervisors":supervisors , "workers":workers})
+
+
+# def mark_task_completed(request, task_id):
+#     # Check if the user is a supervisor
+#     supervisors = User.objects.filter(groups__name="supervisors")
+
+#     if request.user in supervisors:
+#         task = Task.objects.get(pk=task_id)
+#         if task.completed == False:
+#             task.completed = True
+#             task.save()
+#         else:
+#             task.completed = False
+#             task.save()
+
+    
+#     return redirect("service:display_task_view")
+
+
+def update_status(request:HttpRequest, task_id):
+
+    try:
+        task = Task.objects.get(pk=task_id)
+
+        # Check if the user is a worker and the task is assigned to them
+        if request.user.groups.filter(name='workers').exists() and request.user in task.workers.all():
+
+            if task.worker_status == 'in_progress':
+                task.worker_status = 'none'
+            else:
+                task.worker_status = 'in_progress'
+            task.save()
+
+        # Check if the user is a supervisor
+        elif request.user.groups.filter(name='supervisors').exists():
+            # Toggle between 'completed' and 'uncompleted'
+            if task.supervisor_status == 'completed':
+                task.supervisor_status = 'uncompleted'
+            else:
+                task.supervisor_status = 'completed'
+            task.save()
+
+    except Task.DoesNotExist:
+        pass
+
+    return redirect("service:display_task_view")
 
 
 
@@ -61,6 +132,21 @@ def add_comment_view(request: HttpRequest, task_id, parent_comment_id=None):
     return render(request, "service/comment.html", {"comments": comments, "comment_count": comment_count, "task": task})
 
 
+def reply_view(request: HttpRequest, task_id, comment_id):
+
+    task = get_object_or_404(Task, id=task_id)
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    if request.method == "POST":
+        content = request.POST["content"]
+        image = request.FILES["image"] if 'image' in request.FILES else None
+
+        add_comment_view(task, request.user, content, parent_comment=comment, image=image)
+
+    comments = Comment.objects.filter(task=task, parent_comment=None)
+
+    return render(request, "service/comment.html", {"comments": comments,  "task": task})
+   
 
 
 

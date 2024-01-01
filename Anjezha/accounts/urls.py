@@ -15,5 +15,5 @@ urlpatterns = [
     path('rate/worker/', views.rate_worker_view, name='rate_worker_view'),
     path("display/supervisor/", views.display_supervisor, name= "display_supervisor"),
     path("display/worker/", views.display_worker, name= "display_worker"),
-
+    path('rate/profile/<user_id>', views.worker_rating_view, name='worker_rating_view'),
 ]

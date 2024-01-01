@@ -7,6 +7,9 @@ from django.db import IntegrityError
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 
 # Create your views here.
@@ -21,8 +24,12 @@ def login_view(request):
 
         user = authenticate(request, username=username, password=password)
 
+
         if user:
-            if user.is_superuser:
+            if not user.last_login:
+                login(request, user)
+                return redirect("accounts:reset_password_view")
+            elif user.is_superuser:
                 login(request, user)
                 return redirect("accounts:admin_home_view")
             elif user.is_staff:
@@ -30,8 +37,8 @@ def login_view(request):
                 return redirect("service:display_task_view")
             else:
                 login(request, user)
-                return redirect("accounts:reset_password_view")
-
+                return redirect("service:display_task_view")
+                   
         else:
             msg = "Please provide correct username and password"
 
@@ -61,30 +68,38 @@ def user_profile_view(request: HttpRequest, user_id):
 
 # Register
 
-
-def register_view(request: HttpRequest):
-    msg = None
+def register_view (request):
+    msg =None
     if request.method == "POST":
-        try:
-            # create a new user
-            user = User.objects.create_user(username=request.POST["username"], first_name=request.POST["first_name"],
-                                            last_name=request.POST["last_name"], email=request.POST["email"], password=request.POST["password"])
+      try:
+            user = User.objects.create_user(
+                username=request.POST["username"],
+                first_name=request.POST["first_name"],
+                last_name=request.POST["last_name"],
+                email=request.POST["email"],
+                password=request.POST["password"]
+            )
             user.save()
-
-            is_supervisor = True if request.POST["type"] == "supervisor" else False
-
-            supervisor_group, created = Group.objects.get_or_create(
-                name="supervisors")
-            worker_group, created = Group.objects.get_or_create(name="workers")
+            is_supervisor = request.POST.get("type") == "supervisor"
 
             if is_supervisor:
-                user.groups.add(supervisor_group)
+                user.groups.add(Group.objects.get_or_create(name="supervisors")[0])
             else:
-                user.groups.add(worker_group)
+                user.groups.add(Group.objects.get_or_create(name="workers")[0])
+
+
+            # Sending email
+            subject = f'{user.first_name} {user.last_name} , Information Profile . '
+            message = f'Dear Mr.{user.first_name} {user.last_name},\nWelcome Aboard! We are happy to have you at anjezha :)\n\nPlease find your login details below:\n\nUsername: {user.username}\nPassword: {request.POST["password"]}\n\nFor any inquiries, please do not hesitate to contact our IT department at anjezhaa@gmail.com.\n\nWe look forward to working with you.\n\nBest regards,\n[Anjezha Team]'
+            from_email = 'anjezhaa@gmail.com'
+            to_email = user.email
+
+            send_mail(subject, message, from_email, [to_email], fail_silently=False)
             return redirect("accounts:successfully_msg_view")
-        except IntegrityError as e:
+
+      except IntegrityError as e:
             msg = f"Please select another username"
-        except Exception as e:
+      except Exception as e:
             msg = f"something went wrong {e}"
 
     return render(request, "accounts/register.html", {"msg": msg})
@@ -147,10 +162,9 @@ def reset_password_view(request: HttpRequest):
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(
-                request, 'Your password was successfully updated!')
-            return redirect('accounts:user_profile_view')
+            update_session_auth_hash(request, user)          
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('accounts:user_profile_view', user_id=request.user.id)
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -159,43 +173,31 @@ def reset_password_view(request: HttpRequest):
 
 
 # view supervisor rating
+
+#superviser write rating
 def rate_worker_view(request):
     msg = None
     workers = User.objects.filter(groups__name="workers")
 
     if request.method == 'POST':
         worker_username = request.POST.get('worker_username')
-        rating = request.POST.get('rating')
+        rating_value = request.POST.get('supervisor_rating')
 
-        if worker_username and rating:
+        if worker_username and rating_value:
             try:
-                worker_profile = Profile.objects.get(
-                    user__username=worker_username)
-                worker_profile.supervisor_rating = int(rating)
+                worker = User.objects.get(username=worker_username)
+                worker_profile = worker.profile
+                worker_profile.supervisor_rating = int(rating_value)
                 worker_profile.save()
                 return redirect('accounts:rate_worker_view')
-            except Profile.DoesNotExist as e:
-                print(f"Error: {e}")
-                msg = f"Worker profile not found for username: {
-                    worker_username}"
-            except ValueError as e:
-                print(f"Error: {e}")
+            except User.DoesNotExist:
+                msg = f"Worker with username {worker_username} not found."
+            except ValueError:
                 msg = "Invalid rating value."
 
     return render(request, 'accounts/rate_worker.html', {"workers": workers, "msg": msg})
 
 # view rating
-
-
-def worker_rating_view(request: HttpRequest):
-    try:
-        profile = request.user.profile
-        supervisor_rating = profile.supervisor_rating
-        return render(request, 'accounts/worker_profile.html', {"supervisor_rating": supervisor_rating})
-    except Exception as e:
-        msg = f"Something went wrong: {e}"
-        return render(request, 'main/not_found.html', {"msg": msg})
-
 
 def display_supervisor(request: HttpRequest):
 
@@ -207,3 +209,11 @@ def display_worker(request: HttpRequest):
 
     workers = User.objects.filter(groups__name="workers")
     return render(request, "accounts/display_worker.html", {"workers": workers})
+
+#worker view his rating
+def worker_rating_view(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        return render(request, 'accounts/profile.html', {"user": user})
+    except User.DoesNotExist:
+        return redirect('main:not_found_view')

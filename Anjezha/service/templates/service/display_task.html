@@ -2,6 +2,7 @@
 {% block title %} Tasks {% endblock %}
 
 {% block content %}
+
 <section id="content">
 <div class="container">
     <div class="row">
@@ -10,25 +11,29 @@
                 <div class="card-body">
 
                     <form method="get" action="{% url 'service:display_task_view' %}">
-                        <button type="submit" name="completion" value="">All</button>
-                        <button type="submit" name="completion" value="completed">Completed</button>
-                        <button type="submit" name="completion" value="not_completed">Not Completed</button>
+                    <div class="d-flex justify-content-between"> 
+                        <div>
+                        <button class="btn btn-link" type="submit" name="completion" value="">All</button>
+                        <button class="btn btn-link" type="submit" name="completion" value="completed">Completed</button>
+                        <button class="btn btn-link" type="submit" name="completion" value="not_completed">Not Completed</button>
+                        </div>
 
-
-   
+                        <div>
                         <label for="sort_order">Sort Order:</label>
-                        <select name="sort_order">
+                        <select name="sort_order" >
+                            <option selected> All </option>
                             <option value="ascending">Ascending</option>
                             <option value="descending">Descending</option>
                         </select>
                         
-                        <button type="submit">Apply Filters</button>
+                        <button class="btn btn-warning" type="submit">Sort</button>
+                    </div>
+                </div>
                     </form>
 
 
 
-
-                    {% if request.user.is_supervisors %}
+                    {% if task.supervisor %}
                     <button class="btn btn-success">
                         <a href="{% url 'service:add_task_view' %}" style="color: white;">Add New Task</a>
                     </button>
@@ -39,6 +44,7 @@
 
 
                     {% for task in tasks %}
+         
 
                     <div class="todo-list ">
                         <div class="todo-item d-flex justify-content-between align-items-center ">
@@ -113,7 +119,33 @@
                                 </div>
                             </div>
                           
-
+                            {% if is_worker %}
+                            {% if task.worker_status == 'none' %}
+                                <form method="post" action="{% url 'service:update_status' task.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-warning">Start Task</button>
+                                </form>
+                            {% elif task.worker_status == 'in_progress' %}
+                            <form method="post" action="{% url 'service:update_status' task.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-warning"><span class="badge badge-primary">In Progress</span></button>
+                            </form>
+                    
+                            {% endif %}
+                    
+                            {% elif is_supervisor %}
+                            {% if task.supervisor_status == 'uncompleted' %}
+                                <form method="post" action="{% url 'service:update_status' task.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success">Completed</button>
+                                </form>
+                            {% elif task.supervisor_status == 'completed' %}
+                                <form method="post" action="{% url 'service:update_status' task.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn"><span class="badge badge-primary">Uncompleted</span></button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
 
                             {% if task.supervisor %}
 
@@ -145,33 +177,7 @@
                         <div class=" d-flex Start-0 top-0" style="opacity: 50%;">{{ task.created_at }}</div>
 
                       
-        {% if is_worker %}
-        {% if task.worker_status == 'none' %}
-            <form method="post" action="{% url 'service:update_status' task.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-warning">Start Task</button>
-            </form>
-        {% elif task.worker_status == 'in_progress' %}
-        <form method="post" action="{% url 'service:update_status' task.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-warning"><span class="badge badge-primary">In Progress</span></button>
-        </form>
 
-        {% endif %}
-
-        {% elif is_supervisor %}
-        {% if task.supervisor_status == 'uncompleted' %}
-            <form method="post" action="{% url 'service:update_status' task.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success">Completed</button>
-            </form>
-        {% elif task.supervisor_status == 'completed' %}
-            <form method="post" action="{% url 'service:update_status' task.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn"><span class="badge badge-primary">Uncompleted</span></button>
-            </form>
-        {% endif %}
-    {% endif %}
 {% endfor %}
                     
                 </div>

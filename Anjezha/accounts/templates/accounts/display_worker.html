@@ -1,0 +1,40 @@
+{% extends 'main/base.html' %}
+{% block title %} All Workers {% endblock %}
+{% block content %}
+
+<!-- CONTENT -->
+<section id="content">
+    <!-- MAIN -->
+    <main>
+
+        <div class="overflow-hidden">
+            <section class="container overflow-hidden">
+                <div class="d-flex flex-column">
+                    <h1>All Workers ({{ worker.count }})</h1>
+
+                    <div class="row  g-4 row-cols-1 row-cols-md-3">
+
+                        {% for worker in workers %}
+
+                        <div class="col">
+                            <div class="d-flex flex-column gap-2">
+                                <img src="{{ worker.avatar.url }}" class="w-100 rounded-4 actor-img" />
+                                <a href="{% url 'accounts:user_profile_view' worker.id %}"
+                                    class="text-decoration-none text-black">
+                                    <h2>{{ worker.first_name }} {{ worker.last_name }}</h2>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+            </section>
+        </div>
+
+    </main>
+    <!-- MAIN -->
+</section>
+<!-- CONTENT -->
+
+
+
+{% endblock %}

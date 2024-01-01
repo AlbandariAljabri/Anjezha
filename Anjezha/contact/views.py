@@ -23,7 +23,11 @@ def contact_view (request :HttpRequest):
 
     return render(request, "contact/contact.html", {"status" : Contact.status_choices,  "msg" : msg})
 
+def message_view(request:HttpRequest,):
+    message = Contact.objects.all()
+
+    return render(request, "contact/messages.html", {"message" :message})
 
 def thank_you_view(request:HttpRequest):
-    return render(request , "contact/thank_you.html ")
+    return render(request , "contact/thank_you.html")
 

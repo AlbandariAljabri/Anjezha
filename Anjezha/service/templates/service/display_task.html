@@ -135,16 +135,22 @@
                     
                             {% elif is_supervisor %}
                             {% if task.supervisor_status == 'uncompleted' %}
+                                {% if not task.worker_status == 'in_progress' %}
+                                <button type="submit" class="btn"><span class="badge badge-primary">Not started yet</span></button>
+                                
+                                {%else%}
                                 <form method="post" action="{% url 'service:update_status' task.id %}">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-success">Completed</button>
                                 </form>
+                                {% endif %}
                             {% elif task.supervisor_status == 'completed' %}
                                 <form method="post" action="{% url 'service:update_status' task.id %}">
                                     {% csrf_token %}
                                     <button type="submit" class="btn"><span class="badge badge-primary">Uncompleted</span></button>
                                 </form>
-                            {% endif %}
+                                {% endif %}
+                          
                         {% endif %}
 
                             {% if task.supervisor %}

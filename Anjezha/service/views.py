@@ -14,29 +14,90 @@ from .models import *
 
 def display_task_view(request: HttpRequest ):
     supervisors = User.objects.filter(groups__name="supervisors")
+    workers = User.objects.filter(groups__name="workers")
+
+
+    is_worker = request.user.groups.filter(name='workers').exists()
+    is_supervisor = request.user.groups.filter(name='supervisors').exists()
+
+    sort_order = request.GET.get('sort_order', 'ascending')
+    created_at_filter = request.GET.get('created_at', '')
+    completion_filter = request.GET.get('completion', '')
 
     if request.user in supervisors:
         tasks = Task.objects.filter(supervisor=request.user)
     else:
         tasks = Task.objects.filter(workers=request.user)
 
-    return render(request, "service/display_task.html", {"tasks": tasks })
+    # Apply filters
+    if created_at_filter:
+        tasks = tasks.filter(created_at=created_at_filter)
+
+    if request.user.groups.filter(name='supervisors').exists():
+        if completion_filter == 'completed':
+            tasks = tasks.filter(supervisor_status="completed")
+        elif completion_filter == 'not_completed':
+            tasks = tasks.filter(supervisor_status="uncompleted")
 
 
-def mark_task_completed(request, task_id):
-    # Check if the user is a supervisor
-    supervisors = User.objects.filter(groups__name="supervisors")
+    if request.user.groups.filter(name='workers').exists():
+        if completion_filter == 'in_progress':
+            tasks = tasks.filter(worker_status="in_progress")
+        elif completion_filter == 'none':
+            tasks = tasks.filter(worker_status="none")
 
-    if request.user in supervisors:
-        task = Task.objects.get(pk=task_id)
-        if task.completed == False:
-            task.completed = True
-            task.save()
-        else:
-            task.completed = False
-            task.save()
+    # Apply sorting
+    if sort_order == 'ascending':
+        tasks = tasks.order_by('created_at')
+    elif sort_order == 'descending':
+        tasks = tasks.order_by('-created_at')
+
+    return render(request, "service/display_task.html", {"tasks": tasks , "supervisors" : supervisors , "is_worker":is_worker ,"is_supervisor" :is_supervisor , "supervisors":supervisors , "workers":workers})
+
+
+# def mark_task_completed(request, task_id):
+#     # Check if the user is a supervisor
+#     supervisors = User.objects.filter(groups__name="supervisors")
+
+#     if request.user in supervisors:
+#         task = Task.objects.get(pk=task_id)
+#         if task.completed == False:
+#             task.completed = True
+#             task.save()
+#         else:
+#             task.completed = False
+#             task.save()
 
     
+#     return redirect("service:display_task_view")
+
+
+def update_status(request:HttpRequest, task_id):
+
+    try:
+        task = Task.objects.get(pk=task_id)
+
+        # Check if the user is a worker and the task is assigned to them
+        if request.user.groups.filter(name='workers').exists() and request.user in task.workers.all():
+
+            if task.worker_status == 'in_progress':
+                task.worker_status = 'none'
+            else:
+                task.worker_status = 'in_progress'
+            task.save()
+
+        # Check if the user is a supervisor
+        elif request.user.groups.filter(name='supervisors').exists():
+            # Toggle between 'completed' and 'uncompleted'
+            if task.supervisor_status == 'completed':
+                task.supervisor_status = 'uncompleted'
+            else:
+                task.supervisor_status = 'completed'
+            task.save()
+
+    except Task.DoesNotExist:
+        pass
+
     return redirect("service:display_task_view")
 
 

@@ -100,9 +100,9 @@
 <div class="card">
     <p class="heading">Contact us</p>
     
-   <!-- <div class="input-div">
-      <input type="text" class="input"  name="username" placeholder="" readonly>
-      </div> -->
+   <div class="input-div">
+      <input type="text" class="input"  name="{{request.user.username}}" placeholder="{{request.user.username}}" disabled >
+      </div>
       <div class="input-div">
         <input type="text" class="input" placeholder="Subject" name="subject" id="subject">
         </div>
@@ -113,8 +113,7 @@
       <input class="input" type="file" placeholder="Upload file" name="file" id="file">
       </div>
       <div class="button-div">
-        <button type="submit" class="btn btn-success"><a href="{% url 'contact:thank_you_view' %}" ></a>Send</button>
-        
+        <button type="submit" class="btn btn-success">Send</button>
       </div>
   </div>
      </form>

@@ -1,126 +1,124 @@
 {% extends 'main/base.html' %}
 {% load static %}
-{% block title %} comment {% endblock %}
+{% block title %} Comment {% endblock %}
 
 {% block content %}
 
 <section id="content">
 
-
-<section  style="background-color: whitesmoke">
-  <div class="container my-5 py-5 ">
+  <section style="background-color: whitesmoke">
+    <div class="container my-5 py-5">
       {% if comment_count > 0 %}
-      <h4 class="mb-0">Recent reviews {{comment_count }} </h4>  
+        <h4 class="mb-0">Recent reviews {{ comment_count }} </h4>
 
-    <div class="row row-cols-1 row-cols-md-4 mt-3  d-flex ">
-      {% for comment in comments %}    
-          <div class="col">
-        <div class="card text-dark">
-          <div class="card-body p-4">
-            <div class="d-flex flex-start">
-                   <img class="rounded-circle shadow-1-strong me-3" src="{{ comment.user.profile.avatar.url }}" width="60" height="60" />
-              <div>
-                <h6 class="fw-bold mb-1">{{comment.user.first_name}} {{comment.user.last_name}}</h6>
-                <div class="d-flex align-items-center mb-3">
-                  <p class="mb-0">
-                      {{comment.task.name}} 
-                  </p> 
-                </div>  
-                
-                  <div class="d-flex mt-5 justify-content-between">
-                    <p class="mb-0">
-                      {{comment.content}}
-                    </p>
-                     </div>
-                
-                {% if comment.image %}
-                <img src="{{ comment.image.url }}" class="img-fluid mt-3" alt="Comment Image">
-                {% endif %}
+        <div class="row row-cols-1 row-cols-md-4 mt-3 d-flex ">
+          {% for comment in comments %}
+            <div class="col">
+              <div class="card text-dark">
+                <div class="card-body p-4">
+                  <div class="d-flex flex-start">
+                    <img class="rounded-circle shadow-1-strong me-3" src="{{ comment.user.profile.avatar.url }}" width="60" height="60" />
+                    <div>
+                      <h6 class="fw-bold mb-1">{{ comment.user.first_name }} {{ comment.user.last_name }}</h6>
+                      <div class="d-flex align-items-center mb-3">
+                        <p class="mb-0">
+                          {{ comment.task.name }}
+                        </p>
+                      </div>
+
+                      <div class="d-flex mt-5 justify-content-between">
+                        <p class="mb-0">
+                          {{ comment.content }}
+                        </p>
+                      </div>
+
+                      {% if comment.image %}
+                        <img src="{{ comment.image.url }}" class="img-fluid mt-3" alt="Comment Image">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <hr>
+
+                  {% if comment.replies.count > 0 %}
+                    <div class="replies mt-3 badge bg-light text-dark">
+                      <p class="mb-3">Replies:</p>
+
+                      {% for reply in comment.replies.all %}
+                      
+                        <div class="reply">
+                          <p class="mb-0">{{ reply.user.first_name }} {{ reply.user.last_name }} :</p> <br>
+                          <p>{{ reply.reply_content }}</p>
+                          {% if reply.reply_image %}
+                            <img src="{{ reply.reply_image.url }}" class="img-fluid" alt="Reply Image">
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+
+                  <div class="justify-content-between ">
+                    <br></bt><h6>Reply to {{ comment.user.first_name }}</h6>
+                    <!-- Reply form  -->
+                    <form action="{% url 'service:add_reply_view' comment.id %}" method="POST" enctype="multipart/form-data"
+                          class="mt-3">
+                      {% csrf_token %}
+                      <div class="form-group mb-2">
+                        <input type="text" class="form-control" placeholder="Enter your reply..." name="reply_content" required>
+                      </div>
+                      <div class="form-group mb-2">
+                        <input type="file" class="form-control" name="reply_image" accept="image/*" placeholder="Upload image">
+                      </div>
+                      <button type="submit" class="btn btn-success"> Reply <svg xmlns="http://www.w3.org/2000/svg"
+                          width="16" height="16" fill="currentColor"  class="bi bi-reply-fill"  viewBox="0 0 16 16">
+                          <path
+                            d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
+                        </svg> </button>
+                    </form>
+
+                  </div>
                 </div>
+              </div>
             </div>
-            </div>
-<hr>
-            {% if comment.replies.all %}
-            <div class="replies mt-3 badge bg-light text-dark ">
-                <p class="mb-3">Replies:</p>
-                {% for reply in comment.replies.all %}
-                <div class="reply ">
-                    <p class="mb-0">{{ reply.user.first_name }} {{ reply.user.last_name }} :</p> <br>
-                    <p>{{ reply.content }}</p>
-                    {% if reply.image %}
-                    <img src="{{ reply.image.url }}" class="img-fluid" alt="Reply Image">
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
+          {% endfor %}
+        </div>
 
-            <div class="justify-content-between ">
-            <br></bt><h6>Reply to {{comment.user.first_name}}</h6>
-              <!-- Reply form  -->
-              <form action="{% url 'service:add_comment_view' task.id comment.id %}" method="POST" enctype="multipart/form-data" class="mt-3">
-                {% csrf_token %}
-                <div class="form-group mb-2">
-                  <input type="text" class="form-control" placeholder="Enter your reply..." name="content" required>
-                </div>
-                <div class="form-group mb-2">
-                  <input type="file" class="form-control" name="image" accept="image/*" placeholder="Upload image">
-                </div>
-                <button type="submit" class="btn btn-success"> Reply  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
-                  <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
-                </svg> </button>
-              </form>
-            </div>
+      {% endif %}
 
-
-          
-            </div>
-          </div>
-          {%endfor%}
-
- 
     </div>
+  </section>
 
-    {%endif%}
-   
-  </div>
-</section>
-      
   <hr/>
 
-
-<!-- to add review -->
+  <!-- to add review -->
 
   <section class="row mt-5 justify-content-center">
 
     <div class="col-6">
       <h2>Add comment</h2>
-      
+
       <form action="{% url 'service:add_comment_view' task.id %}" method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          <div class="card p-3">
-              <div class="form-group mb-2">
-                  <input type="text" class="form-control" name="{{ request.user.username }}"
-                      value="{{ request.user.username }} " disabled>
-              </div>
-              <div class="form-group mb-2">
-                  <input type="text" class="form-control" placeholder="{{ task.name }}" name="task" disabled>
-              </div>
-              <div class="form-group mb-2">
-                  <textarea class="form-control" placeholder="Enter your comment..." name="content" required></textarea>
-              </div>
-              <div class="form-group mb-2">
-                  <input type="file" class="form-control" name="image" accept="image/*" placeholder="Upload image">
-              </div>
-              <button type="submit" class="btn btn-success">Submit</button>
+        {% csrf_token %}
+        <div class="card p-3">
+          <div class="form-group mb-2">
+            <input type="text" class="form-control" name="{{ request.user.username }}"
+                   value="{{ request.user.username }} " disabled>
           </div>
+          <div class="form-group mb-2">
+            <input type="text" class="form-control" placeholder="{{ task.name }}" name="task" disabled>
+          </div>
+          <div class="form-group mb-2">
+            <textarea class="form-control" placeholder="Enter your comment..." name="content" required></textarea>
+          </div>
+          <div class="form-group mb-2">
+            <input type="file" class="form-control" name="image" accept="image/*" placeholder="Upload image">
+          </div>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
       </form>
 
     </div>
 
   </section>
-
-
 
 </section>
 {% endblock %}

@@ -6,5 +6,5 @@ from .models import *
 
 admin.site.register(Task)
 admin.site.register(Comment)
-
+admin.site.register(Reply)
 

@@ -2,29 +2,171 @@
 {% block title %} All Workers {% endblock %}
 {% block content %}
 
+<style>
+    .card {
+        width: 210px;
+        height: 280px;
+        background: rgba(0, 90, 11, 0.602);
+        border-radius: 12px;
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.123);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        transition-duration: .5s;
+    }
+
+    .profileImage {
+        background: #ffffff9e;
+        margin-top: 20px;
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.329);
+    }
+
+    .textContainer {
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .name {
+        font-size: 0.9em;
+        font-weight: 600;
+        color: rgb(0, 0, 0);
+        letter-spacing: 0.5px;
+        text-align: center;
+    }
+
+    .profile {
+        font-size: 0.84em;
+        color: rgb(194, 194, 194);
+        letter-spacing: 0.2px;
+    }
+
+    .card:hover {
+        background-color: rgba(0, 90, 11, 0.318);
+        transition-duration: .5s;
+    }
+</style>
+<!-- SIDEBAR -->
+<section id="sidebar">
+    <a href="#" class="brand">
+        <img src="/static/images/anjezha-logo.png" width="60" height="60" alt="Anjezha Logo" loading="lazy"
+            style="margin-top: 10px;" />
+        <span class="text">Anjezha</span>
+    </a>
+    <ul class="side-menu top">
+
+        {% if request.user.is_superuser %}
+        <li class="active">
+            <a href="{% url 'accounts:admin_home_view'%}">
+                <i class='bx bxs-dashboard'></i>
+                <span class="text">Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'accounts:register_view' %}">
+                <i class="bx bi-person-plus-fill"></i>
+                <span class="text">Add Member</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'contact:message_view' %}">
+                <i class="bx bi-envelope-fill"></i>
+                <span class="text">Message</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'service:display_task_view' %}">
+                <i class="bx bi-list-check"></i>
+                <span class="text">Tasks</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if not request.user.is_superuser %}
+        <li>
+            <a href="{% url 'service:display_task_view'%}">
+                <i class='bx bxs-dashboard'></i>
+                <span class="text">Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'accounts:rate_worker_view'%}">
+                <i class="bx bi-star-fill"></i>
+                <span class="text">Rate worker</span>
+            </a>
+        </li>
+
+        {% endif %}
+        <li>
+            <a href="{% url 'contact:contact_view'%}">
+                <i class='bx bxs-message-dots'></i>
+                <span class="text">Contact</span>
+            </a>
+        </li>
+
+    </ul>
+    <ul class="side-menu">
+        <li>
+            <a href="{% url 'accounts:logout_view'%}" class="logout">
+                <i class='bx bxs-log-out-circle'></i>
+                <span class="text">Logout</span>
+            </a>
+        </li>
+
+    </ul>
+</section>
+<!-- SIDEBAR -->
 <!-- CONTENT -->
 <section id="content">
     <!-- MAIN -->
     <main>
 
+        <div class="head-title">
+            <div class="left">
+                <h1>Admin Dashboard</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">Dashboard</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li>
+                        <a class="active" href="#">Workers</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <div class="overflow-hidden">
             <section class="container overflow-hidden">
                 <div class="d-flex flex-column">
-                    <h1>All Workers ({{ worker.count }})</h1>
+                    <h1>All Workers ({{ workers.count }})</h1>
 
-                    <div class="row  g-4 row-cols-1 row-cols-md-3">
 
+                    <div class="row  g-4 row-cols-6 row-cols-md-3">
                         {% for worker in workers %}
 
-                        <div class="col">
-                            <div class="d-flex flex-column gap-2">
-                                <img src="{{ worker.avatar.url }}" class="w-100 rounded-4 actor-img" />
-                                <a href="{% url 'accounts:user_profile_view' worker.id %}"
-                                    class="text-decoration-none text-black">
-                                    <h2>{{ worker.first_name }} {{ worker.last_name }}</h2>
-                                </a>
+                        <div class="card">
+                            <a href="{% url 'accounts:user_profile_view' worker.id %}">
+
+                            <div class="profileImage">
+                                <img class="rounded-circle" style="width: 170px; height: 170px; border-radius: 50%;" src="{{ worker.profile.avatar.url }}" />
                             </div>
+                            <div class="textContainer">
+                                <p class="name">{{ worker.first_name }} {{ worker.last_name }}</p>
+                            </div>
+                        </a>
+
                         </div>
+
+                        
                         {% endfor %}
                     </div>
             </section>

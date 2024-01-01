@@ -3,20 +3,117 @@
 {% block title %} Department Details {% endblock %}
 
 {% block content %}
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-
 <style>
     .details-image {
-        width: 700px;
+        width: 500px;
         height: auto;
         border: 15px;
-        padding-left: 150px;
+        margin-left: 400px;
     }
+
+    .avatar-xxl {
+        height: 7rem;
+        width: 7rem;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        -webkit-box-shadow: 0 2px 3px #eaedf2;
+        box-shadow: 0 2px 3px #eaedf2;
+    }
+
+    .pb-0 {
+        padding-bottom: 0 !important;
+    }
+
+    .font-size-16 {
+        font-size: 16px !important;
+    }
+
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+
+  
+
+    .border-end {
+        border-right: 1px solid #eff0f2 !important;
+    }
+
+
+
 </style>
 
+<!-- SIDEBAR -->
+<section id="sidebar">
+    <a href="#" class="brand">
+        <img src="/static/images/anjezha-logo.png" width="60" height="60" alt="Anjezha Logo" loading="lazy"
+            style="margin-top: 10px;" />
+        <span class="text">Anjezha</span>
+    </a>
+    <ul class="side-menu top">
+
+        {% if request.user.is_superuser %}
+        <li class="active">
+            <a href="{% url 'accounts:admin_home_view'%}">
+                <i class='bx bxs-dashboard'></i>
+                <span class="text">Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'accounts:register_view' %}">
+                <i class="bx bi-person-plus-fill"></i>
+                <span class="text">Add Member</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'contact:message_view' %}">
+                <i class="bx bi-envelope-fill"></i>
+                <span class="text">Message</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'service:display_task_view' %}">
+                <i class="bx bi-list-check"></i>
+                <span class="text">Tasks</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if not request.user.is_superuser %}
+        <li>
+            <a href="{% url 'service:display_task_view'%}">
+                <i class='bx bxs-dashboard'></i>
+                <span class="text">Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'accounts:rate_worker_view'%}">
+                <i class="bx bi-star-fill"></i>
+                <span class="text">Rate worker</span>
+            </a>
+        </li>
+
+        {% endif %}
+        <li>
+            <a href="{% url 'contact:contact_view'%}">
+                <i class='bx bxs-message-dots'></i>
+                <span class="text">Contact</span>
+            </a>
+        </li>
+
+    </ul>
+    <ul class="side-menu">
+        <li>
+            <a href="{% url 'accounts:logout_view'%}" class="logout">
+                <i class='bx bxs-log-out-circle'></i>
+                <span class="text">Logout</span>
+            </a>
+        </li>
+    </ul>
+</section>
+<!-- SIDEBAR -->
 
 <!-- CONTENT -->
 <section id="content">
@@ -38,7 +135,8 @@
         </div>
 
         <section>
-            <div class="d-flex flex-column gap-1 p-5 border border-1 rounder-6 shadow h-100 align-items-start">
+            <div class="d-flex flex-column gap-1 p-5 border border-1 rounder-6 shadow h-100 align-items-start"
+                style="background-color: white;">
                 <img class="details-image" src="{{department.image.url}}" />
                 <h2>{{ department.title }}</h2>
                 <h4>{{ department.description }}</h4>
@@ -60,49 +158,76 @@
                 </div>
             </div>
         </section>
-
         <!-- display Supervisor -->
-        <section>
-            {% if department.supervisor %}
-            <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
-                <div class="d-flex align-items-center gap-3">
-                    <img class="img-doctors-add" src="{{ department.supervisor.profile.avatar.url }}"
-                        class="rounded-3 avatar" />
-                    <h4>Supervisor for this department: </h4>
-                    <h5> {{ department.supervisor.first_name }} {{ department.supervisor.last_name }}</h5>
-                </div>
 
+        <div class="card">
+            <div class="card-body pb-0">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        {% if department.supervisor %}
+
+                        <div class="text-center border-end">
+                            <img src="{{ department.supervisor.profile.avatar.url }}"
+                                class="img-fluid avatar-xxl rounded-circle" alt="">
+                            <h4 class="text-primary font-size-20 mt-3 mb-2">{{ department.supervisor.first_name }} {{department.supervisor.last_name }}</h4>
+                            <h5 class="text-muted font-size-13 mb-0">{{ department.title }}</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="ms-3">
+                            <div>
+                                <h4 class="card-title mb-2">Supervisor for this department</h4>
+                            </div>
+                            <div class="row my-4">
+                                <div class="col-md-12">
+                                    <div>
+                                        <p class="text-muted mb-2 fw-medium"><i
+                                                class="mdi mdi-email-outline me-2"></i>{{department.supervisor.email}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% else %}
-                <p>No supervisor assigned</p>
+                <p>No Supervisor assigned</p>
                 {% endif %}
             </div>
-        </section>
+        </div>
 
         <!-- display Workers -->
 
-        {% if department.worker.count > 0 %}
-        <h4>Workers in this department:</h4>
-        <section class="row row-cols-12 row-cols-md-4 border-1">
-            {% for worker in department.worker.all %}
-            <div>
-                <div class="d-flex gap-2 justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-3">
-                        <img src="{{ worker.avatar.url }}" class="rounded-3 avatar" />
-                        <h5>{{ worker.first_name }} {{ worker.last_name }}</h5>
+        <div class="row">
+            <div class=" d-flex col-xl-8">
+                {% if department.worker.count > 0 %}
+                {% for worker in department.worker.all %}
+                <div class="card">
+                    <h4>Worker in this department</h4>
+
+                    <div class="card-body pb-0">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div class="text-center border-end">
+                                    <img src="{{ worker.profile.avatar.url }}"
+                                        class="img-fluid avatar-xxl rounded-circle" alt="">
+                                    <h4 class="text-primary font-size-20 mt-3 mb-2">{{ worker.first_name }} {{worker.last_name }}</h4>
+                                    <h5 class="text-muted font-size-13 mb-0">{{ department.title }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        {% if perms.worker.delete_worker %}
+                        <a href="{% url 'department:remove_department_worker' department.id worker.id %}"
+                            class="btn btn-danger text-white">Remove</a>
+                        {% endif %}
                     </div>
-                    {% if perms.worker.delete_worker %}
-                    <a href="{% url 'department:remove_department_worker' department.id worker.id %}"
-                        class="btn btn-danger text-white">Remove</a>
-                    {% endif %}
                 </div>
+                {% endfor %}
+                {% else %}
+                <p>No Workers assigned</p>
+                {% endif %}
             </div>
-            {% endfor %}
-        </section>
-        {% endif %}
-
-
-
-
+        </div>
         <!-- Add Supervisor button -->
         <div class="modal fade" id="ModalSupervisor" tabindex="-1" aria-labelledby="ModalSupervisor" aria-hidden="true">
             <div class="modal-dialog">
@@ -115,8 +240,7 @@
                         {% for supervisor in supervisors %}
                         <div class="d-flex gap-2 justify-content-between align-items-center mt-2">
                             <div class="d-flex align-items-center gap-3">
-                                <img src="{{ supervisor.avatar.url }}"
-                                    class="rounded-3 avatar" />
+                                <img src="{{ supervisor.avatar.url }}" class="rounded-3 avatar" />
                                 <h5>{{ supervisor.first_name }} {{ supervisor.last_name }}</h5>
                             </div>
                             <a href="{% url 'department:add_department_supervisor' department.id supervisor.id %}"
@@ -187,13 +311,5 @@
     <!-- MAIN -->
 </section>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
 
 {% endblock %}

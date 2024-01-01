@@ -238,6 +238,7 @@
       {{ msg }}
     </div>
     {% endif %}
+
     <div class="content">
       <div class="left-side">
         <div class="address details">
@@ -261,6 +262,9 @@
 
       <form action="{% url 'contact:contact_view' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+         <div class="input-box">
+      <input type="text" class="input"  name="{{request.user.username}}" placeholder="{{request.user.username}}" disabled >
+        </div>
         <div class="input-box">
           <input type="text" placeholder="Subject" id="subject" name="subject" required>
         </div>

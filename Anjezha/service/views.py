@@ -104,50 +104,35 @@ def update_status(request:HttpRequest, task_id):
 
 
 
-def add_comment_view(request: HttpRequest, task_id, parent_comment_id=None):
-    task = get_object_or_404(Task, id=task_id)
+def add_comment_view(request: HttpRequest, task_id ):
+    tasks = Task.objects.get(id=task_id)
 
-    if request.method == "POST":
-        content = request.POST["content"]
-        parent_comment = None
-
-        if parent_comment_id:
-            parent_comment = Comment.objects.get(id=parent_comment_id)
-
-        new_comment = Comment.objects.create(
-            task=task,
-            user=request.user,
-            content=content,
-            parent_comment=parent_comment
-        )
-
-        if 'image' in request.FILES:
-            new_comment.image = request.FILES["image"]
-
-        new_comment.save()
-
-    comments = Comment.objects.filter(task=task, parent_comment=None)
+    if request.method=="POST":
+            new_comment = Comment(task=tasks ,user=request.user ,content=request.POST["content"] )
+            if 'image' in request.FILES: new_comment.image = request.FILES["image"]
+            new_comment.save()
+            return redirect('service:add_comment_view', task_id=tasks.id)
+    
+    comments = Comment.objects.filter(task=tasks)
     comment_count = comments.count()
 
-    return render(request, "service/comment.html", {"comments": comments, "comment_count": comment_count, "task": task})
+
+    return render(request, "service/comment.html", {"comments": comments, "comment_count": comment_count, "task": tasks })
 
 
-def reply_view(request: HttpRequest, task_id, comment_id):
+def add_reply_view(request: HttpRequest,  comment_id ):
 
-    task = get_object_or_404(Task, id=task_id)
-    comment = get_object_or_404(Comment, id=comment_id)
+    parent_comment = Comment.objects.get(id=comment_id)
 
-    if request.method == "POST":
-        content = request.POST["content"]
-        image = request.FILES["image"] if 'image' in request.FILES else None
+    if request.method=="POST":
+            reply = Reply(comment=parent_comment ,user=request.user ,reply_content=request.POST["reply_content"] )
+            if 'reply_image' in request.FILES: reply.reply_image = request.FILES["reply_image"]
+            reply.save()
+            return redirect ('service:add_comment_view' ,  task_id=parent_comment.task.id)
 
-        add_comment_view(task, request.user, content, parent_comment=comment, image=image)
+    replies = Reply.objects.filter(comment=parent_comment) 
 
-    comments = Comment.objects.filter(task=task, parent_comment=None)
-
-    return render(request, "service/comment.html", {"comments": comments,  "task": task})
-   
-
+    return render(request, "service/comment.html", {"replies":replies ,"task":parent_comment.task})
 
 
 

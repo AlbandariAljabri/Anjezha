@@ -34,13 +34,16 @@ class Comment(models.Model):
     task = models.ForeignKey(Task , on_delete=models.CASCADE)
     content = models.TextField()
     image = models.ImageField(upload_to="img/" )
-    parent_comment = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
     
 
     def __str__(self):
         return f"{self.user} : {self.content}"
     
 class Reply(models.Model):
+    comment = models.ForeignKey(Comment , on_delete=models.CASCADE , related_name='replies')
     user = models.ForeignKey(User , on_delete=models.CASCADE)
-    content = models.TextField()
-    image = models.ImageField(upload_to="img/" )
+    reply_content = models.TextField()
+    reply_image = models.ImageField(upload_to="img/" )
+
+    def __str__(self):
+        return f"{self.user} replied  {self.reply_content}"

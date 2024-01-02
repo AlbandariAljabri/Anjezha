@@ -196,11 +196,7 @@
     <div class="card__title">
       {{ user.first_name }} {{ user.last_name }}
     </div>
-    {% if supervisor_department %}
-    <div class="card__subtitle"> Department :{{ supervisor_department.title }}</div>
-{% else %}
-    <p>Supervisor's Department: Not assigned</p>
-{% endif %}
+   
     <div class="card__wrapper">
       {% if request.user.is_authenticated and request.user.id == user.id %}
       <a href="{% url 'accounts:update_user_view'%}"><button class="card__btn">Edit</button></a>

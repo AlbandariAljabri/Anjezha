@@ -95,11 +95,8 @@ changes to managers.
     Task Overview:
     Admins can view a comprehensive list of completed and uncompleted tasks.
 
-    Admin Management:
-    Admins can delete and update supervisor and worker .
-
-    Search and Filtering:
-    Allow users to search and filter tasks based on various criteria.
+    Filtering:
+    Allow users to filter tasks based on various criteria.
 
 # URL for UML
 https://drive.google.com/file/d/1Lhp9IIpNN_rx0PWP-_jkPyZWlXXYqFf6/view?usp=share_link

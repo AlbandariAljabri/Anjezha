@@ -11,8 +11,8 @@ from accounts.models import *
 
 def add_department(request: HttpRequest):
     if request.method == "POST":
-        new_department = Department(
-            title=request.POST["title"], description=request.POST["description"], image=request.FILES["image"])
+        new_department = Department(title=request.POST["title"], description=request.POST["description"])
+        if 'image' in request.FILES: new_department.image = request.FILES["image"]
         new_department.save()
         return redirect("department:display_department")
     return render(request, "department/add_department.html")

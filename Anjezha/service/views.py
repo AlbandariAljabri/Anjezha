@@ -6,13 +6,9 @@ from .models import *
 
 # Create your views here.
 
-
-
-
-
-
-
 def display_task_view(request: HttpRequest ):
+    user_groups = request.user.groups.values_list('name', flat=True)
+
     supervisors = User.objects.filter(groups__name="supervisors")
     workers = User.objects.filter(groups__name="workers")
 
@@ -24,7 +20,11 @@ def display_task_view(request: HttpRequest ):
     created_at_filter = request.GET.get('created_at', '')
     completion_filter = request.GET.get('completion', '')
 
-    if request.user in supervisors:
+
+    if request.user.is_superuser:
+        tasks = Task.objects.all()
+
+    elif request.user in supervisors:
         tasks = Task.objects.filter(supervisor=request.user)
     else:
         tasks = Task.objects.filter(workers=request.user)
@@ -32,6 +32,12 @@ def display_task_view(request: HttpRequest ):
     # Apply filters
     if created_at_filter:
         tasks = tasks.filter(created_at=created_at_filter)
+
+    if request.user.is_superuser:
+        if completion_filter == 'completed':
+            tasks = tasks.filter(supervisor_status="completed")
+        elif completion_filter == 'not_completed':
+            tasks = tasks.filter(supervisor_status="uncompleted")
 
     if request.user.groups.filter(name='supervisors').exists():
         if completion_filter == 'completed':
@@ -52,24 +58,9 @@ def display_task_view(request: HttpRequest ):
     elif sort_order == 'descending':
         tasks = tasks.order_by('-created_at')
 
-    return render(request, "service/display_task.html", {"tasks": tasks , "supervisors" : supervisors , "is_worker":is_worker ,"is_supervisor" :is_supervisor , "supervisors":supervisors , "workers":workers})
+    return render(request, "service/display_task.html", {"tasks": tasks , "supervisors" : supervisors , "is_worker":is_worker ,"is_supervisor" :is_supervisor , "supervisors":supervisors , "workers":workers , "user_groups" : user_groups})
 
 
-# def mark_task_completed(request, task_id):
-#     # Check if the user is a supervisor
-#     supervisors = User.objects.filter(groups__name="supervisors")
-
-#     if request.user in supervisors:
-#         task = Task.objects.get(pk=task_id)
-#         if task.completed == False:
-#             task.completed = True
-#             task.save()
-#         else:
-#             task.completed = False
-#             task.save()
-
-    
-#     return redirect("service:display_task_view")
 
 
 def update_status(request:HttpRequest, task_id):
@@ -106,31 +97,35 @@ def update_status(request:HttpRequest, task_id):
 
 def add_comment_view(request: HttpRequest, task_id ):
     tasks = Task.objects.get(id=task_id)
+    try:
+        if request.method=="POST":
+                new_comment = Comment(task=tasks ,user=request.user ,content=request.POST["content"] )
+                if 'image' in request.FILES: new_comment.image = request.FILES["image"]
+                new_comment.save()
+                return redirect('service:add_comment_view', task_id=tasks.id)
+        
+        comments = Comment.objects.filter(task=tasks)
+        comment_count = comments.count()
 
-    if request.method=="POST":
-            new_comment = Comment(task=tasks ,user=request.user ,content=request.POST["content"] )
-            if 'image' in request.FILES: new_comment.image = request.FILES["image"]
-            new_comment.save()
-            return redirect('service:add_comment_view', task_id=tasks.id)
-    
-    comments = Comment.objects.filter(task=tasks)
-    comment_count = comments.count()
-
+    except :
+        return render(request , "main/not_found.html")
 
     return render(request, "service/comment.html", {"comments": comments, "comment_count": comment_count, "task": tasks })
 
 
 def add_reply_view(request: HttpRequest,  comment_id ):
-
+    
     parent_comment = Comment.objects.get(id=comment_id)
-
-    if request.method=="POST":
+    try:
+        if request.method=="POST":
             reply = Reply(comment=parent_comment ,user=request.user ,reply_content=request.POST["reply_content"] )
             if 'reply_image' in request.FILES: reply.reply_image = request.FILES["reply_image"]
             reply.save()
             return redirect ('service:add_comment_view' ,  task_id=parent_comment.task.id)
 
-    replies = Reply.objects.filter(comment=parent_comment) 
+        replies = Reply.objects.filter(comment=parent_comment) 
+    except :
+        return render(request , "main/not_found.html")
 
     return render(request, "service/comment.html", {"replies":replies ,"task":parent_comment.task})
 

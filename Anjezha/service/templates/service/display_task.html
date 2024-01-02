@@ -8,7 +8,17 @@
   <main>
     <div class="head-title">
       <div class="left">
-        <h1>Supervisor Dashboard</h1>
+
+
+          {% if request.user.is_superuser %}
+          <h1>Admin Dashboard</h1>
+          {% elif 'supervisors' in user_groups %}
+          <h1>Supervisor Dashboard</h1>
+          {% elif 'workers' in user_groups %}
+          <h1>Worker Dashboard</h1>
+          {% endif %}
+
+
         <ul class="breadcrumb">
           <li>
             <a href="#">Dashboard</a>
@@ -87,6 +97,9 @@
       </li>
     </ul>
   </section>
+
+
+
   <!-- SIDEBAR -->
   <div class="container" style="margin-top: -20px;">
     <div class="row">
@@ -97,24 +110,25 @@
 
             <form method="get" action="{% url 'service:display_task_view' %}">
               <div class="d-flex justify-content-between">
-                {% if request.user.is_superuser %}
+                {% if 'supervisors' in user_groups or request.user.is_superuser %}
+
                 <div>
                   <button class="btn btn-link" type="submit" name="completion" value="">All</button>
                   <button class="btn btn-link" type="submit" name="completion" value="completed">Completed</button>
                   <button class="btn btn-link" type="submit" name="completion" value="not_completed">Not
                     Completed</button>
                 </div>
-
                 {% endif %}
 
-                {% if not request.user.is_superuser %}
+                {% if 'workers' in user_groups %}
+
                 <div>
                   <button class="btn btn-link" type="submit" name="completion" value="">All</button>
                   <button class="btn btn-link" type="submit" name="completion" value="in_progress">in progress</button>
                   <button class="btn btn-link" type="submit" name="completion" value="none">Not started</button>
                 </div>
-                {% endif %}
 
+                {% endif %}
 
                 <div>
                   <label for="sort_order">Sort Order:</label>
@@ -131,7 +145,7 @@
 
 
 
-            {% if not request.user.is_supervisors %}
+            {% if 'supervisors' in user_groups %}
             <button class="btn btn-success">
               <a href="{% url 'service:add_task_view' %}" style="color: white;">Add New Task</a>
             </button>
@@ -147,15 +161,6 @@
             <div class="todo-list ">
               <div class="todo-item d-flex justify-content-between align-items-center ">
                 <div class="d-flex">
-                  <!-- <form method="post" action=" url 'service:mark_task_completed' task.id ">
-                                    {% csrf_token %}
-                             
-
-                                    <input type="checkbox" name="task_id" id="task_{{ task.id }}" value="{{ task.id }}" {% if task.completed %}checked{% endif %}>
-
-                                    <input type="submit" value="mark as completed"> 
-                                </form> -->
-
                   <span style="font-family: 'Roboto Slab', serif; ">{{task.name}}</span>
                 </div>
 
@@ -216,6 +221,17 @@
                   </div>
                 </div>
 
+                {% if request.user.is_superuser %}
+                  {% if task.supervisor_status == 'completed' %}
+                    <span class="badge badge-success">completed</span>
+
+                  {% elif task.supervisor_status == 'uncompleted' %}
+                    <span class="badge badge-warning">uncompleted</span>
+                  {% endif %}
+                {% endif %}
+
+
+
                 {% if is_worker %}
                 {% if task.worker_status == 'none' %}
                 <form method="post" action="{% url 'service:update_status' task.id %}">
@@ -260,7 +276,7 @@
 
 
 
-                {% if task.supervisor %}
+                {% if 'supervisors' in user_groups %}
 
                 <div style="margin-right: 6px; ">
                   <a href="{% url 'service:delete_task_view' task.id %}" style="color: green;"> <svg

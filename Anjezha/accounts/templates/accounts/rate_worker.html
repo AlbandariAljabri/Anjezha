@@ -167,6 +167,12 @@
   </div>
   {% endif %}
 
+  {% if msg1 %}
+  <div class="alert alert-success" role="alert">
+    {{ msg1 }}
+  </div>
+  {% endif %}
+
 
   <div class="subscribe">
     <p>Rate Worker</p>
@@ -185,6 +191,7 @@
       <input type="submit" value="Submit Rating" class="submit-btn">
     </form>
   </div>
+
 
   <!--  -->
   <!-- <h1>Rate Worker</h1>
